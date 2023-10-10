@@ -34,7 +34,13 @@ const Admin = () => {
         </div>
 
         <div id='admin-info-board'>
-          <div id='admin-joining-req'></div>
+          <div id='admin-joining-req'> {/* Should be rendered dynamicly */}
+            <div id='joining-req-card'>
+              <div className='joining-data'></div>
+              <div className='joining-accept-btn'><input type="button" onClick={console.log("Accepted")} value="Accept" id="" ></input></div>
+              <div className='joining-reject-btn'><input type="button" onClick={console.log("Rejected")} value="Reject" id=""></input></div>
+            </div>
+          </div>
           <div id='admin-patient-view'></div>
           <div id='admin-pharmacist-view'></div>
         </div>
