@@ -33,7 +33,11 @@ const Admin = () => {
 
         </div>
 
-        <div id='admin-info-board'></div>
+        <div id='admin-info-board'>
+          <div id='admin-joining-req'></div>
+          <div id='admin-patient-view'></div>
+          <div id='admin-pharmacist-view'></div>
+        </div>
         
         
     </>
