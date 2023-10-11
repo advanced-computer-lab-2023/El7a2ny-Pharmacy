@@ -4,7 +4,8 @@ const {
     getPharmacists,
     getPharmacist,
     removePharmacist,
-    updatePharmacist
+    updatePharmacist,
+
 } = require('../controllers/pharmacistController');
 
 const router = express.Router();
