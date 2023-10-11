@@ -5,7 +5,7 @@ const {
     getPharmacist,
     removePharmacist,
     updatePharmacist,
-
+    getPending
 } = require('../controllers/pharmacistController');
 
 const router = express.Router();
@@ -13,6 +13,8 @@ const router = express.Router();
 router.post('/register-request', registerRequest); //req 3
 
 router.get('/all-pharmacists', getPharmacists); //req 8,9
+
+router.get('/pending', getPending);
 
 router.get('/one-pharmacist/:id', getPharmacist); //req 9
 

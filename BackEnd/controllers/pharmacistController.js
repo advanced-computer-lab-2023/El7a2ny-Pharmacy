@@ -36,6 +36,11 @@ const getPharmacists = async (req, res) => {
     res.status(200).json(pharmacists);
 };
 
+const getPending = async (req, res) => {
+    const pending = await Pending.find({"status": "pending"}).sort({createdAt: -1}).select({password: 0});
+    res.status(200).json(pending);
+};
+
 const getPharmacist = async (req, res) => {
     const {id} = req.params;
 
@@ -85,5 +90,6 @@ module.exports = {
     getPharmacist,
     getPharmacists,
     removePharmacist,
-    updatePharmacist
+    updatePharmacist,
+    getPending
 };

@@ -11,7 +11,9 @@ const addMedicine = async (req, res) => {
 };
 
 const getMedicines = async (req, res) => {
-    const medicines = await Medicine.find({}).sort({createdAt: -1}).select({password: 0});
+    const filter = req.query //name=marwan ===> {name: marwan}
+    //console.log(filter)
+    const medicines = await Medicine.find(filter).sort({createdAt: -1}).select({password: 0});
     res.status(200).json(medicines);
 };
 
@@ -29,24 +31,24 @@ const removeMedicine = async (req, res) => {
     res.status(200).json(medicine); 
 };
 
-// const updateMedicine = async (req, res) => {
-//     const {id} = req.params;
+const updateMedicine = async (req, res) => {
+    const {id} = req.params;
 
-//     if(!mongoose.Types.ObjectId.isValid(id))
-//         return res.status(404).json({error: 'no such a medicine'});
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such a medicine'});
 
-//     const medicine = await Medicine.findOneAndUpdate({_id: id}, {
-//         ...req.body
-//     });
+    const medicine = await Medicine.findOneAndUpdate({_id: id}, {
+        ...req.body
+    });
     
-//     if(!medicine)
-//         return res.status(404).json({error: 'no such a medicine'});
+    if(!medicine)
+        return res.status(404).json({error: 'no such a medicine'});
      
-//     res.status(200).json(medicine); 
-// };
+    res.status(200).json(medicine); 
+};
 module.exports = {
     addMedicine,
     getMedicines,
     removeMedicine,
-    //updateMedicine
+    updateMedicine
 };

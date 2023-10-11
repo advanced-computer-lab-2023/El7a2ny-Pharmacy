@@ -13,8 +13,6 @@ router.post('/add-medicine', addMedicine); //req 3
 
 router.get('/all-medicines', getMedicines); //req 8,9
 
-//router.get('/one-pharmacist/:id', getPharmacist); //req 9
-
 router.delete('/remove-medicine/:id', removeMedicine); //req 8
 
 router.patch('/update-medicine/:id', updateMedicine); //req 14
