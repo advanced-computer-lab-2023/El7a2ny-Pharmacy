@@ -44,12 +44,23 @@ const Admin = () => {
 
           </div>
 
+<br></br>
           <div id='admin-patient-view'>
-            <div id='admin-patient-data'></div>
+            <div id='admin-patient-data'>
+              <h3>Patients</h3>
+              <ul>
+                <li></li>
+              </ul>
+            </div>
           </div>
           
           <div id='admin-pharmacist-view'>
-            <div id='admin-pharmacist-data'></div>
+            <div id='admin-pharmacist-data'>
+              <h3>Pharmacist</h3>
+              <ul>
+                <li></li>
+              </ul>
+            </div>
           </div>
         </div>
         
