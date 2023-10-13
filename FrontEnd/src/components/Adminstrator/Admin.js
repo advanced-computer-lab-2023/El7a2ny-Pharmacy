@@ -1,13 +1,106 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const Admin = () => {
+
+  // Define your backend URL
+  const backendURL = 'http://localhost:4000'; // Replace with your backend URL
+
+  const showPat = async () => {
+    try{
+      const apiUrl = `${backendURL}/api/Patient/all-patients`;
+
+      const response = await axios.get(apiUrl, getPatients);
+      if (response.status === 200) {
+
+      }
+      else {
+        console.error('Failed to showing patients:', response);
+      }
+    }
+    catch (error) {
+      console.error('Error while showing patients:', error);
+    }
+  }
+
+  const showPharma = async () => {
+    try{
+      const apiUrl = `${backendURL}/api/Pharmacist/all-pharmacists`;
+
+      const response = await axios.get(apiUrl, getPharmacist);
+
+      if (response.status === 200) {
+
+      }
+      else {
+        console.error('Failed to showing Pharmacists:', response);
+      }
+    }
+    catch (error) {
+      console.error('Error while showing Pharmacists:', error);
+    }
+  }
+
+  const addAdmin1 = async () => {
+    try {
+      const apiUrl = `${backendURL}/api/Admins/add-admin`;
+
+      const response = await axios.post(apiUrl, addAdmin);
+
+      if (response.status === 200) {
+        console.log('Admin added successfully:', response.data);
+      } else {
+        console.error('Failed to add admin.');
+      }
+    } catch (error) {
+      console.error('Error while adding admin:', error);
+    }
+  }
+
+  const removePatient1 = async () => {
+    try {
+      const apiUrl = `${backendURL}/api/Patient/remove-patient`;
+
+      const response = await axios.delete(apiUrl, removePatient);
+
+      if (response.status === 200) {
+        console.log('Patient removed successfully:', response.data);
+      } else {
+        console.error('Failed to remove Patient.');
+      }
+    } catch (error) {
+      console.error('Error while removeing Patient:', error);
+    }
+  }
+
+  const removePharmacist1 = async () => {
+    try {
+      const apiUrl = `${backendURL}/api/Pharmacist/remove-pharmacist`;
+
+      const response = await axios.delete(apiUrl, removePharmacist);
+
+      if (response.status === 200) {
+        console.log('Pharmacist removed successfully:', response.data);
+      } else {
+        console.error('Failed to remove Pharmacist.');
+      }
+    } catch (error) {
+      console.error('Error while removeing Pharmacist:', error);
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addAdmin1();
+  }
+
   return (
     <>
         <div id='admin-head'></div>
 
         <div id='admin-control-panel'>
 
-          <form id='add-admin'>
+          <form id='add-admin' onSubmit={handleSubmit}>
             <h2>Add an Admin</h2>
 
             <input type="text" placeholder="User name" name="username" id="username"></input>
@@ -16,7 +109,7 @@ const Admin = () => {
             <label for="submit">SUBMIT</label>
           </form>
 
-          <form id='admin-remove'>
+          <form id='admin-remove' onSubmit={handleSubmit}>
             <h2>Remove a Pharmacist or Patient</h2>
 
             <input type="radio" id="Pharmacist" name="pha-or-pat" value="Pharmacist"></input>
