@@ -20,3 +20,4 @@ router.get('/filter-by-medicinal-use/:usage', getMedicineFilterByUsage); //req 1
 router.patch('/update-medicine/:id', updateMedicine); //req 18
 
 module.exports = router;
+

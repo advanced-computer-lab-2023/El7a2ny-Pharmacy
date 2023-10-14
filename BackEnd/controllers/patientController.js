@@ -15,6 +15,7 @@ const getPatients = async (req, res) => {
     res.status(200).json(patients);
 };
 
+
 const removePatient = async (req, res) => {
     const {id} = req.params;
 
