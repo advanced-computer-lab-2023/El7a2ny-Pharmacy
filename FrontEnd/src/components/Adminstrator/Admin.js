@@ -6,6 +6,12 @@ const Admin = () => {
   // Define your backend URL
   const backendURL = 'http://localhost:4000'; // Replace with your backend URL
 
+  const [patient, setPatient] = useState(null);
+
+  const [pharmacist, setPharmacist] = useState(null);
+
+  const [admin, setAdmin] = useState(null);
+
   const showPat = async () => {
     try{
       const apiUrl = `${backendURL}/api/Patient/all-patients`;
@@ -94,6 +100,7 @@ const Admin = () => {
     addAdmin1();
   }
 
+
   return (
     <>
         <div id='admin-head'></div>
@@ -138,20 +145,32 @@ const Admin = () => {
           </div>
 
 <br></br>
+{React.useEffect(() => {
+    axios.get(backendURL).then((response) => {
+      setPatient(response.data);
+    });
+  }, [])}
           <div id='admin-patient-view'>
             <div id='admin-patient-data'>
               <h3>Patients</h3>
               <ul>
-                <li></li>
+                <li>{patient.username} {patient.password}</li>
               </ul>
             </div>
           </div>
+
+          
+  {React.useEffect(() => {
+    axios.get(backendURL).then((response) => {
+      setPharmacist(response.data);
+    });
+  }, [])}
           
           <div id='admin-pharmacist-view'>
             <div id='admin-pharmacist-data'>
               <h3>Pharmacist</h3>
               <ul>
-                <li></li>
+                <li>{pharmacist.username} {pharmacist.password}</li>
               </ul>
             </div>
           </div>
