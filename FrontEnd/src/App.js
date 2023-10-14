@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="App">
-      <AppRouter /> {/* Render the AppRouter component */}
+      <Admin /> {/* Render the AppRouter component */}
     </div>
   );
 }
