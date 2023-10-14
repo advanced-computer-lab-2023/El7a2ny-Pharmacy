@@ -9,6 +9,9 @@ import AddMedicineForm from './components/Pharmacist/AddMedicineForm';
 import MedicineEditor from './components/Pharmacist/MedicineEditor';
 import RemoveUser from './components/Adminstrator/RemoveUser';
 import PharmacistRequests from './components/Adminstrator/PharmacistsRequests';
+import MedicineFilterBrowse from './components/Patient/MedicineFilterBrowse';
+import MedicineSreach from './components/Patient/MedicineSearch';
+import MedicineList from './components/Patient/MedicineList';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -16,7 +19,7 @@ function App() {
 
   return (
     <div className="App">
-      <Admin /> {/* Render the AppRouter component */}
+      <MedicineList /> {/* Render the AppRouter component */}
     </div>
   );
 }
