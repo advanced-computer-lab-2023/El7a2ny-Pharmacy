@@ -34,10 +34,6 @@ const pharmacistSchema = new Schema({
         type: String,
         required: true
     },
-    speciality: {
-        type: String,
-        required: true
-    },
     status: {
         type: String
     }

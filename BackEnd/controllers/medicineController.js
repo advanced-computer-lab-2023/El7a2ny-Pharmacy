@@ -11,9 +11,7 @@ const addMedicine = async (req, res) => {
 };
 
 const getMedicines = async (req, res) => {
-    const filter = req.query //name=marwan ===> {name: marwan}
-    //console.log(filter)
-    const medicines = await Medicine.find(filter).sort({createdAt: -1}).select({password: 0});
+    const medicines = await Medicine.find({}).sort({createdAt: -1});
     res.status(200).json(medicines);
 };
 
@@ -46,9 +44,34 @@ const updateMedicine = async (req, res) => {
      
     res.status(200).json(medicine); 
 };
+
+const getMedicineSearchByName = async (req, res) => {
+    const {name} = req.params;
+
+    const medicine = await Medicine.find({name: name});
+    
+    if(!medicine)
+        return res.status(404).json({error: 'no such medicine'});
+     
+    res.status(200).json(medicine);
+};
+
+const getMedicineFilterByUsage = async (req, res) => {
+    const {usage} = req.params;
+
+    const medicine = await Medicine.find({medicinal_use: usage});
+    
+    if(!medicine)
+        return res.status(404).json({error: 'no such medicine'});
+     
+    res.status(200).json(medicine);
+};
+
 module.exports = {
     addMedicine,
     getMedicines,
     removeMedicine,
-    updateMedicine
+    updateMedicine,
+    getMedicineSearchByName,
+    getMedicineFilterByUsage
 };

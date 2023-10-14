@@ -10,9 +10,7 @@ const registerRequest = async (req, res) => {
     hourlyRate,
     DOB,
     education,
-    affiliation,
-    speciality,
-    session_price} = req.body;
+    affiliation} = req.body;
     try {
         const pharmacist = await Pharmacist.create({
             username,
@@ -23,7 +21,6 @@ const registerRequest = async (req, res) => {
             DOB,
             education,
             affiliation,
-            speciality,
             status: 'pending'});
         res.status(200).json(pharmacist);
     } catch(error) {
@@ -34,11 +31,6 @@ const registerRequest = async (req, res) => {
 const getPharmacists = async (req, res) => {
     const pharmacists = await Pharmacist.find({}).sort({createdAt: -1}).select({password: 0});
     res.status(200).json(pharmacists);
-};
-
-const getPending = async (req, res) => {
-    const pending = await Pending.find({"status": "pending"}).sort({createdAt: -1}).select({password: 0});
-    res.status(200).json(pending);
 };
 
 const getPharmacist = async (req, res) => {
@@ -61,7 +53,7 @@ const removePharmacist = async (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(id))
         return res.status(404).json({error: 'no such a pharmacist'});
 
-    const pharmacist = await pharmacist.findOneAndDelete({_id: id});
+    const pharmacist = await Pharmacist.findOneAndDelete({_id: id});
     
     if(!pharmacist)
         return res.status(404).json({error: 'no such a pharmacist'});
@@ -90,6 +82,5 @@ module.exports = {
     getPharmacist,
     getPharmacists,
     removePharmacist,
-    updatePharmacist,
-    getPending
+    updatePharmacist
 };

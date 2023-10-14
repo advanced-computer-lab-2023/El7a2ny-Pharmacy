@@ -10,15 +10,13 @@ const {
 
 const router = express.Router();
 
-router.post('/register-request', registerRequest); //req 3
+router.post('/register-request', registerRequest); //req 2
 
-router.get('/all-pharmacists', getPharmacists); //req 8,9
+router.get('/all-pharmacists', getPharmacists); //req 22
 
-router.get('/pending', getPending);
+router.get('/one-pharmacist/:id', getPharmacist); //req 22
 
-router.get('/one-pharmacist/:id', getPharmacist); //req 9
-
-router.delete('/remove-pharmacist/:id', removePharmacist); //req 8
+router.delete('/remove-pharmacist/:id', removePharmacist); //req 6
 
 router.patch('/update-pharmacist/:id', updatePharmacist); //req 14
 
