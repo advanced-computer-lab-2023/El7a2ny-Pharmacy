@@ -37,7 +37,7 @@ const getPharmacists = async (req, res) => {
 };
 
 const getPending = async (req, res) => {
-    const pending = await Pending.find({"status": "pending"}).sort({createdAt: -1}).select({password: 0});
+    const pending = await Pharmacist.find({"status": "pending"}).sort({createdAt: -1}).select({password: 0});
     res.status(200).json(pending);
 };
 
@@ -61,7 +61,7 @@ const removePharmacist = async (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(id))
         return res.status(404).json({error: 'no such a pharmacist'});
 
-    const pharmacist = await pharmacist.findOneAndDelete({_id: id});
+    const pharmacist = await Pharmacist.findOneAndDelete({_id: id});
     
     if(!pharmacist)
         return res.status(404).json({error: 'no such a pharmacist'});

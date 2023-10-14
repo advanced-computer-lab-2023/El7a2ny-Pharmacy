@@ -1,20 +1,24 @@
-// src/components/PharmacistRegistrationForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function PharmacistRegistrationForm() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: '',
     name: '',
     email: '',
     password: '',
-    dateOfBirth: '',
+    DOB: '',
     hourlyRate: '',
     affiliation: '',
-    educationalBackground: '',
+    education: '',
+    status: 'Pending', // Default status
+    speciality: '', 
   });
+
+  const backendURL = 'http://localhost:4000';
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,13 +28,22 @@ function PharmacistRegistrationForm() {
     });
   };
 
-   const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send formData to your backend for pharmacist registration
-    console.log(formData);
 
-    // After successful registration, navigate back to the login page
-    navigate('/');
+    try {
+      // Send the pharmacist registration request to the backend
+      const response = await axios.post(`${backendURL}/api/pharmacist/register-request`, formData);
+
+      if (response.status === 200) {
+        console.log('Pharmacist registration request successful.');
+        navigate('/'); // Navigate to the home page
+      } else {
+        console.error('Failed to register pharmacist.');
+      }
+    } catch (error) {
+      console.error('Error while registering pharmacist:', error);
+    }
   };
 
   return (
@@ -58,7 +71,7 @@ function PharmacistRegistrationForm() {
         <label>
           Email:
           <input
-            type="email"
+            type="text"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
@@ -67,7 +80,7 @@ function PharmacistRegistrationForm() {
         <label>
           Password:
           <input
-            type="password"
+            type="text"
             name="password"
             value={formData.password}
             onChange={handleInputChange}
@@ -77,15 +90,15 @@ function PharmacistRegistrationForm() {
           Date of Birth:
           <input
             type="date"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
+            name="DOB"
+            value={formData.DOB}
             onChange={handleInputChange}
           />
         </label>
         <label>
           Hourly Rate:
           <input
-            type="text"
+            type="number"
             name="hourlyRate"
             value={formData.hourlyRate}
             onChange={handleInputChange}
@@ -103,12 +116,21 @@ function PharmacistRegistrationForm() {
         <label>
           Educational Background:
           <textarea
-            name="educationalBackground"
-            value={formData.educationalBackground}
+            name="education"
+            value={formData.education}
             onChange={handleInputChange}
           />
         </label>
-        <button type="submit" onClick={handleSubmit}>Submit</button>
+        <label>
+          Speciality:
+          <input
+            type="text"
+            name="speciality"
+            value={formData.speciality}
+            onChange={handleInputChange}
+          />
+        </label>
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

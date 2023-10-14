@@ -18,3 +18,4 @@ router.delete('/remove-medicine/:id', removeMedicine); //req 8
 router.patch('/update-medicine/:id', updateMedicine); //req 14
 
 module.exports = router;
+

@@ -39,7 +39,9 @@ const patientSchema = new Schema({
         mobile_number: {
             type: String,
             required: true
-        }
+        },
+        
+
     },
     required: true
     },

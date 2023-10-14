@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function MedicineEditor() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
 
+  const backendURL = 'http://localhost:4000'; // Replace with your backend URL
+
   const handleSearch = async () => {
-    // Send a GET request to your backend to search for medicines by name
     try {
-      const response = await fetch(`/api/medicines?name=${searchQuery}`);
-      if (response.ok) {
-        const data = await response.json();
-        setSearchResults(data);
+      const response = await axios.get(`${backendURL}/api/medicine/all-medicines?name=${searchQuery}`);
+      if (response.status === 200) {
+        setSearchResults(response.data);
       } else {
         console.error('Failed to search for medicines.');
       }
@@ -21,30 +22,23 @@ function MedicineEditor() {
   };
 
   const handleEdit = (medicine) => {
-    setSelectedMedicine(medicine);
+    setSelectedMedicine({ ...medicine, id: medicine._id }); // Use "_id" as the property name
   };
+  
 
   const handleUpdate = async () => {
-    // Calculate sales and available quantity
-    const updatedMedicine = {
-      ...selectedMedicine,
-      sales: selectedMedicine.sales + 1, // Increment sales by 1
-      availableQuantity: selectedMedicine.availableQuantity - 1, // Decrement available quantity by 1
-    };
-
-    // Send a PUT request to your backend to update medicine details and price
+    
     try {
-      const response = await fetch(`/api/medicines/${updatedMedicine.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedMedicine),
-      });
+      const updateMedicine = {
+        ...selectedMedicine,
+        
+      };
 
-      if (response.ok) {
+      const response = await axios.patch(`${backendURL}/api/medicine/update-medicine/${updateMedicine.id}`, updateMedicine);
+
+      if (response.status === 200) {
         console.log('Medicine details updated successfully.');
-        setSelectedMedicine(updatedMedicine);
+        setSelectedMedicine(updateMedicine);
       } else {
         console.error('Failed to update medicine details.');
       }
@@ -55,7 +49,7 @@ function MedicineEditor() {
 
   useEffect(() => {
     if (selectedMedicine) {
-      // If a medicine is selected, you can fetch its details from the backend here
+      // If a medicine is selected, you can fetch its details from the backend here using Axios
       // For now, we'll assume it has been fetched and set in 'selectedMedicine'
     }
   }, [selectedMedicine]);
@@ -75,7 +69,7 @@ function MedicineEditor() {
       <ul>
         {searchResults.map((medicine, index) => (
           <li key={index}>
-            {medicine.name} - {medicine.price} - Sales: {medicine.sales} - Available Quantity: {medicine.availableQuantity}
+            {medicine.name} - {medicine.price} - Sales: {medicine.sales} - Available Quantity: {medicine.quantity}
             <button onClick={() => handleEdit(medicine)}>Edit</button>
           </li>
         ))}

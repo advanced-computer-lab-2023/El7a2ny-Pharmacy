@@ -15,7 +15,7 @@ const medicineSchema = new Schema({
         type: Number,
         required: true
     },
-    quantity: {
+    availableQuantity: {
         type: Number,
         required: true
     }

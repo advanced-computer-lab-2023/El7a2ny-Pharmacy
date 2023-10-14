@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function AddMedicineForm() {
   const [medicine, setMedicine] = useState({
     name: '',
-    activeIngredients: '',
+    pictureUrl: '',
     price: '',
-    availableQuantity: '',
-    image: null, // Add an 'image' property for the uploaded image
+    quantity: '',
+    
   });
 
+  // Define your backend URL
+  const backendURL = 'http://localhost:4000'; 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
     // If the input is of type 'file', use the 'files' property to get the uploaded file
@@ -20,21 +23,66 @@ function AddMedicineForm() {
     });
   };
 
+  const submitMedicine = async () => {
+    try {
+      const apiUrl = `${backendURL}/api/medicine/add-medicine`;
+
+      const response = await axios.post(apiUrl, medicine);
+
+      if (response.status === 200) {
+        console.log('Medicine added successfully:', response.data);
+        // Reset the form fields after submission
+        setMedicine({
+          name: '',
+          pictureUrl: '',
+          price: '',
+          quantity: '',
+          
+        });
+      } else {
+        console.error('Failed to add medicine:', response);
+      }
+    } catch (error) {
+      console.error('Error while adding medicine:', error);
+    }
+  };
+
+  const addMedicine = async () => {
+    try {
+      // Define the API endpoint where you want to send the data
+      const apiUrl = `${backendURL}/api/medicine/add-medicine`;
+
+      // Send a POST request with the medicine data
+      const response = await axios.post(apiUrl, medicine);
+
+      if (response.status === 200) {
+        // Successfully added the medicine
+        console.log('Medicine added successfully:', response.data);
+        // You can add further logic, such as displaying a success message or redirecting the user.
+      } else {
+        console.error('Failed to add medicine.');
+        // Handle the error, e.g., display an error message to the user.
+      }
+    } catch (error) {
+      console.error('Error while adding medicine:', error);
+      // Handle network errors or other issues.
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // You can add your logic to process the form data here, e.g., validation or API call.
-    console.log('Medicine Data:', medicine);
-
-    // Reset the form fields after submission (except for the image)
+    addMedicine();
+    // Reset the form fields here or add other logic as needed.
     setMedicine({
       name: '',
-      activeIngredients: '',
+      pictureUrl: '',
       price: '',
-      availableQuantity: '',
-      image: medicine.image, // Retain the uploaded image
+      quantity: '',
+      
     });
   };
+
+  
 
   return (
     <div>
@@ -45,8 +93,8 @@ function AddMedicineForm() {
           <input type="text" name="name" value={medicine.name} onChange={handleInputChange} />
         </label>
         <label>
-          Active Ingredients:
-          <input type="text" name="activeIngredients" value={medicine.activeIngredients} onChange={handleInputChange} />
+          Picture Url:
+          <input type="text" name="pictureUrl" value={medicine.pictureUrl} onChange={handleInputChange} />
         </label>
         <label>
           Price:
@@ -54,12 +102,9 @@ function AddMedicineForm() {
         </label>
         <label>
           Available Quantity:
-          <input type="number" name="availableQuantity" value={medicine.availableQuantity} onChange={handleInputChange} />
+          <input type="number" name="quantity" value={medicine.quantity} onChange={handleInputChange} />
         </label>
-        <label>
-          Medicine Image:
-          <input type="file" name="image" onChange={handleInputChange} />
-        </label>
+        
         <button type="submit">Add Medicine</button>
       </form>
     </div>
