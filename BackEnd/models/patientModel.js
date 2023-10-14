@@ -40,12 +40,16 @@ const patientSchema = new Schema({
             type: String,
             required: true
         },
+        relation: {
+            type: String,
+            required: true
+        }
         
 
     },
     required: true
-    },
-    // health_package: {
+    }
+    // ,health_package: {
     //     type: mongoose.Schema.ObjectId, ref: 'HealthPackage'
     // }
 }, {timestamps: true});

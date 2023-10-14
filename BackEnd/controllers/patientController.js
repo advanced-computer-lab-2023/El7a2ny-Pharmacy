@@ -30,8 +30,23 @@ const removePatient = async (req, res) => {
     res.status(200).json(patient); 
 };
 
+const getPatient = async (req, res) => {
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such patient'});
+
+    const patient = await Patient.findById(id).select({password: 0});
+    
+    if(!patient)
+        return res.status(404).json({error: 'no such patient'});
+     
+    res.status(200).json(patient);
+};
+
 module.exports = {
     register,
     getPatients,
-    removePatient
+    removePatient,
+    getPatient
 };

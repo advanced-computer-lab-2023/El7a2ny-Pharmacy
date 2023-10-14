@@ -18,9 +18,23 @@ const medicineSchema = new Schema({
     availableQuantity: {
         type: Number,
         required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    sales: {
+        type: Number,
+        required: true
+    },
+    ingredients: {
+        type: [String],
+        required: true
+    },
+    medicinal_use: {
+        type: String,
+        required: true
     }
-
-
 }, {timestamps: true});
 
 const Medicine = mongoose.model('Medicine', medicineSchema);

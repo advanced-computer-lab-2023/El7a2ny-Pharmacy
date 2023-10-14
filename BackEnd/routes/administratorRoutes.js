@@ -7,10 +7,10 @@ const {
 
 const router = express.Router();
 
-router.post('/add-admin', addAdmin); //req 7
+router.post('/add-admin', addAdmin); //req 5
 
-router.get('/all-admins', getAdmins); //req 8
+//router.get('/all-admins', getAdmins); 
 
-router.delete('/remove-admin/:id', removeAdmin); //req 8
+//router.delete('/remove-admin/:id', removeAdmin); 
 
 module.exports = router;
