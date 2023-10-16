@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="App">
-      <MedicineList /> {/* Render the AppRouter component */}
+      <MedicineEditor /> {/* Render the AppRouter component */}
     </div>
   );
 }

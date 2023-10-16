@@ -33,7 +33,7 @@ function PharmacistRegistrationForm() {
 
     try {
       // Send the pharmacist registration request to the backend
-      const response = await axios.post(`${backendURL}/api/pharmacist/register-request`, formData);
+      const response = await axios.post(`${backendURL}/api/pharmacists/register-request`, formData);
 
       if (response.status === 200) {
         console.log('Pharmacist registration request successful.');

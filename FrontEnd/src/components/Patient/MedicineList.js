@@ -9,7 +9,7 @@ const MedicineList = () => {
   const backendURL = 'http://localhost:4000';
   // Fetch all medicines on initial load
   useEffect(() => {
-    axios.get(`${backendURL}/api/medicine/all-medicines`)
+    axios.get(`${backendURL}/api/medicines/all-medicines`)
       .then((response) => {
         setMedicines(response.data);
       })

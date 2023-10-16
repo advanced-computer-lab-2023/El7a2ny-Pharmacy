@@ -37,7 +37,7 @@ const RemoveUser = () => {
 
   const handleRemovePharmacist = async (id) => {
     try {
-      const apiUrl = `${backendURL}/api/pharmacist/remove-pharmacist/${id}`;
+      const apiUrl = `${backendURL}/api/pharmacists/remove-pharmacist/${id}`;
 
       const response = await axios.delete(apiUrl);
 

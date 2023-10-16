@@ -6,7 +6,7 @@ const PharmacistRequests = () => {
 
   useEffect(() => {
     // Fetch pharmacist requests from the backend
-    axios.get('http://localhost:4000/api/pharmacist/pending')
+    axios.get('http://localhost:4000/api/pharmacists/all-pharmacists')
       .then((response) => {
         setRequests(response.data);
       })

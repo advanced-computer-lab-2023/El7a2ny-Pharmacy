@@ -10,7 +10,7 @@ function MedicineEditor() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`${backendURL}/api/medicine/all-medicines?name=${searchQuery}`);
+      const response = await axios.get(`${backendURL}/api/medicines/all-medicines?name=${searchQuery}`);
       if (response.status === 200) {
         setSearchResults(response.data);
       } else {
@@ -34,7 +34,7 @@ function MedicineEditor() {
         
       };
 
-      const response = await axios.patch(`${backendURL}/api/medicine/update-medicine/${updateMedicine.id}`, updateMedicine);
+      const response = await axios.patch(`${backendURL}/api/medicines/update-medicine/${updateMedicine.id}`, updateMedicine);
 
       if (response.status === 200) {
         console.log('Medicine details updated successfully.');

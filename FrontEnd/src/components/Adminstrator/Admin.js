@@ -52,7 +52,7 @@ const Admin = () => {
       if (searchType === 'patient') {
         apiUrl = `${backendURL}/api/patients/all-patients?username=${searchUsername}`;
       } else if (searchType === 'pharmacist') {
-        apiUrl = `${backendURL}/api/pharmacist/all-pharmacists?username=${searchUsername}`;
+        apiUrl = `${backendURL}/api/pharmacists/all-pharmacists?username=${searchUsername}`;
       } else {
         console.error('Invalid search type');
         return;

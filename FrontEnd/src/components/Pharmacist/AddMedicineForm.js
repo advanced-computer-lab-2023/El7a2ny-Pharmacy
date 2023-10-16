@@ -25,7 +25,7 @@ function AddMedicineForm() {
 
   const submitMedicine = async () => {
     try {
-      const apiUrl = `${backendURL}/api/medicine/add-medicine`;
+      const apiUrl = `${backendURL}/api/medicines/add-medicine`;
 
       const response = await axios.post(apiUrl, medicine);
 
@@ -50,7 +50,7 @@ function AddMedicineForm() {
   const addMedicine = async () => {
     try {
       // Define the API endpoint where you want to send the data
-      const apiUrl = `${backendURL}/api/medicine/add-medicine`;
+      const apiUrl = `${backendURL}/api/medicines/add-medicine`;
 
       // Send a POST request with the medicine data
       const response = await axios.post(apiUrl, medicine);
