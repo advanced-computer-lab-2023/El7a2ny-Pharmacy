@@ -32,6 +32,9 @@ const patientSchema = new Schema({
         type: String,
         required: true
     },
+    addresses: {
+        type: [String]    
+    },
     emergency_contact: {
         type: {
             name: {

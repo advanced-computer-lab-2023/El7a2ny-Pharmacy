@@ -7,7 +7,8 @@ const {
     getMedicines,
     getMedicinesFilterByUsage,
     getMedicinesSearchByName,
-    changePassword
+    changePassword,
+    addAddress
 } = require('../controllers/patientController');
 const {requireAuthPatient} = require('../middleware/requireAuth');
 
@@ -30,5 +31,7 @@ router.get('/all-medicines-search-by-name/:name', getMedicinesSearchByName); //r
 router.get('/all-medicines-filter-by-medicinal-use/:usage', getMedicinesFilterByUsage); //req 15
 
 router.patch('/change-password', changePassword); //req 10
+
+router.patch('/add-address', addAddress); //req 30
 
 module.exports = router;

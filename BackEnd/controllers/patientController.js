@@ -135,6 +135,20 @@ const changePassword = async (req, res) => {
     res.status(200).json(patient); 
 };
 
+const addAddress = async (req, res) => {
+    const id = req.user._id
+
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such patient'});
+
+    const patient = await Patient.findOneAndUpdate({_id: id}, { $push: { addresses: req.body.address } });
+    
+    if(!patient)
+        return res.status(404).json({error: 'no such patient'});
+     
+    res.status(200).json(patient); 
+};
+
 module.exports = {
     register,
     login,
@@ -143,5 +157,6 @@ module.exports = {
     getMedicines,
     getMedicinesFilterByUsage,
     getMedicinesSearchByName,
-    changePassword
+    changePassword,
+    addAddress
 };
