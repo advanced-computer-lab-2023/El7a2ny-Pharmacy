@@ -6,7 +6,6 @@ const cors = require('cors');
 const patientRoutes = require('./routes/patientRoutes.js');
 const pharmacistRoutes = require('./routes/pharmacistRoutes.js');
 const administratorRoutes = require('./routes/administratorRoutes.js');
-const medicineRoutes = require('./routes/medicineRoutes.js');
 
 const app = express();
 
@@ -20,7 +19,6 @@ app.use(express.json());
 app.use('/api/patients', patientRoutes);
 app.use('/api/pharmacists', pharmacistRoutes);
 app.use('/api/administrators', administratorRoutes);
-app.use('/api/medicines', medicineRoutes);
 
 mongoose.connect(process.env.MONGO_URI_2)
     .then(() => {

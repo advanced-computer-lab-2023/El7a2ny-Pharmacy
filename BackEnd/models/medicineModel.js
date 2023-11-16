@@ -8,9 +8,8 @@ const medicineSchema = new Schema({
         required: true
     },
      pictureUrl: {
-         type: String,
-         required: true
-     },
+         type: String
+    },
     price: {
         type: Number,
         required: true
