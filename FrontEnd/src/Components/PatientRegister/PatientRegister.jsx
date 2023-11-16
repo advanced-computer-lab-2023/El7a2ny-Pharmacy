@@ -45,13 +45,11 @@ const PatientRegister = () => {
     try {
       const response = await axios.post(ApiBaseUrl + 'patients/register', values);
       console.log(response);
-      console.log('hiii'); // Handle the response as needed
       setIsLoading(false);
       formik.resetForm();
 
     } catch (error) {
       console.error(error);
-      console.log('byeeeee');
       setIsLoading(false);
     }
   }

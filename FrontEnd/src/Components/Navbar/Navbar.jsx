@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-export default function NavBar() {
+export default function NavBar({LogOut , PharmacistData , PatientData , AdminData}) {
   const [activeLink, setActiveLink] = useState('Home');
   return <>
     <nav className={ `first-z navbar navbar-expand-lg bg-light shadow-sm navbar-light position-sticky top-0`}>
@@ -23,6 +23,12 @@ export default function NavBar() {
           Pharmacist List
           </Link>
         </li>
+        <li className="nav-item">
+          <Link className={`nav-link ${activeLink === 'AddMedicine' ? ' active' : ''}`} to={`AddMedicine`} onClick={() => setActiveLink('AddMedicine')}>
+          Add Medicine
+          </Link>
+        </li>
+
         <li className="nav-item">
           <Link className={`nav-link ${activeLink === 'MedicineList' ? ' active' : ''}`} to={`MedicineList`} onClick={() => setActiveLink('MedicineList')}>
           Medicine List
