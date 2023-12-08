@@ -56,7 +56,7 @@ router.patch('/change-password', changePassword); //req 10
 
 router.post('/add-medicine', addMedicine); //req 16
 
-router.patch('/update-medicine/:id', updateMedicine); //req 18
+router.patch('/update-medicine/:id', updateMedicine); //req 18, 19
 
 router.patch('/upload-medicine-image/:id', upload.single('file'), uploadMedicineImage); //req 17
 
