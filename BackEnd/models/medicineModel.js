@@ -33,6 +33,11 @@ const medicineSchema = new Schema({
     medicinal_use: {
         type: String,
         required: true
+    },
+    isArchived: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 }, {timestamps: true});
 

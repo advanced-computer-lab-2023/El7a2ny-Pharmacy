@@ -10,8 +10,6 @@ const administratorRoutes = require('./routes/administratorRoutes.js');
 const app = express();
 
 
-
-
 app.use(cors()); // Enable CORS for all routes
 
 app.use(express.json());
@@ -23,7 +21,7 @@ app.use('/api/administrators', administratorRoutes);
 mongoose.connect(process.env.MONGO_URI_2)
     .then(() => {
         app.listen(process.env.PORT, () => {
-            console.log('connected to db and listening to port'+ process.env.PORT);
+            console.log('connected to db and listening to port '+ process.env.PORT);
         });
     })
     .catch((error) => {

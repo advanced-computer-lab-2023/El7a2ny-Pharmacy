@@ -91,14 +91,14 @@ const loginOTP = async (req, res) => {
 };
 
 const getMedicines = async (req, res) => {
-    const medicines = await Medicine.find({}).sort({createdAt: -1});
+    const medicines = await Medicine.find({isArchived: false}).sort({createdAt: -1});
     res.status(200).json(medicines);
 };
 
 const getMedicinesSearchByName = async (req, res) => {
     const {name} = req.params;
 
-    const medicines = await Medicine.find({name: name});
+    const medicines = await Medicine.find({name: name, isArchived: false});
     
     if(!medicines)
         return res.status(404).json({error: 'no such medicine'});
@@ -109,7 +109,7 @@ const getMedicinesSearchByName = async (req, res) => {
 const getMedicinesFilterByUsage = async (req, res) => {
     const {usage} = req.params;
 
-    const medicines = await Medicine.find({medicinal_use: usage});
+    const medicines = await Medicine.find({medicinal_use: usage, isArchived: false});
     
     if(!medicines)
         return res.status(404).json({error: 'no such medicine'});

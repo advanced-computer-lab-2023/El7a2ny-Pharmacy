@@ -14,7 +14,8 @@ const patientSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -30,7 +31,8 @@ const patientSchema = new Schema({
     },
     mobile_number: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     addresses: {
         type: [String]    
@@ -61,6 +63,7 @@ patientSchema.statics.register = async function(reqBody) {
     const password = reqBody.password;
     const username = reqBody.username;
     const gender = reqBody.gender;
+    const mobile_number = reqBody.mobile_number;
 
     if(!validator.isEmail(email)) {
         throw Error('Email is not valid');
@@ -70,10 +73,22 @@ patientSchema.statics.register = async function(reqBody) {
         throw Error('Password not strong enough');
     }
     
-    const exists = await this.findOne({username});
+    const usernameExists = await this.findOne({username});
 
-    if(exists) {
+    if(usernameExists) {
         throw Error('Username already in use');
+    }
+
+    const emailExists = await this.findOne({email});
+
+    if(emailExists) {
+        throw Error('Email already in use');
+    }
+
+    const mobileExists = await this.findOne({mobile_number});
+
+    if(mobileExists) {
+        throw Error('Mobile number already in use');
     }
 
     if(gender!=='male' && gender!=='female') {
