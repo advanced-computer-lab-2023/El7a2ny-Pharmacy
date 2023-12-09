@@ -51,7 +51,7 @@ router.get('/all-not-filled-prescriptions', getNotFilledPrescriptions); //req 25
 
 router.get('/one-prescription/:id', getPrescription); //req 25, the id of the prescription
 
-router.patch('/add-medicine-to-cart/:id', addMedicineToCart); //req 25, id is the medicine id
+router.patch('/add-medicine-to-cart/:id', addMedicineToCart); //req 24, 25, id is the medicine id
 
 router.get('/over-the-counter-medicines', getOverTheCounterMedicines); //req 24
 
