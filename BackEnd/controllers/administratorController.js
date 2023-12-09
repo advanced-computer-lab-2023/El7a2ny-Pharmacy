@@ -5,7 +5,8 @@ const Patient = require('../models/patientModel');
 const Medicine = require('../models/medicineModel');
 const nodemailer = require('nodemailer');
 const Pharmacist = require('../models/pharmacistModel');
-const validator = require('validator')
+const validator = require('validator');
+const Cart = require('../models/cartModel');
 
 const createToken = (_id) => {
     return jwt.sign({_id: _id}, process.env.SECRET, {expiresIn: '3d'})
@@ -120,6 +121,8 @@ const removePatient = async (req, res) => {
     
     if(!patient)
         return res.status(404).json({error: 'no such patient'});
+
+    await Cart.deleteMany({patient_id: id});
 
     res.status(200).json(patient); 
 };

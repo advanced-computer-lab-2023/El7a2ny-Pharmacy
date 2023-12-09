@@ -38,6 +38,11 @@ const medicineSchema = new Schema({
         type: Boolean,
         default: false,
         required: true
+    },
+    isOverTheCounter: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 }, {timestamps: true});
 

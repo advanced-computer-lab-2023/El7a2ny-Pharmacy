@@ -8,7 +8,14 @@ const {
     getMedicinesFilterByUsage,
     getMedicinesSearchByName,
     changePassword,
-    addAddress
+    addAddress,
+    getCart,
+    removeMedicineFromCart,
+    updateMedicineQuantityInCart,
+    getNotFilledPrescriptions,
+    getPrescription,
+    addMedicineToCart,
+    getOverTheCounterMedicines
 } = require('../controllers/patientController');
 const {requireAuthPatient} = require('../middleware/requireAuth');
 
@@ -33,5 +40,19 @@ router.get('/all-medicines-filter-by-medicinal-use/:usage', getMedicinesFilterBy
 router.patch('/change-password', changePassword); //req 10
 
 router.patch('/add-address', addAddress); //req 30
+
+router.get('/view-cart', getCart); //req 26
+
+router.patch('/remove-medicine-from-cart/:id', removeMedicineFromCart); //req 27, id is the medicine id
+
+router.patch('/update-medicine-quantity-in-cart/:id', updateMedicineQuantityInCart); //req 28, id is the medicine id, pass new quantity in req body
+
+router.get('/all-not-filled-prescriptions', getNotFilledPrescriptions); //req 25
+
+router.get('/one-prescription/:id', getPrescription); //req 25, the id of the prescription
+
+router.patch('/add-medicine-to-cart/:id', addMedicineToCart); //req 25, id is the medicine id
+
+router.get('/over-the-counter-medicines', getOverTheCounterMedicines); //req 24
 
 module.exports = router;
