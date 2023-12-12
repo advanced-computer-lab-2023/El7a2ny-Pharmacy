@@ -367,10 +367,7 @@ const cancelOrder = async (req, res) => {
 
     const order = await Order.findById(id).populate('medicine_list.medicine');
 
-    if(order.payment_method == 'credit card')
-        return res.status(400).json({error: 'Sorry, orders payed with credit card cannot be cancelled'});
-
-    if(order.payment_method == 'wallet') {
+    if(order.payment_method == 'wallet' || order.payment_method == 'credit card') {
         const patient = await Patient.findById(patient_id);
         await Patient.findOneAndUpdate({_id: patient_id}, {wallet: patient.wallet + order.total});
     }
