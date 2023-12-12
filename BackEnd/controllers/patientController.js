@@ -7,7 +7,8 @@ const jwt = require('jsonwebtoken')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
 const Cart = require('../models/cartModel');
-
+const Order = require('../models/orderModel');
+const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 
 const register = async (req, res) => {
     try {
@@ -167,9 +168,14 @@ const getCart = async (req, res) => {
 const removeMedicineFromCart = async (req, res) => {
     const patient_id = req.user._id
     const {id} = req.params;
-
-    const cart = await Cart.updateOne({patient_id: patient_id}, { $pull: { 'medicine_list': { medicine: id } } });
-     
+    
+    const medicine = await Medicine.findById(id);
+    const cartTemp1 = await Cart.findOne({patient_id: patient_id});
+    const cartTemp = await Cart.findOne({ patient_id: patient_id, 'medicine_list.medicine': id }).select('medicine_list.$');
+    const currentQuantity = cartTemp.medicine_list[0].quantity;
+    const newTotal = (cartTemp1.total - (currentQuantity * medicine.price));
+    const cart = await Cart.updateOne({patient_id: patient_id}, { $pull: { 'medicine_list': { medicine: id } }, total: newTotal});
+    
     res.status(200).json(cart); 
 };
 
@@ -181,8 +187,13 @@ const updateMedicineQuantityInCart = async (req, res) => {
     const medicine = await Medicine.findById(id);
 
     let cart = null;
-    if(quantity <= medicine.availableQuantity)
-        cart = await Cart.updateOne({"patient_id": patient_id, "medicine_list.medicine": id}, { $set: { "medicine_list.$.quantity": quantity } });
+    if(quantity <= medicine.availableQuantity) {
+        const cartTemp1 = await Cart.findOne({patient_id: patient_id});
+        const cartTemp = await Cart.findOne({ patient_id: patient_id, 'medicine_list.medicine': id }).select('medicine_list.$');
+        const currentQuantity = cartTemp.medicine_list[0].quantity;
+        const newTotal = (cartTemp1.total - (currentQuantity * medicine.price)) + (quantity * medicine.price);
+        cart = await Cart.updateOne({"patient_id": patient_id, "medicine_list.medicine": id}, { $set: { "medicine_list.$.quantity": quantity }, total: newTotal});
+    }
     else
         return res.status(400).json({error: 'you exceeded the available quantity of this item'});
 
@@ -228,7 +239,12 @@ const addMedicineToCart = async (req, res) => {
     if(medicine.availableQuantity <= 0 || medicine.isArchived)
         return res.status(400).json({error: 'sorry, this item is not available right now'});
 
-    const cart = await Cart.updateOne({patient_id: patient_id}, { $push: { 'medicine_list': { medicine: id, quantity: 1 } } });
+    const exists = await Cart.findOne({ "patient_id": patient_id, "medicine_list": { $elemMatch: { medicine: id } } });
+    if(exists)
+        return res.status(400).json({error: 'this item is already in your cart'});
+
+    const cartTemp = await Cart.findOne({patient_id: patient_id});
+    const cart = await Cart.updateOne({patient_id: patient_id}, { $push: { 'medicine_list': { medicine: id, quantity: 1 } }, total: medicine.price + cartTemp.total});
      
     res.status(200).json(cart); 
 };
@@ -236,6 +252,139 @@ const addMedicineToCart = async (req, res) => {
 const getOverTheCounterMedicines = async (req, res) => {
     const medicines = await Medicine.find({isOverTheCounter: true, isArchived: false}); 
     res.status(200).json(medicines);
+};
+
+const getAddresses = async (req, res) => {
+    const id = req.user._id
+
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such patient'});
+
+    const patient = await Patient.findById(id).select({password: 0});
+    
+    if(!patient)
+        return res.status(404).json({error: 'no such patient'});
+     
+    res.status(200).json(patient.addresses);
+};
+
+const creditCardPayment = async (req, res) => {
+    const id = req.user._id
+   
+    const cart = await Cart.findOne({patient_id: id}).populate('medicine_list.medicine');
+    let items = [];
+    for(let i = 0; i < cart.medicine_list.length; i++) {
+        items.push({
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: cart.medicine_list[i].medicine.name
+                },
+                unit_amount: cart.medicine_list[i].medicine.price * 100
+            },
+            quantity: cart.medicine_list[i].quantity
+        })
+    }
+
+    try {
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items: items,
+            success_url: "https://google.com", // when user press pay button redirects to link
+            cancel_url: "https://facebook.com" // if user cancelled payment (pressed back) redirects to link
+        })
+
+        res.json({url: session.url})
+    } catch(e) {
+        res.status(500).json({error: e.message});
+    }
+};
+
+const placeOrder = async (req, res) => {
+    const patient_id = req.user._id
+    const {address, payment_method} = req.body
+    
+    const cart = await Cart.findOne({patient_id: patient_id});
+
+    if(payment_method == 'wallet') {
+        const patient = await Patient.findById(patient_id);
+        if(patient.wallet >= cart.total) 
+            await Patient.findOneAndUpdate({_id: patient_id}, {wallet: patient.wallet - cart.total});
+        else
+            return res.status(400).json({error: 'Sorry, the amount in your wallet is not enough'});
+    }
+
+    try {
+        const order = await Order.create({
+            patient_id, 
+            medicine_list: cart.medicine_list,
+            address,
+            payment_method,
+            status: 'confirmed',
+            total: cart.total
+        });
+
+        //update medicine, cart, prescription
+        for(let i = 0; i < cart.medicine_list.length; i++) {
+            const medicine = await Medicine.findById(cart.medicine_list[i].medicine);
+            await Medicine.findOneAndUpdate({_id: cart.medicine_list[i].medicine}, {availableQuantity: medicine.availableQuantity - cart.medicine_list[i].quantity, sales: medicine.sales + cart.medicine_list[i].quantity});
+        }
+
+        await Cart.findOneAndUpdate({patient_id: patient_id}, {medicine_list: [], total: 0});
+
+        res.status(200).json(order);
+    } catch(error) {
+        res.status(400).json({error: error.message});
+    }
+};
+
+const getMyOrders = async (req, res) => {
+    const id = req.user._id
+
+    const orders = await Order.find({patient_id: id}).populate('medicine_list.medicine');
+    
+    res.status(200).json(orders);
+};
+
+const getOrder = async (req, res) => {
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such order'});
+
+    const order = await Order.findById(id).populate('medicine_list.medicine');
+    
+    if(!order)
+        return res.status(404).json({error: 'no such order'});
+     
+    res.status(200).json(order);
+};
+
+const cancelOrder = async (req, res) => {
+    const patient_id = req.user._id
+    const {id} = req.params
+
+    const order = await Order.findById(id).populate('medicine_list.medicine');
+
+    if(order.payment_method == 'credit card')
+        return res.status(400).json({error: 'Sorry, orders payed with credit card cannot be cancelled'});
+
+    if(order.payment_method == 'wallet') {
+        const patient = await Patient.findById(patient_id);
+        await Patient.findOneAndUpdate({_id: patient_id}, {wallet: patient.wallet + order.total});
+    }
+
+    //update medicine, prescription
+    for(let i = 0; i < order.medicine_list.length; i++) {
+        const medicine = await Medicine.findById(order.medicine_list[i].medicine);
+        await Medicine.findOneAndUpdate({_id: medicine._id}, {availableQuantity: medicine.availableQuantity + order.medicine_list[i].quantity, sales: medicine.sales - order.medicine_list[i].quantity});
+    }    
+        
+    const order2 = await Order.findOneAndUpdate({_id: id}, {status: 'cancelled'});
+
+    res.status(200).json(order2);
+    
 };
 
 module.exports = {
@@ -254,5 +403,11 @@ module.exports = {
     getNotFilledPrescriptions,
     getPrescription,
     addMedicineToCart,
-    getOverTheCounterMedicines
+    getOverTheCounterMedicines,
+    getAddresses,
+    creditCardPayment,
+    placeOrder,
+    getMyOrders,
+    getOrder,
+    cancelOrder
 };

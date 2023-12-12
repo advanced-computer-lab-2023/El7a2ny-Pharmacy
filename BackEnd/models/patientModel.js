@@ -55,6 +55,10 @@ const patientSchema = new Schema({
 
     },
     required: true
+    },
+    wallet: {
+        type: Number,
+        default: 0
     }
 }, {timestamps: true});
 

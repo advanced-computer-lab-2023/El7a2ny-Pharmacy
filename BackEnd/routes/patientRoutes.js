@@ -15,7 +15,13 @@ const {
     getNotFilledPrescriptions,
     getPrescription,
     addMedicineToCart,
-    getOverTheCounterMedicines
+    getOverTheCounterMedicines,
+    getAddresses,
+    creditCardPayment,
+    placeOrder,
+    getMyOrders,
+    getOrder,
+    cancelOrder
 } = require('../controllers/patientController');
 const {requireAuthPatient} = require('../middleware/requireAuth');
 
@@ -54,5 +60,17 @@ router.get('/one-prescription/:id', getPrescription); //req 25, the id of the pr
 router.patch('/add-medicine-to-cart/:id', addMedicineToCart); //req 24, 25, id is the medicine id
 
 router.get('/over-the-counter-medicines', getOverTheCounterMedicines); //req 24
+
+router.get('/my-addresses', getAddresses); //req 31
+
+router.post('/credit-card-payment', creditCardPayment); //req 32, response is the payment url
+
+router.post('/place-order', placeOrder); //req 29
+
+router.get('/my-orders', getMyOrders); //req 33
+
+router.get('/one-order/:id', getOrder); //req 34, id is id of the order
+
+router.patch('/cancel-order/:id', cancelOrder); //req 35, id is id of the order
 
 module.exports = router;

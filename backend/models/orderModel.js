@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const cartSchema = new Schema({
+const orderSchema = new Schema({
     patient_id: {
         type: mongoose.Schema.ObjectId, ref: 'Patient',
         required: true
@@ -16,12 +16,25 @@ const cartSchema = new Schema({
       default: [],
       required: true
     },
+    address: {
+        type: String,
+        required: true
+    },
+    payment_method: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        required: true
+    },
     total: {
         type: Number,
-        required: true,
-        default: 0
+        required: true
     }
+
+    // createdAt
 }, {timestamps: true});
 
-const Cart = mongoose.model('Cart', cartSchema);
-module.exports = Cart;
+const Order = mongoose.model('Order', orderSchema);
+module.exports = Order;
