@@ -21,7 +21,8 @@ const {
     placeOrder,
     getMyOrders,
     getOrder,
-    cancelOrder
+    cancelOrder,
+    getWallet
 } = require('../controllers/patientController');
 const {requireAuthPatient} = require('../middleware/requireAuth');
 
@@ -72,5 +73,7 @@ router.get('/my-orders', getMyOrders); //req 33
 router.get('/one-order/:id', getOrder); //req 34, id is id of the order
 
 router.patch('/cancel-order/:id', cancelOrder); //req 35, id is id of the order
+
+router.get('/my-wallet', getWallet); //req 38
 
 module.exports = router;

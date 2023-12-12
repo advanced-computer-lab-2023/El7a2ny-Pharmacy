@@ -48,6 +48,11 @@ const pharmacistSchema = new Schema({
     },
     gov_id: {
         type: String
+    },
+    wallet: {
+        type: Number,
+        required: true,
+        default: 0
     }
 }, {timestamps: true});
 

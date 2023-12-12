@@ -257,6 +257,14 @@ const uploadMedicineImage = async (req, res) => {
     res.status(200).json(medicine);
 };
 
+const getWallet = async (req, res) => {
+    const id = req.user._id
+
+    const pharmacist = await Pharmacist.findById(id);
+     
+    res.status(200).json(pharmacist.wallet);
+};
+
 module.exports = {
     registerRequest,
     getPharmacist,
@@ -274,5 +282,6 @@ module.exports = {
     changePassword,
     updateMedicine,
     addMedicine,
-    uploadMedicineImage
+    uploadMedicineImage,
+    getWallet
 };

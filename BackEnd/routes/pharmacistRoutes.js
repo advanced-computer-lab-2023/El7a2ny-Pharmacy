@@ -13,7 +13,8 @@ const {
     changePassword,
     updateMedicine,
     addMedicine,
-    uploadMedicineImage
+    uploadMedicineImage,
+    getWallet
 } = require('../controllers/pharmacistController');
 const {requireAuthPharmacist, requireAuthPendingPharmacist} = require('../middleware/requireAuth');
 const multer = require('multer');
@@ -59,5 +60,7 @@ router.post('/add-medicine', addMedicine); //req 16
 router.patch('/update-medicine/:id', updateMedicine); //req 18, 19
 
 router.patch('/upload-medicine-image/:id', upload.single('file'), uploadMedicineImage); //req 17
+
+router.get('/my-wallet', getWallet); //req 38
 
 module.exports = router;

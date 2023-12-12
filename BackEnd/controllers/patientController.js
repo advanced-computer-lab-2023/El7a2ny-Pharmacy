@@ -384,6 +384,15 @@ const cancelOrder = async (req, res) => {
     
 };
 
+const getWallet = async (req, res) => {
+    const id = req.user._id
+
+    const patient = await Patient.findById(id);
+     
+    res.status(200).json(patient.wallet);
+};
+
+
 module.exports = {
     register,
     login,
@@ -406,5 +415,6 @@ module.exports = {
     placeOrder,
     getMyOrders,
     getOrder,
-    cancelOrder
+    cancelOrder,
+    getWallet
 };
