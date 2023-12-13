@@ -15,7 +15,10 @@ const {
     removePharmacist,
     updatePharmacistStatus,
     getRequests,
-    changePassword
+    changePassword,
+    getSalesReport,
+    getSalesReportFilterByDate,
+    getSalesReportFilterByMedicine
 } = require('../controllers/administratorController');
 const {requireAuthAdmin} = require('../middleware/requireAuth');
 
@@ -54,5 +57,11 @@ router.patch('/pharmacist-request/:id', updatePharmacistStatus); //req 8
 router.get('/all-pharmacists-requests', getRequests); //req 8
 
 router.patch('/change-password', changePassword); //req 10
+
+router.get('/sales-report', getSalesReport); //req 20, 21
+
+router.get('/sales-report-filter-by-date/:startDate/:endDate', getSalesReportFilterByDate); //req 20, 21
+
+router.get('/sales-report-filter-by-medicine/:name', getSalesReportFilterByMedicine); //req 20, 21
 
 module.exports = router;

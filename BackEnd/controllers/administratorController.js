@@ -224,6 +224,160 @@ const changePassword = async (req, res) => {
     res.status(200).json(admin); 
 };
 
+const getSalesReport = async (req, res) => {
+    try {
+        const orders = await Order.find({ status: { $ne: 'cancelled' } }).populate('medicine_list.medicine');
+        
+        let totalMoney = 0;
+        let totalMedicinesSold = 0;
+        let medicineSales = {};
+
+        orders.forEach(order => {
+            if (order.status !== 'cancelled') {
+                order.medicine_list.forEach(item => {
+                    const medicine = item.medicine;
+                    const quantity = item.quantity;
+                    const price = medicine.price;
+
+                    totalMedicinesSold += quantity;
+                    totalMoney += quantity * price;
+
+                    if (medicineSales[medicine._id]) {
+                        medicineSales[medicine._id].quantity += quantity;
+                        medicineSales[medicine._id].total += quantity * price;
+                    } else {
+                        medicineSales[medicine._id] = {
+                            name: medicine.name,
+                            quantity,
+                            total: quantity * price
+                        };
+                    }
+                });
+            }
+        });
+
+        const report = {
+            totalMoney,
+            totalMedicinesSold,
+            medicineSales: Object.values(medicineSales),
+        };
+
+        res.json(report);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const getSalesReportFilterByDate = async (req, res) => {
+    try {
+        // Get start and end dates from request parameters
+        const startDate = req.params.startDate;
+        const endDate = req.params.endDate;
+
+        // Build the date filter object
+        const dateFilter = {};
+        if (startDate && endDate) {
+            dateFilter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+        }
+
+        // Use date filter in the Order query
+        const orders = await Order.find({
+            status: { $ne: 'cancelled' },
+            ...dateFilter,
+        }).populate('medicine_list.medicine');
+
+        let totalMoney = 0;
+        let totalMedicinesSold = 0;
+        let medicineSales = {};
+
+        orders.forEach(order => {
+            if (order.status !== 'cancelled') {
+                order.medicine_list.forEach(item => {
+                    const medicine = item.medicine;
+                    const quantity = item.quantity;
+                    const price = medicine.price;
+
+                    totalMedicinesSold += quantity;
+                    totalMoney += quantity * price;
+
+                    if (medicineSales[medicine._id]) {
+                        medicineSales[medicine._id].quantity += quantity;
+                        medicineSales[medicine._id].total += quantity * price;
+                    } else {
+                        medicineSales[medicine._id] = {
+                            name: medicine.name,
+                            quantity,
+                            total: quantity * price
+                        };
+                    }
+                });
+            }
+        });
+
+        const report = {
+            totalMoney,
+            totalMedicinesSold,
+            medicineSales: Object.values(medicineSales),
+        };
+
+        res.json(report);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const getSalesReportFilterByMedicine = async (req, res) => {
+    const {name} = req.params;
+    
+    try {
+        const orders = await Order.find({ status: { $ne: 'cancelled' }}).populate('medicine_list.medicine');
+        
+        let totalMoney = 0;
+        let totalMedicinesSold = 0;
+        let medicineSales = {};
+
+        orders.forEach(order => {
+            if (order.status !== 'cancelled') {
+                order.medicine_list.forEach(item => {
+                    const medicine = item.medicine;
+                    const quantity = item.quantity;
+                    const price = medicine.price;
+
+                    if(medicine.name == name) {
+
+                    totalMedicinesSold += quantity;
+                    totalMoney += quantity * price;
+
+                    if (medicineSales[medicine._id]) {
+                        medicineSales[medicine._id].quantity += quantity;
+                        medicineSales[medicine._id].total += quantity * price;
+                    } else {
+                        medicineSales[medicine._id] = {
+                            name: medicine.name,
+                            quantity,
+                            total: quantity * price
+                        };
+                    }
+                }
+                });
+            }
+        });
+
+        const report = {
+            totalMoney,
+            totalMedicinesSold,
+            medicineSales: Object.values(medicineSales),
+        };
+
+        res.json(report);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 
 module.exports = {
     addAdmin,
@@ -241,5 +395,8 @@ module.exports = {
     removePharmacist,
     updatePharmacistStatus,
     getRequests,
-    changePassword
+    changePassword,
+    getSalesReport,
+    getSalesReportFilterByDate,
+    getSalesReportFilterByMedicine
 };

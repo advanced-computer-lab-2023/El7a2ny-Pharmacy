@@ -14,7 +14,10 @@ const {
     updateMedicine,
     addMedicine,
     uploadMedicineImage,
-    getWallet
+    getWallet,
+    getSalesReport,
+    getSalesReportFilterByDate,
+    getSalesReportFilterByMedicine
 } = require('../controllers/pharmacistController');
 const {requireAuthPharmacist, requireAuthPendingPharmacist} = require('../middleware/requireAuth');
 const multer = require('multer');
@@ -62,5 +65,11 @@ router.patch('/update-medicine/:id', updateMedicine); //req 18, 19
 router.patch('/upload-medicine-image/:id', upload.single('file'), uploadMedicineImage); //req 17
 
 router.get('/my-wallet', getWallet); //req 38
+
+router.get('/sales-report', getSalesReport); //req 20, 21
+
+router.get('/sales-report-filter-by-date/:startDate/:endDate', getSalesReportFilterByDate); //req 20, 21
+
+router.get('/sales-report-filter-by-medicine/:name', getSalesReportFilterByMedicine); //req 20, 21
 
 module.exports = router;
