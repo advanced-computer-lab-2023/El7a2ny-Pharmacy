@@ -7,6 +7,7 @@ const patientRoutes = require('./routes/patientRoutes.js');
 const pharmacistRoutes = require('./routes/pharmacistRoutes.js');
 const administratorRoutes = require('./routes/administratorRoutes.js');
 
+
 const app = express();
 
 

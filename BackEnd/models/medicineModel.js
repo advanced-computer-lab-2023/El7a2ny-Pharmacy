@@ -44,6 +44,10 @@ const medicineSchema = new Schema({
         type: Boolean,
         default: false,
         required: true
+    },
+    main_ingredient: {
+        type: String,
+        required: true
     }
 }, {timestamps: true});
 

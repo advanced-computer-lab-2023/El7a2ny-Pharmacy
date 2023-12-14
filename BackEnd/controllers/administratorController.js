@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 const Pharmacist = require('../models/pharmacistModel');
 const validator = require('validator');
 const Cart = require('../models/cartModel');
+const Order = require('../models/orderModel');
 
 const createToken = (_id) => {
     return jwt.sign({_id: _id}, process.env.SECRET, {expiresIn: '3d'})
@@ -123,6 +124,7 @@ const removePatient = async (req, res) => {
         return res.status(404).json({error: 'no such patient'});
 
     await Cart.deleteMany({patient_id: id});
+    await Order.deleteMany({patient_id: id});
 
     res.status(200).json(patient); 
 };

@@ -392,6 +392,12 @@ const getWallet = async (req, res) => {
     res.status(200).json(patient.wallet);
 };
 
+const getMedicineAlternatives = async (req, res) => {
+    const {id} = req.params
+    const medicine = await Medicine.findById(id);
+    const medicines = await Medicine.find({isArchived: false, availableQuantity: {$gt: 0}, main_ingredient: medicine.main_ingredient, _id: {$ne: id}});
+    res.status(200).json(medicines);
+};
 
 module.exports = {
     register,
@@ -416,5 +422,6 @@ module.exports = {
     getMyOrders,
     getOrder,
     cancelOrder,
-    getWallet
+    getWallet,
+    getMedicineAlternatives
 };
