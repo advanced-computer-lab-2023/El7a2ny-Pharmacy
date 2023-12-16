@@ -17,7 +17,8 @@ const {
     getWallet,
     getSalesReport,
     getSalesReportFilterByDate,
-    getSalesReportFilterByMedicine
+    getSalesReportFilterByMedicine,
+    getNotifications
 } = require('../controllers/pharmacistController');
 const {requireAuthPharmacist, requireAuthPendingPharmacist} = require('../middleware/requireAuth');
 const multer = require('multer');
@@ -71,5 +72,7 @@ router.get('/sales-report', getSalesReport); //req 20, 21
 router.get('/sales-report-filter-by-date/:startDate/:endDate', getSalesReportFilterByDate); //req 20, 21
 
 router.get('/sales-report-filter-by-medicine/:name', getSalesReportFilterByMedicine); //req 20, 21
+
+router.get('/notifications', getNotifications); //req 40
 
 module.exports = router;

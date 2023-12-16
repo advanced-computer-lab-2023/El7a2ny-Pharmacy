@@ -8,6 +8,8 @@ const validator = require('validator')
 const nodemailer = require('nodemailer');
 const Cart = require('../models/cartModel');
 const Order = require('../models/orderModel');
+const PharmacistNotification = require('../models/pharmacistNotificationModel');
+const Pharmacist = require('../models/pharmacistModel');
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
 
 const register = async (req, res) => {
@@ -332,6 +334,42 @@ const placeOrder = async (req, res) => {
         }
 
         await Cart.findOneAndUpdate({patient_id: patient_id}, {medicine_list: [], total: 0});
+
+        const medicinesOrdered = [];
+        order.medicine_list.forEach(e => {medicinesOrdered.push(e.medicine)});
+
+        const outOfStockMedicines = await Medicine.find({_id: {$in: medicinesOrdered}, availableQuantity: {$lte: 0}});
+        let medicineNames = [];
+        for(let i = 0; i < outOfStockMedicines.length; i++) {
+            await PharmacistNotification.create({content: 'The medicine ' + outOfStockMedicines[i].name + ' is out of stock'});
+            medicineNames.push(outOfStockMedicines[i].name);
+        }
+
+        if(medicineNames.length > 0) {
+            const text = medicineNames.join(', ');
+
+            const transporter = nodemailer.createTransport({
+                service: 'hotmail',
+                auth: {
+                    user: 'abdulla_ahly@hotmail.com',
+                    pass: 'ahlyplayer'
+                }
+                });
+            
+            
+            const pharmacists = await Pharmacist.find();
+            let emails = [];
+            pharmacists.forEach(e => {emails.push(e.email)});
+            
+            const mailOptions = {
+                from: 'abdulla_ahly@hotmail.com',
+                to: emails,
+                subject: 'Medicine Out Of Stock',
+                text: 'The following medicines are out of stock: ' + text
+                };
+            
+            transporter.sendMail(mailOptions);
+        }    
 
         res.status(200).json(order);
     } catch(error) {

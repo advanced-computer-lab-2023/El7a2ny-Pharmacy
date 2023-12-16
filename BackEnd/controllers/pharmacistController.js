@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const validator = require('validator')
 const nodemailer = require('nodemailer');
 const Order = require('../models/orderModel');
+const PharmacistNotification = require('../models/pharmacistNotificationModel');
 
 
 const createToken = (_id) => {
@@ -423,6 +424,12 @@ const getSalesReportFilterByMedicine = async (req, res) => {
     }
 };
 
+const getNotifications = async (req, res) => {
+    const notifications = await PharmacistNotification.find();
+     
+    res.status(200).json(notifications);
+};
+
 
 module.exports = {
     registerRequest,
@@ -445,5 +452,6 @@ module.exports = {
     getWallet,
     getSalesReport,
     getSalesReportFilterByDate,
-    getSalesReportFilterByMedicine
+    getSalesReportFilterByMedicine,
+    getNotifications
 };
