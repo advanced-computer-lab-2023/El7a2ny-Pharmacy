@@ -25,7 +25,8 @@ const medicineSchema = new Schema({
     },
     sales: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     ingredients: {
         type: [String],
@@ -42,7 +43,6 @@ const medicineSchema = new Schema({
     },
     isOverTheCounter: {
         type: Boolean,
-        default: false,
         required: true
     },
     main_ingredient: {
