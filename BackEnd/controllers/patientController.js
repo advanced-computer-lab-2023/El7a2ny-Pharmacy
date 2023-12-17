@@ -437,6 +437,25 @@ const getMedicineAlternatives = async (req, res) => {
     res.status(200).json(medicines);
 };
 
+const getPharmacists = async (req, res) => {
+    const pharmacists = await Pharmacist.find({status: 'registered'}).select({password: 0});
+    res.status(200).json(pharmacists);
+};
+
+const getPharmacist = async (req, res) => {
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such a pharmacist'});
+
+    const pharmacist = await Pharmacist.findById(id).select({password: 0});
+    
+    if(!pharmacist)
+        return res.status(404).json({error: 'no such a pharmacist'});
+     
+    res.status(200).json(pharmacist);
+};
+
 module.exports = {
     register,
     login,
@@ -461,5 +480,7 @@ module.exports = {
     getOrder,
     cancelOrder,
     getWallet,
-    getMedicineAlternatives
+    getMedicineAlternatives,
+    getPharmacists,
+    getPharmacist
 };

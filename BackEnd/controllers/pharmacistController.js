@@ -258,8 +258,10 @@ const uploadMedicineImage = async (req, res) => {
     
     if(!medicine)
         return res.status(404).json({error: 'no such medicine'});
-     
-    res.status(200).json(medicine);
+    
+    const medicine1 = await Medicine.findById(id);
+
+    res.status(200).json(medicine1);
 };
 
 const getWallet = async (req, res) => {
