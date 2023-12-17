@@ -1,34 +1,45 @@
 ## Project Title
-This is an implementation of a mern stack web application. This application is a virtual pharmacy and serves three user parties which are pharmacists, patients and admins.
+
+"El7a2ny" is a virtual pharmacy and serves three user parties which are pharmacists, patients and admins. This is an implementation of a mern stack web application. 
 
 ## Motivation
-We thought of implementing this web application to make it easier for patients to order their medications and pay online or pay on delivery 
+
+We thought of implementing this web application to make it easier for patients to order their medications anytime, anywhere and pay online or pay on delivery.
+
 ## Build Status
+
+One of the biggest problems we have in our code is that we did not follow the clean code guidelines in a lot of parts of our project, also some UI elements need to look more consistent, the project needs unit tests, accounting for scalability and good performance is missing, also the application is not deployed yet
+
 ## Code Style
+
 The code style is enforced using `eslint` and `prettier`. The code style is enforced using `pre-commit` hooks and `pre-commit github action.`
+
 ## Screenshots
 
 Homepage
 
-![Screenshot (36)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/fb9e4386-b683-4a7a-b056-1367e69efde8)
+![Screenshot (37)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/2fd26f99-da47-43ef-a11a-f8bc27a25766)
 
-Patient registration
+Pharmacist registration form
 
-![Screenshot (34)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/6a22ad6a-6352-408f-9ab2-330f19ff58eb)
+![Screenshot (38)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/9f4f6d53-aea3-4371-be97-b606a2cc01c4)
 
-Admin can add another admin to system
+Admin can view/filter all medicines
 
-![Screenshot (35)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/bb7dc7d5-f4bb-4ca8-aba2-fb4f0429e9ed)
+![Screenshot (39)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/2d629aad-3b6f-41ce-ab7f-4daa7baf3dc7)
 
+Admin manages all pharmacists
+
+![Screenshot (40)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/41fc099b-2234-4e21-a325-803fb8608097)
 
 ## Tech/Framework used
-- React
+
+- React.js
 - Node.js
 - Nodemon
 - Express
 - MongoDB
 - Mongoose
-- MongoDB Atlas
 - Postman
 - VSCode
 - Git
@@ -41,16 +52,18 @@ Admin can add another admin to system
 - Formik
 - BootStrap
 - PrimeReact
+  
 ## Features
-There are three different types of users which are pharmacists, patients and admins
 
-As an admin I can: Login and logout, add other administrators, add or remove pharmacists, view pharmacists' requests, change or reset passwords, view, search or filter medicines, view sales reports and view patients or pharmacists' information.
+There are three different types of users which are pharmacists, patients and admins:
 
-As a pharmacist I can: Login and logout, upload documents, change or reset passwords, view, search, add or filter medicines, view medicine quantities, upload their images, edit their prices and archive/unarchive them, view and filter sales,  chat with doctors, view wallet and get informed when medicines are out of stock.
+As an admin I can: Login and logout, add other administrators, add or remove pharmacists, accept/reject pharmacists' requests, change or reset passwords, view, search or filter medicines, view sales reports and view patients or pharmacists' information.
 
-As a patient I can: Login and logout, change or reset passwords, view, search or filter medicines, add medicine to cart, add prescription medicine to cart, view cart, remove item or change item amount from cart, checkout, add or choose delivery address, choose payment method, view current or past orders, view status of order or cancel it, view out of stock medicine alternatives, chat with pharmacists.
+As a pharmacist I can: Login and logout, upload documents, change or reset passwords, view, search, add or filter medicines, view medicine quantities, upload their images, edit their prices and archive/unarchive them, view and filter sales,  chat with doctors, view wallet, and get informed when medicines are out of stock.
 
-As a guest I can: Registrar as a patient or submit request to be a pharmacist using the required info.
+As a patient I can: Login and logout, change or reset passwords, view, search or filter medicines, add over the counter medicine to cart, add prescription medicine to cart, view cart, remove item or change item amount from cart, checkout, add or choose delivery address, choose payment method, view current or past orders, view status of order or cancel it, view out of stock medicine alternatives, chat with pharmacists.
+
+As a guest I can: Register as a patient or submit request to be a pharmacist using the required info.
 
 ## Code Examples
 
