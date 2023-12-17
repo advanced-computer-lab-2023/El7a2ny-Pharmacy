@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import * as Yup from 'yup'
 import axios from 'axios'
 import {  useFormik } from 'formik'
-import {  Link, useNavigate} from 'react-router-dom'
+import {   useNavigate} from 'react-router-dom'
 import ApiBaseUrl from '../ApiBaseUrl';
 import {Helmet} from "react-helmet";
 import { Icon } from 'react-icons-kit';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
+
 export default function AdminOtpLogin({saveAdminData}) {
   const[isLoading,setIsLoading]=useState(false)
   const [passwordShown, setPasswordShown] = useState(false);

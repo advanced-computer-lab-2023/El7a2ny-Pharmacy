@@ -7,27 +7,30 @@ import {Helmet} from "react-helmet";
 import { Icon } from 'react-icons-kit';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
+import ApiBaseUrl from '../ApiBaseUrl'
 export default function AdminLogin({saveAdminData}) {
   const[isLoading,setIsLoading]=useState(false)
   const [passwordShown, setPasswordShown] = useState(false);
+  const [ErrMsg, setErrMsg] = useState()
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
   };
   let navigate = useNavigate()
   async function makeAdminLogged(values){
     setIsLoading(true)
-    let {data} =await axios.post('http://localhost:4000/api/administrators/login',values).catch((err)=>{
-      console.log(err);
+    setErrMsg(null)
+    try {
+      let {data} =await axios.post(ApiBaseUrl + 'administrators/login',values);
       setIsLoading(false)
-  })
-    if (data) {
       formik.resetForm();
-      setIsLoading(false)
       localStorage.setItem("AdminToken",data.token)
       saveAdminData()
       navigate("/")
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false)
+      setErrMsg('Login Failed: Your user Name or password is incorrect')
     }
-    setIsLoading(false)
   }
   let mySchema =Yup.object( {
     username:Yup.string().required("User Name is required"),

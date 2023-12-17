@@ -1,9 +1,9 @@
 import React from 'react'
-
+import { Helmet } from 'react-helmet'
 export default function PharmacistDocs() {
   return <>
-  <div className="container">
-    
-  </div>
-  </>
+    <Helmet>
+      <title>title</title>
+    </Helmet>
+    </>
 }

@@ -42,3 +42,238 @@ code {
   top: 10px;
   cursor: pointer;
 }
+.navbar-nav .nav-link{
+  color : #0057c0 ;
+  position: relative;
+}
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show 
+{
+  color: #0155a0 ;
+}
+.nav-link:focus, .nav-link:hover{
+  color : #0155a0 ;
+}
+.text-main{
+  color : #0155a0 !important;
+}
+.bg-main{
+  background: #0155a0 !important;
+}
+.dropdown-toggle::after {
+  margin-left: 0;
+  border: 0;
+}
+.dropdown-item.active{
+  background-color: #49505733 !important;
+}
+ .nav-link::after {
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  width: 0;
+  content: "";
+  color: #0155a0  ;
+  background: #0155a0 ;
+  height: 1px;
+  transition: 1s all;
+  -webkit-transition: 1s all;
+  -moz-transition: 1s all;
+  -ms-transition: 1s all;
+  -o-transition: 1s all;
+}
+.form-floating label{
+  opacity: 0.75;
+}
+ .nav-link:hover::after , 
+ .nav-link.active::after
+ {
+  width: 77%;
+ }
+ .Tabel {
+  margin-bottom: 50px;
+}
+
+.p-datatable .p-datatable-tbody > tr > td ,
+.p-datatable .p-datatable-thead > tr > th {
+  text-align: center !important;
+  justify-content: center !important;
+}
+.Tabel .p-column-header-content {
+  justify-content: center !important;
+}
+
+.Tabel th {
+  background-color: white !important;
+  text-align: center !important;
+}
+.p-column-header-content{
+  width: fit-content;
+  margin-inline: auto;
+}
+.Tabel th div {
+  justify-content: center !important;
+}
+.dataTabel.APPOINTMENTS{
+  overflow-y: auto;
+}
+.dataTabel {
+  border: 1px solid #eee;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0px 1px 15px 10px rgb(204 204 204 / 13%) !important;
+  margin-top: 10px;
+}
+.p-column-filter-element{
+  margin-right: 5px;
+}
+.p-column-filter-row-items{
+  padding: 0;
+}
+.p-column-filter-overlay{
+  z-index: 9999 !important;
+
+}
+.Tabel thead {
+  background-color: var(--border_color) !important;
+}
+
+.TB_Content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.TabelButtonChar {
+  flex-basis: 40%;
+  border: 1px solid black;
+  background-color: transparent;
+  padding: 5px 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.TabelButton {
+  background-color: transparent;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  font-size: 22px;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  cursor: pointer;
+}
+
+.TabelButton:hover {
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+}
+
+.approve {
+  border-color: #8bc34a !important;
+  color: #8bc34a !important;
+}
+.Cancel , 
+.p-dialog .p-dialog-header .p-dialog-header-icon {
+  color: red !important;
+  border-color: red;
+}
+
+.edit {
+  color: var(--main-color) !important;
+  border-color: var(--main-color);
+}
+
+.addBTN {
+  border: none;
+  min-width: 50px;
+  padding: 10px 15px;
+  background-color: var(--border_color);
+  color: white;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  font-size: clamp(15px, 2vw, 20px);
+  cursor: pointer;
+}
+
+.Dialog_Div input,
+.Dialog_Div textarea {
+  width: 100%;
+}
+
+.numberInput {
+  font-size: 1rem;
+  color: #495057;
+  background: #ffffff;
+  padding: 0.75rem 0.75rem;
+  border: 1px solid #ced4da;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    box-shadow 0.2s;
+  appearance: none;
+  border-radius: 6px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+}
+.tabel_header {
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+.tabel_header button {
+  min-width: 300px;
+}
+@media (max-width: 769px) {
+  .tabel_header {
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .tabel_header button {
+    margin-top: 10px;
+  }
+}
+.p-dialog , 
+.p-dialog form{
+  min-height: 70%;
+  margin-block: auto;
+}
+@media screen and (min-width : 769px) {
+  .p-dialog {
+    width: 65%;
+  }
+
+}
+.pagenatio {
+  margin: 30px 20px;
+}
+.p-datepicker{
+  top: 170px !important;
+    height: 400px;
+  overflow-y: scroll !important;
+}
