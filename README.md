@@ -67,23 +67,49 @@ As a guest I can: Register as a patient or submit request to be a pharmacist usi
 
 ## Code Examples
 
+In the server.js file which is the startpoint of our app, we create an express app and we use another file for the administrator routes and we also connect to the data base:
+
+`const app = express();`
+
+`app.use('/api/administrators', administratorRoutes);`
+
+In the administrator routes file, we create a router and use it to create an API with a PATCH http method and we call the changePassword method which is in the administrator controller file:
+
+`const router = express.Router();`
+
+`router.patch('/change-password', changePassword);`
+
+In the administrator controller file, we implement the changePassword method: we make sure that the new password is strong enough and then we update the password of the admin.
+
+```
+const changePassword = async (req, res) => {
+    const id = req.user._id
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such admin'});
+    if(!validator.isStrongPassword(req.body.password)) 
+        return res.status(400).json({error: 'Password not strong enough'});
+    const admin = await Administrator.findOneAndUpdate({_id: id}, {password: req.body.password});
+    if(!admin)
+        return res.status(404).json({error: 'no such admin'});
+    res.status(200).json(admin); 
+};
+```
+
 ## Installation
-- You also need to install: VS code/ Node/ Nodemon/ Express/ Mongoose/ React/ Git/ Axios/ Mongo DB (Atlas)/ Postman
-- Here are the links you need:
+
+- You need to install: 
+
 VS code
 https://code.visualstudio.com/download
 
 Node/Nodemon/Express/Mongoose/React/Axios
 https://www.npmjs.com/
 
-
-mongodb
-https://www.mongodb.com/atlas/database
-
 Postman
 https://www.postman.com/downloads/
 
 ## API Refrences
+
 These are all our API endpoints:
 
 http://localhost:4000/api/administrators/login (POST)
@@ -273,45 +299,59 @@ http://localhost:4000/api/pharmacists/sales-report-filter-by-medicine/:name (GET
 
 
 http://localhost:4000/api/pharmacists/notifications (GET)
+
 ## Tests
+
 We tested all our APIs using Postman and this is an example for the testing.
 
-## How to Use
-- To use this app you'll need to clone the repository using the command: git clone https://github.com/Advanced-Computer-Lab-2023/teamSlim-clinic.
+![Postman ss](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/d1582c1e-88a3-44d6-9b70-c16c07b10172)
 
-First, run backend so you need to run these commands:
-- `cd` backend
-- `npm` install
-- `nodemon` server
+You choose the http method, for example (POST), the API endpoint, for example (localhost:4000/api/patients/login), you also provide the bearer token as authorization (if needed), and you provide the request body/ parameters if you need, here we pass the request body as raw JSON with two fields the username and password, finally you send the request and you will recieve the responce.
+
+## How to Use
+
+- To use this app you'll need to clone the repository using the command: git clone https://github.com/Advanced-Computer-Lab-2023/teamSlim-Pharmacy.
+
+First, create a .env file and populate PORT, SECRET (used for jwt), MONGO_URI.
+
+Then, run backend so you need to run these commands:
+- `cd backend`
+- `npm install`
+- `nodemon server`
 
 Then, run frontend so you need to run these commands:
-- `cd` frontend
-- `npm` install
-- `npm` start
+- `cd frontend`
+- `npm install`
+- `npm start`
+  
 ## Contribute
-We'd gladly accept your contribution and to do that just kindly contact me on my email abdalla.mahgoub@student.guc.edu.eg
+We'd gladly accept your contribution and to do that just kindly do the following:
 
-### Pull Request Process
+Pull Request Process:
 1. Fork the repository.
 2. Create a new branch for your feature (`git checkout -b feature/new-feature`).
 3. Make changes and commit them (`git commit -am 'Add new feature'`).
 4. Push the branch to your fork (`git push origin feature/new-feature`).
 5. Open a pull request.
 
-### Code Review
+Code Review:
 - All contributions go through code review. Be prepared to make changes based on feedback.
 
-### Communication
-- abdalla.mahgoub@student.guc.edu.eg
+Communication:
+- via email: abdalla.mahgoub@student.guc.edu.eg
 
 Thank you for helping make this project better!
+
 ## Credits
+
 We want to thank the German University in Cairo for giving us the opportunity to work on this project and special thanks to Dr Mervat Aboulkheir, Eng. Nada Ibrahim, Eng. Hadwa Pasha
 Eng. Noha Hamid, Eng. Fatma Elazab, Eng. Amr Diab, Eng. Mahmoud Mabrouk for helping us throughout the semester in completing this project.
 
-I've compiled a playlist of the youtube videos that helped in this project:
+I've compiled a playlist of the youtube videos that helped us in this project:
 
 https://youtube.com/playlist?list=PLiDu-Rr2uZ-ElVGKAmmW1My0_XKYGQUv5&si=uTo0qIaW-LoAuv0i
+
 ## License
+
 Licensed under the Apache license, version 2.0. You're not allowed to use this file without compliance with the license
 link: http://www.apache.org/licenses/LICENSE-2.0
