@@ -1,5 +1,3 @@
-# teamSlim-Pharmacy
-
 ## Project Title
 This is an implementation of a mern stack web application. This application is a virtual pharmacy and serves three user parties which are pharmacists, patients and admins.
 
