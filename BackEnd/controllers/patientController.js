@@ -11,6 +11,7 @@ const Order = require('../models/orderModel');
 const PharmacistNotification = require('../models/pharmacistNotificationModel');
 const Pharmacist = require('../models/pharmacistModel');
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
+const PatientPharmacistChat = require('../models/patientPharmacistChat');
 
 const register = async (req, res) => {
     try {
@@ -456,6 +457,31 @@ const getPharmacist = async (req, res) => {
     res.status(200).json(pharmacist);
 };
 
+const getChat = async (req, res) => {
+    const {id} = req.params;
+    const patient_id = req.user._id
+
+    let chat = await PatientPharmacistChat.findOne({patient_id: patient_id, pharmacist_id: id});
+    
+    if(!chat) {
+        chat = await PatientPharmacistChat.create({patient_id: patient_id, pharmacist_id: id});
+    }
+ 
+    res.status(200).json(chat);
+};
+
+const sendMessage = async (req, res) => {
+    const {id} = req.params;
+    const patient_id = req.user._id
+    const {message} = req.body
+
+    const patient = await Patient.findById(patient_id);
+
+    const chat = await PatientPharmacistChat.findOneAndUpdate({_id: id}, {$push: { 'messages': { message: message, sender_name: patient.name, date: new Date()} }});
+
+    res.status(200).json(chat);
+};
+
 module.exports = {
     register,
     login,
@@ -482,5 +508,7 @@ module.exports = {
     getWallet,
     getMedicineAlternatives,
     getPharmacists,
-    getPharmacist
+    getPharmacist,
+    getChat,
+    sendMessage
 };

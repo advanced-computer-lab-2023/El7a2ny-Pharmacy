@@ -9,7 +9,7 @@ const validator = require('validator')
 const nodemailer = require('nodemailer');
 const Order = require('../models/orderModel');
 const PharmacistNotification = require('../models/pharmacistNotificationModel');
-
+const PatientPharmacistChat = require('../models/patientPharmacistChat');
 
 const createToken = (_id) => {
     return jwt.sign({_id: _id}, process.env.SECRET, {expiresIn: '3d'})
@@ -432,6 +432,33 @@ const getNotifications = async (req, res) => {
     res.status(200).json(notifications);
 };
 
+const getMyChats = async (req, res) => {
+    const id = req.user._id
+
+    const chats = await PatientPharmacistChat.find({pharmacist_id: id});
+     
+    res.status(200).json(chats);
+};
+
+const getChat = async (req, res) => {
+    const {id} = req.params;
+
+    const chat = await PatientPharmacistChat.findById(id);
+    
+    res.status(200).json(chat);
+};
+
+const sendMessage = async (req, res) => {
+    const {id} = req.params;
+    const pharmacist_id = req.user._id
+    const {message} = req.body
+
+    const pharmacist = await Pharmacist.findById(pharmacist_id);
+
+    const chat = await PatientPharmacistChat.findOneAndUpdate({_id: id}, {$push: { 'messages': { message: message, sender_name: pharmacist.name, date: new Date()} }});
+
+    res.status(200).json(chat);
+};
 
 module.exports = {
     registerRequest,
@@ -455,5 +482,8 @@ module.exports = {
     getSalesReport,
     getSalesReportFilterByDate,
     getSalesReportFilterByMedicine,
-    getNotifications
+    getNotifications,
+    getMyChats,
+    getChat,
+    sendMessage
 };

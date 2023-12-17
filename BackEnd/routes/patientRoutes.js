@@ -25,7 +25,9 @@ const {
     getWallet,
     getMedicineAlternatives,
     getPharmacists,
-    getPharmacist
+    getPharmacist,
+    getChat,
+    sendMessage
 } = require('../controllers/patientController');
 const {requireAuthPatient} = require('../middleware/requireAuth');
 
@@ -84,5 +86,9 @@ router.get('/medicine-alternatives/:id', getMedicineAlternatives); //req 36, id 
 router.get('/all-pharmacists', getPharmacists); //req 39
 
 router.get('/one-pharmacist/:id', getPharmacist); //req 39
+
+router.post('/chat/:id', getChat); //req 39, id is id of the pharmacist, response is the full chat
+
+router.patch('/send-message/:id', sendMessage); //req 39, id is id of the chat, send message in req body
 
 module.exports = router;

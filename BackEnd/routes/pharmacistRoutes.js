@@ -18,7 +18,10 @@ const {
     getSalesReport,
     getSalesReportFilterByDate,
     getSalesReportFilterByMedicine,
-    getNotifications
+    getNotifications,
+    getMyChats,
+    getChat,
+    sendMessage
 } = require('../controllers/pharmacistController');
 const {requireAuthPharmacist, requireAuthPendingPharmacist} = require('../middleware/requireAuth');
 const multer = require('multer');
@@ -74,5 +77,11 @@ router.get('/sales-report-filter-by-date/:startDate/:endDate', getSalesReportFil
 router.get('/sales-report-filter-by-medicine/:name', getSalesReportFilterByMedicine); //req 20, 21
 
 router.get('/notifications', getNotifications); //req 40
+
+router.get('/my-patient-chats', getMyChats); //req 39
+
+router.get('/patient-chat/:id', getChat); //req 39, id is id of the chat
+
+router.patch('/send-message-to-patient/:id', sendMessage); //req 39, id is id of the chat, send message in req body
 
 module.exports = router;

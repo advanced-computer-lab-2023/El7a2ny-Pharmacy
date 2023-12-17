@@ -6,20 +6,20 @@ const patientPharmacistChatSchema = new Schema({
         type: mongoose.Schema.ObjectId, ref: 'Patient',
         required: true
     },
-    medicine_list: {
+    pharmacist_id: {
+        type: mongoose.Schema.ObjectId, ref: 'Pharmacist',
+        required: true
+    },
+    messages: {
         type: [
         {
-          medicine: { type: mongoose.Schema.ObjectId, ref: 'Medicine', required: true },
-          quantity: { type: Number, required: true },
+          message: { type: String, required: true },
+          sender_name: { type: String, required: true },
+          date: { type: Date, required: true }
         },
       ],
       default: [],
       required: true
-    },
-    total: {
-        type: Number,
-        required: true,
-        default: 0
     }
 }, {timestamps: true});
 
