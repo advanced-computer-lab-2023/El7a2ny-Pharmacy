@@ -1,17 +1,25 @@
 ## Project Title
 This is an implementation of a mern stack web application. This application is a virtual pharmacy and serves three user parties which are pharmacists, patients and admins.
 
-
-
-
-
 ## Motivation
 We thought of implementing this web application to make it easier for patients to order their medications and pay online or pay on delivery 
 ## Build Status
 ## Code Style
 The code style is enforced using `eslint` and `prettier`. The code style is enforced using `pre-commit` hooks and `pre-commit github action.`
 ## Screenshots
-![Local Image](images/local-image.png)
+
+Homepage
+
+![Screenshot (36)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/fb9e4386-b683-4a7a-b056-1367e69efde8)
+
+Patient registration
+
+![Screenshot (34)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/6a22ad6a-6352-408f-9ab2-330f19ff58eb)
+
+Admin can add another admin to system
+
+![Screenshot (35)](https://github.com/advanced-computer-lab-2023/teamSlim-Clinic/assets/134972084/bb7dc7d5-f4bb-4ca8-aba2-fb4f0429e9ed)
+
 
 ## Tech/Framework used
 - React
