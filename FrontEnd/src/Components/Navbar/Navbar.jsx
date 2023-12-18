@@ -62,6 +62,15 @@ return <>
 
         </>
       : null }
+      {PharmacistData || AdminData ? <>
+        <li className="nav-item">
+          <Link className={`nav-link ${activeLink === 'SalesReport' ? ' active' : ''}`} to={`SalesReport`} onClick={() => setActiveLink('SalesReport')}>
+          Sales Report
+          </Link>
+        </li>
+
+      </>
+      :null}
               <li className="nav-item">
           <Link className={`nav-link ${activeLink === 'MedicineList' ? ' active' : ''}`} to={`MedicineList`} onClick={() => setActiveLink('MedicineList')}>
           Medicine List
