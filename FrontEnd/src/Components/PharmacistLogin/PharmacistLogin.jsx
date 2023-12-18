@@ -3,11 +3,12 @@ import * as Yup from 'yup'
 import axios from 'axios'
 import {  useFormik } from 'formik'
 import {  Link, useNavigate} from 'react-router-dom'
-import ApiBaseUrl from '../ApiBaseUrl';
 import {Helmet} from "react-helmet";
 import { Icon } from 'react-icons-kit';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
+import {login} from 'react-icons-kit/entypo/login'
+
 export default function PharmacistLogin({savePharmacistData}) {
   const[isLoading,setIsLoading]=useState(false)
   const [passwordShown, setPasswordShown] = useState(false);
@@ -19,11 +20,22 @@ export default function PharmacistLogin({savePharmacistData}) {
     setErrMsg(null)
     try {
       let {data} =await axios.post(ApiBaseUrl + 'pharmacists/login',values);
-      setIsLoading(false)
-      formik.resetForm();
-      localStorage.setItem("PharmacistToken",data.token)
-      savePharmacistData()
-      navigate("/")
+      console.log(data);
+      if (data.pharmacist.status === 'registered') {
+        setIsLoading(false)
+        formik.resetForm();
+        localStorage.setItem("PharmacistToken",data.token)
+        savePharmacistData()
+        navigate("/")
+      }else if (data.pharmacist.status === 'pending') {
+        setIsLoading(false)
+        formik.resetForm();
+        setErrMsg('Pending Approval: Your request is currently pending admin approval. Please wait for approval or contact an admin for more information.')
+      }else if (data.pharmacist.status === 'declined') {
+        setIsLoading(false)
+        formik.resetForm();
+        setErrMsg('Request Declined: Your request to join has been declined by the admin. Please contact any admin for further assistance.')
+      }
     } catch (error) {
       console.error(error);
       setIsLoading(false)
@@ -48,27 +60,43 @@ export default function PharmacistLogin({savePharmacistData}) {
     El7a2ny | Pharmacist Login
     </title>
   </Helmet>
-    <div className="container login p-5 w-50 m-auto">
-      <h3>Pharmacist LOG IN :</h3>
-      <form action=""  onSubmit={formik.handleSubmit} className='bg-muted p-3 rounded shadow-sm'>
-        <label htmlFor="username">Pharmacist Name :</label>
-        <input type="string" className='mb-2 form-control' name='username' id='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-        {formik.errors.username && formik.touched.username ?<div className="alert alert-danger">{formik.errors.username}</div>: null}
-        <label htmlFor="password">Pharmacist Password :</label>
-        <div className="passwordField position-relative">
-        <input type={passwordShown ? "text" : "password"} className='mb-2 form-control' name='password' id='password'  onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-        <span onClick={togglePassword} className='togglePassword position-absolute top-0 end-0 me-3 mt-1 cursor-pointer'>{passwordShown ? <Icon className='text-danger' icon={eye}></Icon>:<Icon className='text-main' icon={eyeOff}></Icon>}</span>
+  <div className="container login w-75 ">
+      
+      <form action=""  onSubmit={formik.handleSubmit} className='row text-center '>
+      <div className="col-8 offset-2 m-auto bg-light my-5 rounded border shadow-sm w-auto p-4">
+      <h2 className='text-muted'>Pharmacist LOG IN :</h2>
+      <div className="row">
+          <div className="col-12  form-floating">
+            <input type="string"  placeholder='Username' className='mb-2 form-control' name='username' id='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+            <label className='ms-2' htmlFor="username">Username</label>
+            {formik.errors.username && formik.touched.username ?<div className="alert alert-danger">{formik.errors.username}</div>: null}
+          </div>
+          <div className="col-12  ">
+            <div className="passwordField position-relative form-floating">
+              <input type={passwordShown ? "text" : "password"} placeholder='Password' className='mb-2 form-control' name='password' id='password'  onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+              <span onClick={togglePassword} className='togglePassword position-absolute top-0 end-0 me-3 mt-3 cursor-pointer'>{passwordShown ? <Icon className='text-danger' icon={eye}></Icon>:<Icon className='text-main' icon={eyeOff}></Icon>}</span>
+              <label htmlFor="password">Password</label>
+            </div>
+            {formik.errors.password && formik.touched.password ?<div className="alert alert-danger">{formik.errors.password}</div>: null}
+          </div>
         </div>
-        {formik.errors.password && formik.touched.password ?<div className="alert alert-danger">{formik.errors.password}</div>: null}
-        <Link to={'/PharmacistForgetPassword'} id='forgetPass' className="btn p-0 mb-2 text-primary">Do You Forget Your Password ? </Link>
-        <br />
-        {ErrMsg ? <div className="Err alert-danger">{ErrMsg}</div> : null }
-        {isLoading?
-        <button type="button" className='btn btn-primary text-light me-2'><i className=' fa fa-spin fa-spinner'></i></button>
-        :<>
-        <button type="submit" disabled={!(formik.isValid && formik.dirty)} className='btn btn-primary text-light me-2'>Log in</button>
-        </>
-      }
+        <div className="col-12">
+        {ErrMsg ? <div className="Err alert alert-danger">{ErrMsg}</div> : null }
+        </div>
+        <div className="btns col-12 my-2">
+          {isLoading?
+          <button type="button" className='btn bg-main text-light me-2 w-100'><i className=' fa fa-spin fa-spinner'></i></button>
+          :<>
+          <button type="submit" disabled={!(formik.isValid && formik.dirty)} className='btn bg-main text-light me-2 w-100 d-flex align-items-center justify-content-center'><span className='me-2'>LOG IN</span><Icon className='pb-1' size={20}  icon={login}></Icon></button>
+          </>
+          }
+        </div>
+        <div className="col-12">
+          <Link id='forgetPass' className="btn p-0 mb-2 text-main">Do You Forget Your Password ? </Link>
+        </div>
+
+      </div>
+
       </form>
     </div>
   </>

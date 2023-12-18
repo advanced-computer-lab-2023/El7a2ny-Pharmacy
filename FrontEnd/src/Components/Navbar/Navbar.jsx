@@ -28,11 +28,6 @@ return <>
         </li>
         {PharmacistData || PatientData || AdminData ? <>
           {PatientData ? <>
-            <li className="nav-item">
-          <Link className={`nav-link ${activeLink === 'AddMedicineDocs' ? ' active' : ''}`} to={`AddMedicineDocs`} onClick={() => setActiveLink('AddMedicineDocs')}>
-          Add Medicine Docs
-          </Link>
-        </li>
           </>:null}
             {PatientData ? <>
 
