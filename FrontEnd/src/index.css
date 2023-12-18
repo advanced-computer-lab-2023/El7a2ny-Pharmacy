@@ -26,6 +26,9 @@ code {
   inset: 0;
   background-color: rgba(0, 0, 0, 0.8);
 }
+.border-main{
+  border-color: #0057c0 !important;
+}
 .headLine{
   color: rgba(255, 255, 255, 0.705);
   text-transform: uppercase;

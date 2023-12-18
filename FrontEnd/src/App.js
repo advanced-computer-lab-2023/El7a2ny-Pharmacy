@@ -83,7 +83,7 @@ function App() {
         {path : "ChangePassword",element:<ChangePassword/>},
         {path : "PharmacistOtpLogin",element:<PharmacistOtpLogin/>},
         {path : "PharmacistLogin",element:<PharmacistLogin savePharmacistData={savePharmacistData}/>},
-        {path : "PharmacistDocs",element:<PharmacistDocs/>},
+        {path : "PharmacistDocs",element:<PharmacistDocs  PharmacistToken={PharmacistToken}/>},
         {path : "Home",element:<Home/>},
         {path : "PharmacistRegister",element:<PharmacistRegister/>},
         {path : "AddAdmin",element:<AddAdmin AdminToken={AdminToken}/>},

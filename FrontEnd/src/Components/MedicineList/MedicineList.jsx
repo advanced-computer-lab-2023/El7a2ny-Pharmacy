@@ -11,6 +11,7 @@ import { Icon } from 'react-icons-kit';
 import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import {notepad_ok} from 'react-icons-kit/ikons/notepad_ok'
+import { FileUpload } from 'primereact/fileupload';
 
 export default function MedicineList({PharmacistToken , PatientToken , AdminToken}) {
   let AdminHeaders = { 'Authorization': `Bearer ${AdminToken}` };
@@ -20,7 +21,7 @@ export default function MedicineList({PharmacistToken , PatientToken , AdminToke
   const [OrignalMedicines, setOrignalMedicines] = useState()
   const [DisplayAddMedicineDialog, setDisplayAddMedicineDialog] = useState(false);
   const [displayEditDialog, setDisplayEditDialog] = useState(false);
-  const [SelectedMedicine, setSelectedMedicine] = useState(null)
+  const [SelectedMedicine, setSelectedMedicine] = useState(null);
 
   async function getAllMedicines(role , header) {
       try {
@@ -36,6 +37,8 @@ export default function MedicineList({PharmacistToken , PatientToken , AdminToke
     try {
       let {data} = await axios.post(ApiBaseUrl +'pharmacists/add-medicine' , values , {headers : PharmacistHeaders})
       formik.resetForm();
+      hideDialog()
+      getAllMedicines('pharmacists' , PharmacistHeaders);
     } catch (error) {
       console.error(error);
     }
@@ -49,7 +52,9 @@ export default function MedicineList({PharmacistToken , PatientToken , AdminToke
       price: '',
       ingredients: '',
       name: '',
-      isOverTheCounter : false
+      pictureUrl: '',
+      isOverTheCounter : false,
+      isArchived : false,
     },
     validationSchema: Yup.object().shape({
       medicinal_use: Yup.string().required('medicinal use is required'),
@@ -71,6 +76,7 @@ let editInitial = {
   price: '',
   ingredients: '',
   name: '',
+  pictureUrl: '',
 }
   let editFormik = useFormik({
     initialValues: editInitial,
@@ -93,8 +99,9 @@ useEffect(()=>{
       description: SelectedMedicine.description,
       availableQuantity: SelectedMedicine.availableQuantity,
       price: SelectedMedicine.price,
-      ingredients: SelectedMedicine.ingredients,
+      ingredients: SelectedMedicine.ingredients.toString(),
       name: SelectedMedicine.name,
+      isArchived: SelectedMedicine.isArchived,
       isOverTheCounter : SelectedMedicine.isOverTheCounter
     }   
   }
@@ -103,7 +110,9 @@ useEffect(()=>{
 
   async function editMedicine(id , values){
     try {
-      let {data} = await axios.patch(ApiBaseUrl +`pharmacists/update-medicine/${id}` , values , {headers : PharmacistHeaders})
+      console.log(values);
+      let {data} = await axios.patch(ApiBaseUrl +`pharmacists/update-medicine/${id}` , values , {headers : PharmacistHeaders});
+      console.log(data);
       getAllMedicines('pharmacists' , PharmacistHeaders);
       setDisplayEditDialog(false);
       formik.resetForm();
@@ -194,29 +203,41 @@ useEffect(()=>{
   );
 
   const mainIngredientBody = (rowData) => rowData.ingredients.map((medicine, index) => <span key={index}>{medicine}</span>).reduce((acc, span, index) => index === 0 ? span : [acc, ' - ', span], null);
-  const dialogHeader = ()=>  <h2 className='text-muted d-flex align-items-center'><Icon className='me-2' size={30} icon={notepad_ok}/><span className='me-2'>ADD NEW MEDICINE</span> </h2>
-  const editDialogHeader = ()=>  <h2 className='text-muted d-flex align-items-center'><Icon className='me-2' size={30} icon={notepad_ok}/><span className='me-2'>Edit a MEDICINE</span> </h2>
+  const dialogHeader = ()=>  <h2 className='text-muted d-flex align-items-center'><Icon size={30} icon={notepad_ok}/><span>ADD NEW MEDICINE</span></h2>
+  const editDialogHeader = ()=>  <h2 className='text-muted d-flex align-items-center'><Icon className='me-2' size={30} icon={notepad_ok}/><span className='me-2'>Edit MEDICINE</span> </h2>
 
   const actionTemplate = (rowData) => {
     return (
       <div className='d-flex justify-content-around align-items-center'>
-        <Button icon="pi pi-pencil" className='TabelButton edit' onClick={() => { setSelectedMedicine(rowData); showEditDialog() }} />
+        <Button icon="pi pi-pencil" className='TabelButton approve' onClick={() => { setSelectedMedicine(rowData); showEditDialog() }} />
       </div>
     );
   };
 
-  
-  const uploadImgBody = (rowData)=>{
-    return(
-      <p>upload...</p>
-    )
-  }
+  const handleImageUpload = async (file, id) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      let { data } = await axios.patch(ApiBaseUrl + `pharmacists/upload-medicine-image/${id}`,formData, { headers: PharmacistHeaders });
+      getAllMedicines('pharmacists' , PharmacistHeaders);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  const uploadImgBody = (rowData) => {
+    if (rowData.pictureUrl) return <img src={rowData.pictureUrl} alt="Medicine" style={{ width: '100%', height: 'auto', borderRadius: '8px' }} />
+    else return <label htmlFor={`uploadInput_${rowData._id}`} className='cursor-pointer'>
+                  <i className="pi pi-upload text-main h5"></i>
+                  <input type="file" id={`uploadInput_${rowData._id}`} style={{ display: 'none' }} onChange={(e) => handleImageUpload(e.target.files[0], rowData._id)} />
+                </label>
+  };
+    
   return <>
     <Helmet>
       <title>Medicine List</title>
     </Helmet>
-    <div className="container my-3">
+    <div className="container-fluid my-3">
           <DataTable value={Medicines} header={header} paginator selectionMode="single" className={`dataTabel mb-4 text-capitalize AllList`} dataKey="_id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
             <Column field="name" header="Name" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
             <Column field="availableQuantity" header="Quantity" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
@@ -227,8 +248,9 @@ useEffect(()=>{
             <Column field="main_ingredient" header="main ingredient" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
             <Column field='ingredients' header="ingredients" body={mainIngredientBody} style={{ width: '15%', borderBottom: '1px solid #dee2e6' }} />
             {PharmacistToken ? <Column header="edit" body={actionTemplate}  style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} /> : null}
+            {PharmacistToken ? <Column header="Image" body={uploadImgBody}  style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} /> : null}
           </DataTable>
-        <Dialog header={dialogHeader} className='container'  visible={DisplayAddMedicineDialog} onHide={hideDialog} modal>
+      <Dialog header={dialogHeader} className='container' visible={DisplayAddMedicineDialog} onHide={hideDialog} modal>
           <form onSubmit={formik.handleSubmit} className='bg-light p-3 border shadow-sm rounded'>
             <div className="row">
               <div className="col-sm-6 form-floating">
@@ -261,37 +283,33 @@ useEffect(()=>{
                 <label className='ms-2' htmlFor="availableQuantity">Quantity</label>
                 {formik.errors.availableQuantity && formik.touched.availableQuantity ? (<div className="alert alert-danger">{formik.errors.availableQuantity}</div>) : null}
               </div>
-
               <div className="col-sm-12 form-floating">
                 {/*ingredients input */}
                 <input type="text" placeholder='ingredients' className="form-control mb-2" id="ingredients" name="ingredients"value={formik.values.ingredients}onChange={formik.handleChange}onBlur={formik.handleBlur}/>
                 <label className='ms-2' htmlFor="ingredients">Ingredients</label>
                 {formik.errors.ingredients && formik.touched.ingredients ? (<div className="alert alert-danger">{formik.errors.ingredients}</div>) : null}
               </div>
-
               <div className="col-sm-12 form-floating">
                 {/*main_ingredient input */}
                 <input type="text" placeholder='Main Ingredient' className="form-control mb-2" id="main_ingredient" name="main_ingredient"value={formik.values.main_ingredient}onChange={formik.handleChange}onBlur={formik.handleBlur}/>
                 <label className='ms-2' htmlFor="main_ingredient">Main Ingredient</label>
                 {formik.errors.main_ingredient && formik.touched.main_ingredient ? (<div className="alert alert-danger">{formik.errors.main_ingredient}</div>) : null}
-
               </div>
               <div className="col-sm-5 ms-2">
                 <div className="form-check form-switch mx-0 mt-2 align-items-center">
-                  <label className="form-check-label" for="isOverTheCounter">
+                  <label className="form-check-label" htmlFor="isOverTheCounter">
                     <span className='h6'>over the counter ?</span>
                   </label>
                   <input className="form-check-input mt-2" role="switch" value={formik.values.isOverTheCounter} onChange={formik.handleChange} onBlur={formik.handleBlur} type="checkbox" name="isOverTheCounter" id="isOverTheCounter" />
                 </div>
               </div>
-
               <div className="btns ms-auto w-auto mt-2">
                 <Button label="SUBMIT" type="submit" icon="pi pi-check" disabled={!(formik.isValid && formik.dirty)}className="btn bg-main text-light "/>
               </div>
             </div> 
           </form>
       </Dialog>
-      <Dialog header={editDialogHeader} className='container'  visible={displayEditDialog} onHide={hideDialog} modal>
+      <Dialog header={editDialogHeader} className='container' visible={displayEditDialog} onHide={hideDialog} modal>
           <form onSubmit={editFormik.handleSubmit} className='bg-light p-3 border shadow-sm rounded'>
             <div className="row">
               <div className="col-sm-6 form-floating">
@@ -324,31 +342,35 @@ useEffect(()=>{
                 <label className='ms-2' htmlFor="availableQuantity">Quantity</label>
                 {editFormik.errors.availableQuantity && editFormik.touched.availableQuantity ? (<div className="alert alert-danger">{editFormik.errors.availableQuantity}</div>) : null}
               </div>
-
-              <div className="col-sm-12 form-floating">
+              <div className="col-sm-8 form-floating">
                 {/*ingredients input */}
                 <input type="text" placeholder='ingredients' className="form-control mb-2" id="ingredients" name="ingredients"value={editFormik.values.ingredients}onChange={editFormik.handleChange}onBlur={editFormik.handleBlur}/>
                 <label className='ms-2' htmlFor="ingredients">Ingredients</label>
                 {editFormik.errors.ingredients && editFormik.touched.ingredients ? (<div className="alert alert-danger">{editFormik.errors.ingredients}</div>) : null}
               </div>
-
-              <div className="col-sm-12 form-floating">
+              <div className="col-sm-4 form-floating">
                 {/*main_ingredient input */}
                 <input type="text" placeholder='Main Ingredient' className="form-control mb-2" id="main_ingredient" name="main_ingredient"value={editFormik.values.main_ingredient}onChange={editFormik.handleChange}onBlur={editFormik.handleBlur}/>
                 <label className='ms-2' htmlFor="main_ingredient">Main Ingredient</label>
                 {editFormik.errors.main_ingredient && editFormik.touched.main_ingredient ? (<div className="alert alert-danger">{editFormik.errors.main_ingredient}</div>) : null}
 
               </div>
+              <hr className='my-2'/>
               <div className="col-sm-5 ms-2">
                 <div className="form-check form-switch mx-0 mt-2 align-items-center">
-                  <label className="form-check-label" for="isOverTheCounter">
+                  <label className="form-check-label" htmlFor="isOverTheCounter">
                     <span className='h6'>over the counter ?</span>
                   </label>
                   <input checked={editFormik.values.isOverTheCounter} className="form-check-input mt-2" role="switch" value={SelectedMedicine?.isOverTheCounter} onChange={editFormik.handleChange} onBlur={editFormik.handleBlur} type="checkbox" name="isOverTheCounter" id="isOverTheCounter" />
                 </div>
+                <div className="form-check form-switch mx-0 mt-2 align-items-center">
+                  <label className="form-check-label" htmlFor="isArchived">
+                    <span className='h6'>Archive Medicine ?</span>
+                  </label>
+                  <input checked={editFormik.values.isArchived} className="form-check-input mt-2" role="switch" value={SelectedMedicine?.isArchived} onChange={editFormik.handleChange} onBlur={editFormik.handleBlur} type="checkbox" name="isArchived" id="isArchived" />
+                </div>
               </div>
-
-              <div className="btns ms-auto w-auto mt-2">
+              <div className="btns ms-auto w-auto mt-3">
                 <Button label="SUBMIT" type="submit" icon="pi pi-check" disabled={!(editFormik.isValid && editFormik.dirty)}className="btn bg-main text-light "/>
               </div>
             </div> 
