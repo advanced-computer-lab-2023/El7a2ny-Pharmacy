@@ -3,6 +3,8 @@ import Icon from 'react-icons-kit';
 import { Link, useLocation } from 'react-router-dom'
 import {userMd} from 'react-icons-kit/fa/userMd'
 import {out} from 'react-icons-kit/entypo/out'
+import {shoppingCart} from 'react-icons-kit/feather/shoppingCart'
+import {ic_payment} from 'react-icons-kit/md/ic_payment'
 export default function NavBar({LogOut , PharmacistData , PatientData , AdminData}) {
   const [activeLink, setActiveLink] = useState();
   const location = useLocation();
@@ -88,16 +90,23 @@ return <>
       <ul className='navbar-nav'>
         {PharmacistData || PatientData || AdminData ? <>
           <li className="nav-item position-relative dropdown">
-            <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-            <span className='pi pi pi-user me-1'></span> My Profile </span>
+            <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span className='pi pi pi-user me-1'></span> My Profile 
+            </span>
             <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
               {PatientData ? <>
+                <Link className={`dropdown-item text-main ${activeLink === 'MyAddresses' ? ' active' : ''}`} to={"PharmacistDocs"} onClick={() => setActiveLink('MyAddresses')}>
+                  My Addresses
+                </Link>
+                <Link className={`dropdown-item text-main ${activeLink === 'Orders' ? ' active' : ''}`} to={"PharmacistDocs"} onClick={() => setActiveLink('Orders')}>
+                  All Orders
+                </Link>
               </>
               :
               null
               }
               {PharmacistData ? <>
-                <Link className={`dropdown-item text-main ${activeLink === 'PatientDocs' ? ' active' : ''}`} to={"PharmacistDocs"} onClick={() => setActiveLink('PatientDocs')}>
+                <Link className={`dropdown-item text-main ${activeLink === 'PharmacistDocs' ? ' active' : ''}`} to={"PharmacistDocs"} onClick={() => setActiveLink('PharmacistDocs')}>
                   My Documents
                 </Link>
                 </>
@@ -110,6 +119,21 @@ return <>
               <Link className={`dropdown-item text-main ${activeLink === 'Logout' ? ' active' : ''}`}  onClick={() => { LogOut(); setActiveLink('Logout')}}><Icon size={20} icon={out}/> Logout</Link>
             </div>
           </li>
+          {PatientData || PharmacistData ? <>
+            <li className="nav-item position-relative dropdown">
+              <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <Icon size={20} icon={ic_payment}/> 
+              </span>
+            </li>
+          </> : null}
+          {PatientData ? 
+            <li className="nav-item">
+              <Link className={`nav-link ${activeLink === 'Home' ? ' cartActive' : ''}`} to={""} onClick={() => setActiveLink('Home')}>
+                <Icon size={20} icon={shoppingCart}/>
+              </Link>
+            </li>
+          : null }
+
         </> : <>
           <li className="nav-item">
             <Link className={`nav-link ${activeLink === 'PharmacistRegister' ? ' active' : ''}`} to={`PharmacistRegister`} onClick={() => setActiveLink('PharmacistRegister')}>Signup as a Pharmacist</Link>
