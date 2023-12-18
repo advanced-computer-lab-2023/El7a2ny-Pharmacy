@@ -13,11 +13,9 @@ import Home from './Components/Home/Home';
 import PharmacistRegister from './Components/PharmacistRegister/PharmacistRegister';
 import PharmacistList from './Components/PharmacistList/PharmacistList';
 import MedicineList from './Components/MedicineList/MedicineList';
-import EditMedicine from './Components/EditMedicine/EditMedicine';
 import PharmacistOtpLogin from './Components/PharmacistOtpLogin/PharmacistOtpLogin';
 import PharmacistLogin from './Components/PharmacistLogin/PharmacistLogin';
 import PharmacistDocs from './Components/PharmacistDocs/PharmacistDocs';
-import AddMedicineDocs from './Components/AddMedicineDocs/AddMedicineDocs';
 
 import AdminOtpLogin from './Components/AdminOtpLogin/AdminOtpLogin';
 import PatientLogin from './Components/PatientLogin/PatientLogin';
@@ -32,6 +30,7 @@ import AddAdmin from './Components/AddAdmin/AddAdmin';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import SalesReport from './Components/SalesReport/SalesReport';
 
 
 function App() {
@@ -77,26 +76,26 @@ function App() {
       children:[
         {index:true , element:<Home/>},
         {path : "AdminOtpLogin",element:<AdminOtpLogin/>},
+        {path : "PatientRegister",element:<PatientRegister/>},
         {path : "PatientLogin",element:<PatientLogin/>},
         {path : "AdminLogin",element:<AdminLogin saveAdminData={saveAdminData}/>},
         {path : "PatientOtpLogin",element:<PatientOtpLogin/>},
         {path : "ChangePassword",element:<ChangePassword/>},
+        {path : "PharmacistRegister",element:<PharmacistRegister/>},
         {path : "PharmacistOtpLogin",element:<PharmacistOtpLogin/>},
         {path : "PharmacistLogin",element:<PharmacistLogin savePharmacistData={savePharmacistData}/>},
+        
         {path : "PharmacistDocs",element:<PharmacistDocs  PharmacistToken={PharmacistToken}/>},
         {path : "Home",element:<Home/>},
-        {path : "PharmacistRegister",element:<PharmacistRegister/>},
         {path : "AddAdmin",element:<AddAdmin AdminToken={AdminToken}/>},
         {path : "PharmacistRequests",element:<PharmacistRequests AdminToken={AdminToken}/>},
+        {path : "SalesReport",element:<SalesReport AdminToken={AdminToken} PharmacistToken={PharmacistToken} />},
         {path : "AdminForgetPassword",element:<AdminForgetPassword/>},
         {path : "PatientList",element:<PatientList AdminToken={AdminToken}/>},
         {path : "PatientDetails/:id",element:<PatientDetails/>},
-        {path : "PatientRegister",element:<PatientRegister/>},
         // Pharmacist Routes
         {path : "PharmacistList",element:<PharmacistList AdminToken={AdminToken}/>},
         {path : "MedicineList",element:<MedicineList PatientToken={PatientToken} AdminToken={AdminToken} PharmacistToken={PharmacistToken} PharmacistData={PharmacistData}/>},
-        {path : "EditMedicine/:id",element:<EditMedicine PharmacistToken={PharmacistToken} PharmacistData={PharmacistData}/>},
-        {path : "AddMedicineDocs",element:<AddMedicineDocs PharmacistToken={PharmacistToken} PharmacistData={PharmacistData}/>},        
         {path : "*",element:<Notfound/>}
         
       ]
