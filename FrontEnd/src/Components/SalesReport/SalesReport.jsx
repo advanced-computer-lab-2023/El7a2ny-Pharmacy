@@ -16,40 +16,99 @@ export default function SalesReport({PharmacistToken , AdminToken}) {
   const [AllSales, setAllSales] = useState();
   const [totalMedicinesSold, settotalMedicinesSold] = useState();
   const [totalMoney, settotalMoney] = useState();
+  const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [OrignalSales, setOrignalSales] = useState()
   const getAllSales = async (role , header)=>{
     try {
       let {data} = await axios.get(ApiBaseUrl + `${role}/sales-report` , {headers : header});
       setAllSales(data.medicineSales);
+      setOrignalSales(data.medicineSales);
       settotalMedicinesSold(data.totalMedicinesSold);
       settotalMoney(data.totalMoney)
     } catch (error) {
       console.error(error);
     }
   }
+
+  const handleDateRangeChange = (e) => {
+    setDateRange({ ...dateRange, [e.target.name]: e.target.value });
+  };
+
+  function handleSalesDate(){
+    AdminToken ? filterSalesDate('administrators' , AdminHeaders):null;
+    PharmacistToken ? filterSalesDate('pharmacists' , PharmacistHeaders):null;
+  }  
+
+  const filterSalesDate = async (role , header) => {
+    try {
+      const { data } = await axios.get(ApiBaseUrl + `${role}/sales-report-filter-by-date/${dateRange.start}/${dateRange.end}`,{headers : header});
+      console.log(data);
+      setAllSales(data.medicineSales);
+      settotalMedicinesSold(data.totalMedicinesSold);
+      settotalMoney(data.totalMoney)
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function searchSalesName(searchVal) {
+    if (searchVal.trim() === '') {
+      setAllSales([...OrignalSales]);
+    } else {
+      const filteredPharmacists = OrignalSales.filter((sale) => sale.name.toLowerCase().includes(searchVal.toLowerCase()));
+      setAllSales([...filteredPharmacists]);
+    }
+  }
+
   const header = ()=>{
     return <>
     <div className="d-flex align-items-center justify-content-between">
         <div className="tableTitle">
             <h2 className='text-secondary'>ALL SALES :</h2>
+          <div className="headerData">
+            <h5 className='text-main'>total Medicines Sold : <span className='text-muted'>{totalMedicinesSold}</span> </h5>
+            <h5 className='text-main'>total Money :  <span className='text-muted'>{totalMoney} EGP</span></h5>
+          </div>
         </div>
-        <div className="headerData">
-          <h5 className='text-secondary'>total Medicines Sold : {totalMedicinesSold} </h5>
-          <h5 className='text-secondary'>total Money : {totalMoney} EGP</h5>
+        <div className="rightHeader d-flex flex-column align-items-end">
+          <div className="searchContiner mb-2">
+            <span className="p-input-icon-left align-self-end">
+              <i className="pi pi-search" />
+              <InputText placeholder="Search By Name..." onChange={(e) => { searchSalesName(e.target.value) }} />
+            </span>
+          </div>
+          <div className="dateContair  d-flex  justify-content-around align-items-stretch">
+            <div className="startDate form-floating me-2">    
+              <input type="date" placeholder="Start Date" className="form-control  mb-0"id="start"name="start" value={dateRange.start}onChange={handleDateRangeChange}/>
+              <label className='' htmlFor="start">Start Date </label>
+            </div>
+            <div className="endDate me-2 form-floating">
+              <input type="date" className="form-control mb-0" id="end"name="end"value={dateRange.end}onChange={handleDateRangeChange}/>
+              <label className='' htmlFor="end">End Date </label>
+            </div>
+            <Button icon="pi pi-search" className='rounded px-4 me-1' onClick={handleSalesDate} size="larg"/>
+            <Button icon="pi pi-ban" severity='secondary' className='rounded px-4' onClick={handleRole} size="larg"/>
+          </div>
         </div>
     </div>
     </>
   }
+  
+  const handleRole = ()=>{    
+  switch (PharmacistToken || AdminToken) {
+    case PharmacistToken:
+      getAllSales('pharmacists' , PharmacistHeaders)
+      break;
+    case AdminToken:
+      getAllSales('administrators' , AdminHeaders)
+      break;
+    default:
+      break;
+  }
+}
   useEffect(()=>{
-    switch (PharmacistToken || AdminToken) {
-      case PharmacistToken:
-        getAllSales('pharmacists' , PharmacistHeaders)
-        break;
-      case AdminToken:
-        getAllSales('administrators' , AdminHeaders)
-        break;
-      default:
-        break;
-    }
+    handleRole()
   },[PharmacistToken , AdminToken])
   return <>
     <Helmet>
