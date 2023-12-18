@@ -21,6 +21,10 @@ const prescriptionSchema = new Schema({
     description: {
         type: String,
         required: true
+    },
+    medicine_list: {
+        type: [{medicine: { type: mongoose.Schema.ObjectId, ref: 'Medicine', required: true }}],
+      required: true
     }
 }, {timestamps: true});
 

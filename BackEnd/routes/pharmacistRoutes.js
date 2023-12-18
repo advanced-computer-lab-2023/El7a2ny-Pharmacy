@@ -19,9 +19,13 @@ const {
     getSalesReportFilterByDate,
     getSalesReportFilterByMedicine,
     getNotifications,
-    getMyChats,
-    getChat,
-    sendMessage
+    getPatientChats,
+    getPatientChat,
+    sendMessageToPatient,
+    getDoctors,
+    getDoctor,
+    getDoctorChat,
+    sendMessageToDoctor
 } = require('../controllers/pharmacistController');
 const {requireAuthPharmacist, requireAuthPendingPharmacist} = require('../middleware/requireAuth');
 const multer = require('multer');
@@ -78,10 +82,18 @@ router.get('/sales-report-filter-by-medicine/:name', getSalesReportFilterByMedic
 
 router.get('/notifications', getNotifications); //req 40
 
-router.get('/my-patient-chats', getMyChats); //req 39
+router.get('/my-patient-chats', getPatientChats); //req 39
 
-router.get('/patient-chat/:id', getChat); //req 39, id is id of the chat
+router.get('/patient-chat/:id', getPatientChat); //req 39, id is id of the chat
 
-router.patch('/send-message-to-patient/:id', sendMessage); //req 39, id is id of the chat, send message in req body
+router.patch('/send-message-to-patient/:id', sendMessageToPatient); //req 39, id is id of the chat, send message in req body
+
+router.get('/all-doctors', getDoctors); //req 37
+
+router.get('/one-doctor/:id', getDoctor); //req 37, id is id of the doctor
+
+router.post('/doctor-chat/:id', getDoctorChat); //req 37, id is id of the doctor, response is the full chat
+
+router.patch('/send-message-to-doctor/:id', sendMessageToDoctor); //req 37, id is id of the chat, send message in req body
 
 module.exports = router;

@@ -11,7 +11,7 @@ const Order = require('../models/orderModel');
 const PharmacistNotification = require('../models/pharmacistNotificationModel');
 const Pharmacist = require('../models/pharmacistModel');
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY)
-const PatientPharmacistChat = require('../models/patientPharmacistChat');
+const PatientPharmacistChat = require('../models/patientPharmacistChatModel');
 
 const register = async (req, res) => {
     try {
@@ -214,7 +214,7 @@ const getNotFilledPrescriptions = async (req, res) => {
     if(!patient)
         return res.status(404).json({error: 'no such patient'});
      
-    const prescriptions = await Prescription.find({patient_id: id, isFilled: false});
+    const prescriptions = await Prescription.find({patient_id: id, isFilled: false}).populate(['medicine_list.medicine', 'doctor_id']);
     
     res.status(200).json(prescriptions);
 };
@@ -225,7 +225,7 @@ const getPrescription = async (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(id))
         return res.status(404).json({error: 'no such prescription'});
 
-    const prescription = await Prescription.findById(id);
+    const prescription = await Prescription.findById(id).populate(['medicine_list.medicine', 'doctor_id']);
     
     if(!prescription)
         return res.status(404).json({error: 'no such prescription'});

@@ -1,6 +1,7 @@
 const Pharmacist = require('../models/pharmacistModel');
 const mongoose = require('mongoose');
 const Patient = require('../models/patientModel');
+const Doctor = require('../models/doctorModel');
 const Medicine = require('../models/medicineModel');
 const PharmacistOTP = require('../models/pharmacistOTPModel');
 const multer = require('multer');
@@ -9,7 +10,8 @@ const validator = require('validator')
 const nodemailer = require('nodemailer');
 const Order = require('../models/orderModel');
 const PharmacistNotification = require('../models/pharmacistNotificationModel');
-const PatientPharmacistChat = require('../models/patientPharmacistChat');
+const PatientPharmacistChat = require('../models/patientPharmacistChatModel');
+const PharmacistDoctorChat = require('../models/pharmacistDoctorChatModel');
 
 const createToken = (_id) => {
     return jwt.sign({_id: _id}, process.env.SECRET, {expiresIn: '3d'})
@@ -432,7 +434,7 @@ const getNotifications = async (req, res) => {
     res.status(200).json(notifications);
 };
 
-const getMyChats = async (req, res) => {
+const getPatientChats = async (req, res) => {
     const id = req.user._id
 
     const chats = await PatientPharmacistChat.find({pharmacist_id: id});
@@ -440,7 +442,7 @@ const getMyChats = async (req, res) => {
     res.status(200).json(chats);
 };
 
-const getChat = async (req, res) => {
+const getPatientChat = async (req, res) => {
     const {id} = req.params;
 
     const chat = await PatientPharmacistChat.findById(id);
@@ -448,7 +450,7 @@ const getChat = async (req, res) => {
     res.status(200).json(chat);
 };
 
-const sendMessage = async (req, res) => {
+const sendMessageToPatient = async (req, res) => {
     const {id} = req.params;
     const pharmacist_id = req.user._id
     const {message} = req.body
@@ -456,6 +458,50 @@ const sendMessage = async (req, res) => {
     const pharmacist = await Pharmacist.findById(pharmacist_id);
 
     const chat = await PatientPharmacistChat.findOneAndUpdate({_id: id}, {$push: { 'messages': { message: message, sender_name: pharmacist.name, date: new Date()} }});
+
+    res.status(200).json(chat);
+};
+
+const getDoctors = async (req, res) => {
+    const doctors = await Doctor.find({status: 'registered'}).sort({createdAt: -1}).select({password: 0});
+    res.status(200).json(doctors);
+};
+
+const getDoctor = async (req, res) => {
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id))
+        return res.status(404).json({error: 'no such doctor'});
+
+    const doctor = await Doctor.findById(id).select({password: 0});
+    
+    if(!doctor)
+        return res.status(404).json({error: 'no such doctor'});
+     
+    res.status(200).json(doctor);
+};
+
+const getDoctorChat = async (req, res) => {
+    const {id} = req.params;
+    const pharmacist_id = req.user._id
+
+    let chat = await PharmacistDoctorChat.findOne({pharmacist_id: pharmacist_id, doctor_id: id});
+    
+    if(!chat) {
+        chat = await PharmacistDoctorChat.create({pharmacist_id: pharmacist_id, doctor_id: id});
+    }
+ 
+    res.status(200).json(chat);
+};
+
+const sendMessageToDoctor = async (req, res) => {
+    const {id} = req.params;
+    const pharmacist_id = req.user._id
+    const {message} = req.body
+
+    const pharmacist = await Pharmacist.findById(pharmacist_id);
+
+    const chat = await PharmacistDoctorChat.findOneAndUpdate({_id: id}, {$push: { 'messages': { message: message, sender_name: pharmacist.name, date: new Date()} }});
 
     res.status(200).json(chat);
 };
@@ -483,7 +529,11 @@ module.exports = {
     getSalesReportFilterByDate,
     getSalesReportFilterByMedicine,
     getNotifications,
-    getMyChats,
-    getChat,
-    sendMessage
+    getPatientChats,
+    getPatientChat,
+    sendMessageToPatient,
+    getDoctors,
+    getDoctor,
+    getDoctorChat,
+    sendMessageToDoctor
 };
