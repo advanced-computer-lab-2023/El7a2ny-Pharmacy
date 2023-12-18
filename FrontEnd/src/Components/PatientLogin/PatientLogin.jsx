@@ -8,6 +8,7 @@ import { Icon } from 'react-icons-kit';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
 import {login} from 'react-icons-kit/entypo/login'
+import ApiBaseUrl from '../ApiBaseUrl';
 
 export default function PatientLogin({savePatientData}) {
   const[isLoading,setIsLoading]=useState(false)
@@ -21,7 +22,7 @@ export default function PatientLogin({savePatientData}) {
     setIsLoading(true);
     setErrMsg(null);
     try {
-      let {data} =await axios.post('http://localhost:4000/api/patients/login',values)
+      let {data} =await axios.post(ApiBaseUrl + 'patients/login',values)
         setIsLoading(false)
         formik.resetForm();
         setIsLoading(false)

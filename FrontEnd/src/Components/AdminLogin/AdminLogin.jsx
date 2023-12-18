@@ -8,6 +8,7 @@ import { Icon } from 'react-icons-kit';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
 import {login} from 'react-icons-kit/entypo/login'
+import ApiBaseUrl from '../ApiBaseUrl';
 
 export default function AdminLogin({saveAdminData}) {
   const[isLoading,setIsLoading]=useState(false)
@@ -17,11 +18,12 @@ export default function AdminLogin({saveAdminData}) {
     setPasswordShown(!passwordShown);
   };
   let navigate = useNavigate()
+
   async function makeAdminLogged(values){
     setIsLoading(true)
     setErrMsg(null)
     try {
-      let {data} =await axios.post(ApiBaseUrl + 'administrators/login',values);
+      let {data} = await axios.post(ApiBaseUrl + 'administrators/login',values);
       setIsLoading(false)
       formik.resetForm();
       localStorage.setItem("AdminToken",data.token)

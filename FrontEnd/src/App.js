@@ -77,7 +77,7 @@ function App() {
         {index:true , element:<Home/>},
         {path : "AdminOtpLogin",element:<AdminOtpLogin/>},
         {path : "PatientRegister",element:<PatientRegister/>},
-        {path : "PatientLogin",element:<PatientLogin/>},
+        {path : "PatientLogin",element:<PatientLogin savePatientData={savePatientData}/>},
         {path : "AdminLogin",element:<AdminLogin saveAdminData={saveAdminData}/>},
         {path : "PatientOtpLogin",element:<PatientOtpLogin/>},
         {path : "ChangePassword",element:<ChangePassword/>},
