@@ -34,6 +34,9 @@ import SalesReport from './Components/SalesReport/SalesReport';
 import Perscriptions from './Components/Perscriptions/Perscriptions';
 import { CartContextProvider } from './Context/CartContext';
 import Cart from './Components/Cart/Cart';
+import MyAddresses from './Components/MyAddresses/MyAddresses';
+import AllOrders from './Components/AllOrders/AllOrders';
+import Checkout from './Components/Checkout/Checkout';
 
 
 function App() {
@@ -99,7 +102,10 @@ function App() {
 
         {path : "Perscriptions",element:<Perscriptions PatientToken={PatientToken}/>},
         {path : "Cart",element:<Cart PatientToken={PatientToken}/>},
-
+        {path : "MyAddresses",element:<MyAddresses PatientToken={PatientToken}/>},
+        {path : "AllOrders",element:<AllOrders PatientToken={PatientToken}/>},
+        {path : "Checkout",element:<Checkout PatientToken={PatientToken}/>},
+        
         // Pharmacist Routes
         {path : "PharmacistList",element:<PharmacistList AdminToken={AdminToken}/>},
         {path : "MedicineList",element:<MedicineList PatientToken={PatientToken} AdminToken={AdminToken} PharmacistToken={PharmacistToken} PharmacistData={PharmacistData}/>},

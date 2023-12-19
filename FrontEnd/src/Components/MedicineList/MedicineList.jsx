@@ -35,6 +35,15 @@ export default function MedicineList({PharmacistToken , PatientToken , AdminToke
         console.error(error);
     }
   }
+  async function getOverCounterMedicines(role , header) {
+    try {
+      const response = await axios.get(ApiBaseUrl + `${role}/over-the-counter-medicines` , {headers : header})
+      setMedicines(response.data);
+      setOrignalMedicines(response.data);
+    } catch (error) {
+      console.error(error);
+  }
+}
 
   async function addNewMedicine(values){
     try {
@@ -127,7 +136,7 @@ useEffect(()=>{
   useEffect(()=>{
     switch (PharmacistToken || PatientToken || AdminToken) {
       case PatientToken:
-        getAllMedicines('patients' , PatientHeaders)
+        getOverCounterMedicines('patients' , PatientHeaders)
         break;
       case PharmacistToken:
         getAllMedicines('pharmacists' , PharmacistHeaders)

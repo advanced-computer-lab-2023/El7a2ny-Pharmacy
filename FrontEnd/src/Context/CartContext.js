@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import ApiBaseUrl from "../Components/ApiBaseUrl";
 export let cartContext = createContext();
 export function CartContextProvider(props) {
-    const [numbOfCartItems, setNumbOfCartItems] = useState(0)
+    const [numbOfCartItems, setNumbOfCartItems] = useState()
     let PatientToken = localStorage.getItem('PatientToken')
     let headers = { 'Authorization': `Bearer ${PatientToken}` };
     function getLoggedUserCart(){
@@ -48,18 +48,20 @@ export function CartContextProvider(props) {
         ).then((response) => response)
         .catch((erorr) => erorr)
     }
-    function onlinePayment(){
-        return axios.post(ApiBaseUrl + `patients/credit-card-payment` ,
-        {
-            headers
+    async function onlinePayment(){
+        try {
+            let response = await axios.post(ApiBaseUrl + `patients/credit-card-payment` ,{},{headers});
+            console.log(response);
+            return response
+        } catch (error) {
+            console.error(error);
         }
-        ).then((response) => response)
-        .catch((erorr) => erorr)
     }
-    function PlaceOrder(shippingAddress){
+    function PlaceOrder(values){
         return axios.post(ApiBaseUrl + `patients/place-order` ,
         {
-            shippingAddress : shippingAddress
+            address : values.address ,
+            payment_method : values.payment_method
         },
         {
             headers
