@@ -148,7 +148,7 @@ export default function PharmacistList({ PatientToken, AdminToken }) {
           <Column field="createdAt" header="Joined At" body={joinBodyTemplate} sortable style={{ width: "12%", borderBottom: '1px solid #dee2e6' }} />
           <Column field="hourlyRate" header="Hourly Rate" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
           <Column field="status" header="status" body={statusBodyTemplate} sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }}></Column>
-          <Column body={actionTemplate} header="Actions" style={{ width: '15%', borderBottom: '1px solid #dee2e6' }} />
+          <Column body={actionTemplate} header=" " style={{ width: '15%', borderBottom: '1px solid #dee2e6' }} />
         </DataTable>
     </div>
     </>
