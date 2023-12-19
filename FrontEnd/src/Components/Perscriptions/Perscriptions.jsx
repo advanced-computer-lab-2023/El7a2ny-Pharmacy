@@ -25,7 +25,7 @@ export default function Perscriptions({ PatientToken }) {
             prescriptionDate: new Date(prescription.date).toLocaleDateString(),
           };
         });
-  
+        console.log(updatedPrescriptions);
         setMedicines(updatedPrescriptions);
         setOrignalMedicines(updatedPrescriptions);
         } catch (error) {
@@ -79,8 +79,17 @@ export default function Perscriptions({ PatientToken }) {
     </div>
   );
 
-  const mainIngredientBody = (rowData) => rowData.ingredients.map((medicine, index) => <span key={index}>{medicine}</span>).reduce((acc, span, index) => index === 0 ? span : [acc, ' - ', span], null);
-
+  // const mainIngredientBody = (rowData) => rowData.ingredients.map((medicine, index) => <span key={index}>{medicine}</span>).reduce((acc, span, index) => index === 0 ? span : [acc, ' - ', span], null);
+  const mainIngredientBody = (rowData) => {
+    if (rowData.ingredients && Array.isArray(rowData.ingredients)) {
+      return rowData.ingredients.map((medicine, index) => (
+        <span key={index}>{medicine}</span>
+      )).reduce((acc, span, index) => index === 0 ? span : [acc, ' - ', span], null);
+    } else {
+      return null; // or provide a default value if needed
+    }
+  };
+  
   const actionTemplate = (rowData) => {
     return (
       <div className='d-flex justify-content-around align-items-center'>
@@ -114,6 +123,7 @@ export default function Perscriptions({ PatientToken }) {
           />
             <Column field="name" header="Name" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
             <Column field="availableQuantity" header="Quantity" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
+            <Column field="medicine_list" header="medicine_list" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
             <Column field="price" header="price" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
             <Column field="description" header="description" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
             <Column field="sales" header="sales" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
