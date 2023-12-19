@@ -59,7 +59,7 @@ export default function Perscriptions({ PatientToken }) {
       <div className="row w-100">
         <div className="col-5">
           <div className="tableTitle mt-1">
-            <h2 className="text-secondary">All Un-Filled Medicines :</h2>
+            <h2 className="text-secondary">Unfilled Prescription Medicines</h2>
           </div>
         </div>
         {/* <div className="col-7 ms-auto">
