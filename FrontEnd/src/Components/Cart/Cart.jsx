@@ -8,10 +8,12 @@ export default function Cart() {
   let {getLoggedUserCart , removeItem , updateProductCount , clearUserCart , setNumbOfCartItems} = useContext(cartContext)
   const [cartDetails, setCartDetails] = useState(null)
   const [btnLoading, setBtnLoading] = useState(false)
+
   async function getCart (){
     let response = await getLoggedUserCart()
-    if (response?.data?.status === 'success') {
-      setCartDetails(response.data.data);
+    if (response?.status ===  200) {
+      setCartDetails(response.data);
+      console.log(response.data);
     }else{
       setCartDetails(response.message)
     }
@@ -60,7 +62,7 @@ export default function Cart() {
       <title>Cart Details</title>
     </Helmet>
   {cartDetails? 
-    <div className="container bg-main-light my-4 p-4 position-relative shadow-sm">
+    <div className="container bg-light my-4 p-4 position-relative shadow-sm border rounded">
         {btnLoading ?
         <div className="overlayLoading">
           <i className='text-main fa fa-spin fa-spinner fs-1'></i>

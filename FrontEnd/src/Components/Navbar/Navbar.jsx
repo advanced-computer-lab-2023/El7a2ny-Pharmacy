@@ -164,15 +164,16 @@ return <>
             </Link>
           </li>
           <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
-            <Link className={`dropdown-item text-main ${activeLink === 'AdminLogin' ? ' active' : ''}`} to={`AdminLogin`} onClick={() => setActiveLink('AdminLogin')}>
-            Admin Login
-            </Link>
-          </li>
-          <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
             <Link className={`dropdown-item text-main ${activeLink === 'PharmacistLogin' ? ' active' : ''}`} to={`PharmacistLogin`} onClick={() => setActiveLink('PharmacistLogin')}>
             Pharmacist Login
             </Link>
           </li>
+          <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
+            <Link className={`dropdown-item text-main ${activeLink === 'AdminLogin' ? ' active' : ''}`} to={`AdminLogin`} onClick={() => setActiveLink('AdminLogin')}>
+            Admin Login
+            </Link>
+          </li>
+
             </div>
           </li>
 

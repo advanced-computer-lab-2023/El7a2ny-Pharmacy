@@ -20,8 +20,8 @@ export function CartContextProvider(props) {
         if (response?.status == 200) {
             setNumbOfCartItems(response.data.length)
             // setCartId(response.data.data._id)
+            console.log(response);
         }
-        console.log(response?.status);
     }
     useEffect(()=>{
         getCart();
