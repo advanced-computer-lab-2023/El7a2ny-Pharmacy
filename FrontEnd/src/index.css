@@ -11,6 +11,7 @@ body {
   background-attachment: scroll;
   background-repeat: space;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 body::before {
@@ -105,11 +106,11 @@ code {
   color: #0155a0  ;
   background: #0155a0 ;
   height: 1px;
-  transition: 1s all;
-  -webkit-transition: 1s all;
-  -moz-transition: 1s all;
-  -ms-transition: 1s all;
-  -o-transition: 1s all;
+  transition: 500ms all;
+  -webkit-transition: 500ms all;
+  -moz-transition: 500ms all;
+  -ms-transition: 500ms all;
+  -o-transition: 500ms all;
 }
 .form-floating label{
   opacity: 0.75;
@@ -117,7 +118,7 @@ code {
  .nav-link:hover::after , 
  .nav-link.active::after
  {
-  width: 77%;
+  width: 80%;
  }
  .Tabel {
   margin-bottom: 50px;
