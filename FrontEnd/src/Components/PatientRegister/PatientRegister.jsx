@@ -45,7 +45,7 @@ const PatientRegister = () => {
         name: Yup.string().required('Emergency contact name is required'),
         relation: Yup.string().required('Emergency contact Relation is required'),
         mobile_number: Yup.string()
-          .matches(/^\d{10}$/, 'Invalid mobile number')
+          .matches(/^\d{11}$/, 'Invalid mobile number')
           .required('Emergency contact mobile number is required')
       })
     }),
