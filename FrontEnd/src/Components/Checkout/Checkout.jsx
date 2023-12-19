@@ -4,11 +4,12 @@ import { cartContext } from '../../Context/CartContext';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
+import { useNavigate } from 'react-router-dom';
 
 export default function Checkout({ PatientToken }) {
-  let { onlinePayment, cartId , PlaceOrder } = useContext(cartContext);
+  let { onlinePayment , PlaceOrder , setNumbOfCartItems } = useContext(cartContext);
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
-
+  let navigate = useNavigate()
   const [Addresses, setAddresses] = useState([]);
 
   useEffect(() => {
@@ -22,15 +23,21 @@ export default function Checkout({ PatientToken }) {
       alert('Please select an address before placing the order.');
       return;
     }else if (values.payment_method === 'wallet' || values.payment_method === 'cash') {
-      PlaceOrder(values)
-      formik.resetForm()
-    }else if (values.payment_method === 'online') {
+      try {
+        PlaceOrder(values)
+        formik.resetForm();
+        setNumbOfCartItems(0)
+        navigate('/')  
+      } catch (error) {
+        console.error(error);
+      }
+    }else if (values.payment_method === 'credit card') {
       try {
         let response = await onlinePayment();
-        // if (response?.status === 200) {
-          // window.location.href = response.data.session.url;
-          console.log(response);
-        // }
+        if (response?.status === 200) {
+          window.location.href = response.data.url;
+          PlaceOrder(values)
+        }
       } catch (error) {
         console.error(error);
       }  
@@ -113,15 +120,14 @@ export default function Checkout({ PatientToken }) {
               className="form-check-input"
               type="radio"
               name="payment_method"
-              id="online"
-              checked={formik.values.payment_method === 'online'}
-              onChange={() => formik.setFieldValue('payment_method', 'online')}
+              id="credit card"
+              checked={formik.values.payment_method === 'credit card'}
+              onChange={() => formik.setFieldValue('payment_method', 'credit card')}
             />
-            <label className="form-check-label" htmlFor="online">
+            <label className="form-check-label" htmlFor="credit card">
               Complete Payment Online
             </label>
           </div>
-
           <hr />
           <button type="submit" className="btn bg-main text-light w-100">
             Place Order

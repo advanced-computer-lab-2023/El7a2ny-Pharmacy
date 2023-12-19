@@ -122,7 +122,7 @@ export default function Cart({ PatientToken }) {
             </DataTable>
           ) : null}
           {cartDetails ? (
-            <button className="btn bg-main btn-sm d-block">
+            <button className="btn bg-main btn-sm d-block" >
               <Link className="text-light btn" to={'/Checkout'}>
                 Checkout
               </Link>

@@ -13,19 +13,21 @@ import { Dialog } from 'primereact/dialog';
 import {notepad_ok} from 'react-icons-kit/ikons/notepad_ok'
 import { cartContext } from '../../Context/CartContext'
 import {shopping_cart_ok} from 'react-icons-kit/ikons/shopping_cart_ok'
+import {shopping_cart_delete} from 'react-icons-kit/ikons/shopping_cart_delete'
+import Loading from '../Loading/Loading';
+
 export default function MedicineList({PharmacistToken , PatientToken , AdminToken}) {
   let AdminHeaders = { 'Authorization': `Bearer ${AdminToken}` };
   let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
 
-  let {addToCart} = useContext(cartContext);
+  let {addToCart , IsInCart} = useContext(cartContext);
 
   const [Medicines, setMedicines] = useState()
   const [OrignalMedicines, setOrignalMedicines] = useState()
   const [DisplayAddMedicineDialog, setDisplayAddMedicineDialog] = useState(false);
   const [displayEditDialog, setDisplayEditDialog] = useState(false);
   const [SelectedMedicine, setSelectedMedicine] = useState(null);
-
   async function getAllMedicines(role , header) {
       try {
         const response = await axios.get(ApiBaseUrl + `${role}/all-medicines` , {headers : header})
@@ -245,12 +247,13 @@ useEffect(()=>{
                 </label>
   };
     
-  const AddToCartBody = (rowData) => <Button className='TabelButton approve' onClick={() => { addToCart(rowData._id) }}> <Icon size={20} className='m-0 mb-2' icon={shopping_cart_ok}></Icon> </Button>
+  const AddToCartBody = (rowData) => <Button className='TabelButton approve' onClick={() => { addToCart(rowData._id) }}> <Icon size={20} className='m-0 mb-2' icon=  { IsInCart ? shopping_cart_delete : shopping_cart_ok}></Icon> </Button>
   
   return <>
     <Helmet>
       <title>Medicine List</title>
     </Helmet>
+    {Medicines ? <>
     <div className="container-fluid my-3">
           <DataTable value={Medicines} header={header} paginator selectionMode="single" className={`dataTabel mb-4 text-capitalize AllList`} dataKey="_id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
             <Column field="name" header="Name" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
@@ -393,5 +396,6 @@ useEffect(()=>{
       </Dialog>
 
     </div>
+    </> : <Loading/>}
     </>
 }

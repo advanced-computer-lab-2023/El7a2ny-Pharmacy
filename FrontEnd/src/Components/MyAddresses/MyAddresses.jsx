@@ -8,6 +8,7 @@ import ApiBaseUrl from '../ApiBaseUrl';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Dialog } from 'primereact/dialog';
+import Loading from '../Loading/Loading';
 
 export default function MyAddresses({ PatientToken }) {
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
@@ -86,12 +87,13 @@ export default function MyAddresses({ PatientToken }) {
       <Helmet>
         My Addresses
       </Helmet>
+      {Addresses ? <>
       <div className="container my-3">
         <DataTable value={Addresses} header={header} selectionMode="single" className={`dataTabel mb-4 text-capitalize AllList`} dataKey="id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
           <Column field="address" header="Addresses" />
         </DataTable>
-        <Dialog header={"ADD NEW ADDRESS"} visible={DisplayNewAddressDialog} onHide={hideDialog} modal>
-          <form action="" onSubmit={formik.handleSubmit} className='row text-center'>
+        <Dialog header={"ADD NEW ADDRESS"} className='bg-danger addAdressModal' visible={DisplayNewAddressDialog} onHide={hideDialog} modal>
+          <form action="" onSubmit={formik.handleSubmit} className='row text-center bg-dark .addAdressForm'>
             <div className="col-8 offset-2 m-auto bg-light rounded border shadow-sm w-auto p-4 h-100">
               <div className="row">
                 <div className="col-12 form-floating">
@@ -107,6 +109,7 @@ export default function MyAddresses({ PatientToken }) {
           </form>
         </Dialog>
       </div>
+      </>:<Loading/>}
     </>
   );
 }
