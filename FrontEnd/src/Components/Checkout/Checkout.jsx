@@ -18,11 +18,12 @@ export default function Checkout({ PatientToken }) {
   }, [PatientToken]);
 
   async function handleSubmit(values) {
-    if (!values.shippingAddress) {
-      alert('Please select an shippingAddress before placing the order.');
+    if (!values.address) {
+      alert('Please select an address before placing the order.');
       return;
     }else if (values.payment_method === 'wallet' || values.payment_method === 'cash') {
       PlaceOrder(values)
+      formik.resetForm()
     }else if (values.payment_method === 'online') {
       try {
         let response = await onlinePayment(cartId, values);
@@ -37,8 +38,8 @@ export default function Checkout({ PatientToken }) {
 
   let formik = useFormik({
     initialValues: {
-      shippingAddress: '', // Use this field to store the selected shippingAddress
-      payment_method: 'wallet', // Default to 'wallet'
+      address: '', // Use this field to store the selected address
+      payment_method: '', // Default to 'wallet'
     },
     onSubmit: handleSubmit,
   });
@@ -46,7 +47,7 @@ export default function Checkout({ PatientToken }) {
   const getAllAddresses = async () => {
     try {
       let { data } = await axios.get(ApiBaseUrl + `patients/my-addresses`, { headers: PatientHeaders });
-      const addressesArray = data.map((shippingAddress, index) => ({ id: index + 1, shippingAddress }));
+      const addressesArray = data.map((address, index) => ({ id: index + 1, address }));
       setAddresses(addressesArray);
     } catch (error) {
       console.error(error);
@@ -67,14 +68,14 @@ export default function Checkout({ PatientToken }) {
               <input
                 className="form-check-input"
                 type="radio"
-                name="shippingAddress"
-                id={`shippingAddress${addressOption.id}`}
-                value={addressOption.shippingAddress}
-                checked={formik.values.shippingAddress === addressOption.shippingAddress}
-                onChange={() => formik.setFieldValue('shippingAddress', addressOption.shippingAddress)}
+                name="address"
+                id={`address${addressOption.id}`}
+                value={addressOption.address}
+                checked={formik.values.address === addressOption.address}
+                onChange={() => formik.setFieldValue('address', addressOption.address)}
               />
-              <label className="form-check-label" htmlFor={`shippingAddress${addressOption.id}`}>
-                {addressOption.shippingAddress}
+              <label className="form-check-label" htmlFor={`address${addressOption.id}`}>
+                {addressOption.address}
               </label>
             </div>
           ))}

@@ -57,10 +57,11 @@ export function CartContextProvider(props) {
             console.error(error);
         }
     }
-    function PlaceOrder(shippingAddress){
+    function PlaceOrder(values){
         return axios.post(ApiBaseUrl + `patients/place-order` ,
         {
-            shippingAddress : shippingAddress
+            address : values.address ,
+            payment_method : values.payment_method
         },
         {
             headers
