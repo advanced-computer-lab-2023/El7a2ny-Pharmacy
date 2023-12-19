@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Helmet } from 'react-helmet';
-import { Icon } from 'react-icons-kit';
 import { Button } from 'primereact/button';
 import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
@@ -10,21 +9,28 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Dialog } from 'primereact/dialog';
 
-export default function MyAddresses({PatientToken}) {
+export default function MyAddresses({ PatientToken }) {
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
 
-  const [Addresses, setAddresses] = useState();
+  const [Addresses, setAddresses] = useState([]);
   const [DisplayNewAddressDialog, setDisplayNewAddressDialog] = useState(false);
 
-  const getAllAddresses = async ()=>{
-    let {data} = await axios.get(ApiBaseUrl + `patients/my-addresses` , {headers : PatientHeaders});
-    console.log(data);
-  }
-  useEffect(()=>{
-    if (PatientToken) {
-      getAllAddresses()
+  const getAllAddresses = async () => {
+    try {
+      let { data } = await axios.get(ApiBaseUrl + `patients/my-addresses`, { headers: PatientHeaders });
+      // Transform the array of strings into an array of objects
+      const addressesArray = data.map((address, index) => ({ id: index + 1, address }));
+      setAddresses(addressesArray);
+    } catch (error) {
+      console.error(error);
     }
-  },[PatientToken])
+  };
+
+  useEffect(() => {
+    if (PatientToken) {
+      getAllAddresses();
+    }
+  }, [PatientToken]);
 
   const showDialog = () => {
     setDisplayNewAddressDialog(true);
@@ -45,57 +51,62 @@ export default function MyAddresses({PatientToken}) {
         </div>
         <div className="col-7 ms-auto">
           <div className="rightHeader d-flex flex-column">
-              <div className="addBtn align-self-end me-1">
-                <Button label="ADD ADDRESS" icon="pi pi-plus" className="mb-2 rounded" onClick={showDialog} />
-              </div>
+            <div className="addBtn align-self-end me-1">
+              <Button label="ADD ADDRESS" icon="pi pi-plus" className="mb-2 rounded" onClick={showDialog} />
+            </div>
           </div>
-
         </div>
       </div>
     </div>
-  )
-const addNewAddress = async (val) =>{
-  try {
-    let {data} = await axios.patch(ApiBaseUrl + `patients/add-address`,{}, {headers : PatientHeaders});
-    console.log(data);
-    getAllAddresses()
-    hideDialog()
-  } catch (error) {
-    console.error(error);
-  }
-}
+  );
+
+  const addNewAddress = async (val) => {
+    try {
+      let { data } = await axios.patch(ApiBaseUrl + `patients/add-address`, val, { headers: PatientHeaders });
+      console.log(data);
+      getAllAddresses();
+      hideDialog();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const formik = useFormik({
-    initialValues : {
-      address : ''
+    initialValues: {
+      address: ''
     },
-    validationSchema : Yup.object().shape({
-      address : Yup.string().required('address is required'),
+    validationSchema: Yup.object().shape({
+      address: Yup.string().required('address is required'),
     }),
-    onSubmit : (values) => addNewAddress(values)
-  })
-  return <>
-    <div className="container my-3">
-      <DataTable value={Addresses} header={header} selectionMode="single" className={`dataTabel mb-4 text-capitalize AllList`} dataKey="_id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
-          <Column/>
-          <Column/>
-      </DataTable>
-      <Dialog header={"ADD NEW ADDRESS"}  visible={DisplayNewAddressDialog} onHide={hideDialog} modal>
-        <form action=""  onSubmit={formik.handleSubmit} className='row text-center'>
-          <div className="col-8 offset-2 m-auto bg-light rounded border shadow-sm w-auto p-4 h-100">
-            <div className="row">
-              <div className="col-12 form-floating">
-                  {/*medicinal_use input */}
-                  <input type="text" placeholder='address' className="form-control mb-2" id="address" name="address"value={formik.values.address}onChange={formik.handleChange}onBlur={formik.handleBlur}/>
+    onSubmit: (values) => addNewAddress(values)
+  });
+
+  return (
+    <>
+      <Helmet>
+        My Addresses
+      </Helmet>
+      <div className="container my-3">
+        <DataTable value={Addresses} header={header} selectionMode="single" className={`dataTabel mb-4 text-capitalize AllList`} dataKey="id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
+          <Column field="address" header="Addresses" />
+        </DataTable>
+        <Dialog header={"ADD NEW ADDRESS"} visible={DisplayNewAddressDialog} onHide={hideDialog} modal>
+          <form action="" onSubmit={formik.handleSubmit} className='row text-center'>
+            <div className="col-8 offset-2 m-auto bg-light rounded border shadow-sm w-auto p-4 h-100">
+              <div className="row">
+                <div className="col-12 form-floating">
+                  <input type="text" placeholder='address' className="form-control mb-2" id="address" name="address" value={formik.values.address} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                   <label className='ms-2' htmlFor="address">address</label>
                   {formik.errors.address && formik.touched.address ? (<div className="alert alert-danger">{formik.errors.address}</div>) : null}
-              </div>
-              <div className="col-12">
-                <Button label='Submit' type='submit' className='rounded'/>
+                </div>
+                <div className="col-12">
+                  <Button label='Submit' type='submit' className='rounded' />
+                </div>
               </div>
             </div>
-          </div>
-        </form>
-      </Dialog>
-    </div>
-  </>
+          </form>
+        </Dialog>
+      </div>
+    </>
+  );
 }
