@@ -50,7 +50,7 @@ export function CartContextProvider(props) {
     }
     async function onlinePayment(){
         try {
-            let response = awaitaxios.post(ApiBaseUrl + `patients/credit-card-payment` ,{},{headers});
+            let response = await axios.post(ApiBaseUrl + `patients/credit-card-payment` ,{},{headers});
             console.log(response);
             return response
         } catch (error) {

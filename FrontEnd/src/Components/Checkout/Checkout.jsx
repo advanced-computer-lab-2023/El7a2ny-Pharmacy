@@ -6,7 +6,7 @@ import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
 
 export default function Checkout({ PatientToken }) {
-  let { onlinePayment, cartId } = useContext(cartContext);
+  let { onlinePayment, cartId , PlaceOrder } = useContext(cartContext);
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
 
   const [Addresses, setAddresses] = useState([]);
@@ -18,45 +18,35 @@ export default function Checkout({ PatientToken }) {
   }, [PatientToken]);
 
   async function handleSubmit(values) {
-    // Check if an address is selected before placing an order
-    if (!values.address) {
-      alert('Please select an address before placing the order.');
+    if (!values.shippingAddress) {
+      alert('Please select an shippingAddress before placing the order.');
       return;
-    }else if (values.paymentMethod === 'wallet' || values.paymentMethod === 'cash') {
-      placeOrder(values)
-    }
-    try {
-      let response = await onlinePayment(cartId, values);
-      if (response?.data?.status === 'success') {
-        window.location.href = response.data.session.url;
-      }
-    } catch (error) {
-      console.error(error);
+    }else if (values.payment_method === 'wallet' || values.payment_method === 'cash') {
+      PlaceOrder(values)
+    }else if (values.payment_method === 'online') {
+      try {
+        let response = await onlinePayment(cartId, values);
+        if (response?.data?.status === 'success') {
+          window.location.href = response.data.session.url;
+        }
+      } catch (error) {
+        console.error(error);
+      }  
     }
   }
 
   let formik = useFormik({
     initialValues: {
-      address: '', // Use this field to store the selected address
-      paymentMethod: 'wallet', // Default to 'wallet'
+      shippingAddress: '', // Use this field to store the selected shippingAddress
+      payment_method: 'wallet', // Default to 'wallet'
     },
     onSubmit: handleSubmit,
   });
 
-  const placeOrder = async (val) => {
-    try {
-      let { data } = await axios.post(ApiBaseUrl + `patients/place-order`, val, { headers: PatientHeaders });
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const getAllAddresses = async () => {
     try {
       let { data } = await axios.get(ApiBaseUrl + `patients/my-addresses`, { headers: PatientHeaders });
-      // Transform the array of strings into an array of objects
-      const addressesArray = data.map((address, index) => ({ id: index + 1, address }));
+      const addressesArray = data.map((shippingAddress, index) => ({ id: index + 1, shippingAddress }));
       setAddresses(addressesArray);
     } catch (error) {
       console.error(error);
@@ -77,14 +67,14 @@ export default function Checkout({ PatientToken }) {
               <input
                 className="form-check-input"
                 type="radio"
-                name="address"
-                id={`address${addressOption.id}`}
-                value={addressOption.address}
-                checked={formik.values.address === addressOption.address}
-                onChange={() => formik.setFieldValue('address', addressOption.address)}
+                name="shippingAddress"
+                id={`shippingAddress${addressOption.id}`}
+                value={addressOption.shippingAddress}
+                checked={formik.values.shippingAddress === addressOption.shippingAddress}
+                onChange={() => formik.setFieldValue('shippingAddress', addressOption.shippingAddress)}
               />
-              <label className="form-check-label" htmlFor={`address${addressOption.id}`}>
-                {addressOption.address}
+              <label className="form-check-label" htmlFor={`shippingAddress${addressOption.id}`}>
+                {addressOption.shippingAddress}
               </label>
             </div>
           ))}
@@ -94,10 +84,10 @@ export default function Checkout({ PatientToken }) {
             <input
               className="form-check-input"
               type="radio"
-              name="paymentMethod"
+              name="payment_method"
               id="cash"
-              checked={formik.values.paymentMethod === 'cash'}
-              onChange={() => formik.setFieldValue('paymentMethod', 'cash')}
+              checked={formik.values.payment_method === 'cash'}
+              onChange={() => formik.setFieldValue('payment_method', 'cash')}
             />
             <label className="form-check-label" htmlFor="cash">
               Cash on Delivery
@@ -107,10 +97,10 @@ export default function Checkout({ PatientToken }) {
             <input
               className="form-check-input"
               type="radio"
-              name="paymentMethod"
+              name="payment_method"
               id="wallet"
-              checked={formik.values.paymentMethod === 'wallet'}
-              onChange={() => formik.setFieldValue('paymentMethod', 'wallet')}
+              checked={formik.values.payment_method === 'wallet'}
+              onChange={() => formik.setFieldValue('payment_method', 'wallet')}
             />
             <label className="form-check-label" htmlFor="wallet">
               Pay by Wallet
@@ -120,10 +110,10 @@ export default function Checkout({ PatientToken }) {
             <input
               className="form-check-input"
               type="radio"
-              name="paymentMethod"
+              name="payment_method"
               id="online"
-              checked={formik.values.paymentMethod === 'online'}
-              onChange={() => formik.setFieldValue('paymentMethod', 'online')}
+              checked={formik.values.payment_method === 'online'}
+              onChange={() => formik.setFieldValue('payment_method', 'online')}
             />
             <label className="form-check-label" htmlFor="online">
               Complete Payment Online
