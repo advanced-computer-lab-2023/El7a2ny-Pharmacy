@@ -32,6 +32,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import SalesReport from './Components/SalesReport/SalesReport';
 import Perscriptions from './Components/Perscriptions/Perscriptions';
+import { CartContextProvider } from './Context/CartContext';
 
 
 function App() {
@@ -106,9 +107,11 @@ function App() {
     }
   ])
   return <>
-  <PrimeReactProvider>
+    <PrimeReactProvider>
+    <CartContextProvider>
       <RouterProvider router={routes}></RouterProvider>
-      </PrimeReactProvider>
+    </CartContextProvider>
+    </PrimeReactProvider>
     </>
 }
 export default App;

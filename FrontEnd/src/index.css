@@ -32,6 +32,26 @@ code {
 .border-main{
   border-color: #0057c0 !important;
 }
+.cart-Num
+{
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+    transform: translate(100% 100%);
+    transition: all .5s ease-in;
+    -webkit-transition: all .5s ease-in;
+    -moz-transition: all .5s ease-in;
+    -ms-transition: all .5s ease-in;
+    -o-transition: all .5s ease-in;
+    -webkit-transform: translate(100% 100%);
+    -moz-transform: translate(100% 100%);
+    -ms-transform: translate(100% 100%);
+    -o-transform: translate(100% 100%);
+}
+
 .headLine{
   color: rgba(255, 255, 255, 0.705);
   text-transform: uppercase;

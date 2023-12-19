@@ -1,4 +1,4 @@
-import React, { useState ,useEffect } from 'react'
+import React, { useState ,useEffect,useContext } from 'react'
 import Icon from 'react-icons-kit';
 import { Link, useLocation } from 'react-router-dom'
 import {userMd} from 'react-icons-kit/fa/userMd'
@@ -7,8 +7,11 @@ import {shoppingCart} from 'react-icons-kit/feather/shoppingCart'
 import {ic_payment} from 'react-icons-kit/md/ic_payment'
 import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
+import { cartContext } from '../../Context/CartContext'
 
 export default function NavBar({LogOut , PharmacistData , PatientData , AdminData ,PatientToken, PharmacistToken }) {
+  let {numbOfCartItems} = useContext(cartContext);
+
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
   let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   const [activeLink, setActiveLink] = useState();
@@ -163,6 +166,7 @@ return <>
             <li className="nav-item">
               <Link className={`nav-link ${activeLink === 'Home' ? ' cartActive' : ''}`} to={""} onClick={() => setActiveLink('Home')}>
                 <Icon size={20} icon={shoppingCart}/>
+                <span  className='cart-Num p- badge bg-main text-white position-absolute top-0 end-0 rounded-circle'>{numbOfCartItems}</span>
               </Link>
             </li>
           : null }

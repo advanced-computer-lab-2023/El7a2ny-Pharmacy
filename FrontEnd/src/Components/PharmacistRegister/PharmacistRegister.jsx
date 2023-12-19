@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
-import { useNavigate } from 'react-router-dom';
 import { Icon } from 'react-icons-kit'
 import {notepad_ok} from 'react-icons-kit/ikons/notepad_ok'
 import { Helmet } from 'react-helmet';
@@ -13,9 +12,9 @@ import {ic_error_twotone} from 'react-icons-kit/md/ic_error_twotone'
 const PharmacistRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
-  const [pendingMssg, setpendingMssg] = useState(null)
+  const [pendingMssg, setpendingMssg] = useState(null);
+  const [ErrMsg, setErrMsg] = useState(null)
   const togglePassword = () => {setPasswordShown(!passwordShown)};
-  const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
       name:   '',
@@ -39,8 +38,10 @@ const PharmacistRegister = () => {
     }),
     onSubmit: async (values) => {
       setIsLoading(true);
+      setpendingMssg(null);
+      setErrMsg(null);
       try {
-        const {data} = await axios.post(ApiBaseUrl + 'pharmacists/register-request', values);
+        const data = await axios.post(ApiBaseUrl + 'pharmacists/register-request', values);
         console.log(data);
         setIsLoading(false);
         formik.resetForm();
@@ -48,7 +49,13 @@ const PharmacistRegister = () => {
       } catch (error) {
         console.error(error);
         setIsLoading(false);
-      }
+        if (error.response && error.response.status === 409) {
+          // Handle username conflict error
+          setErrMsg('Error: The username is already in use. Please choose a different username.');
+        } else {
+          // Handle other errors
+          setErrMsg('An error occurred. Please try again later.');
+        }      }
     },
   });
   return (
@@ -117,6 +124,13 @@ const PharmacistRegister = () => {
             <div className="alert alert-success">
             <Icon className='me-2' size={30} icon={ic_error_twotone}/>{pendingMssg}
             </div>
+          </div>
+          </> : null}
+          {ErrMsg ? <>
+            <div className="col-12">
+          <div className="alert alert-danger">
+            {ErrMsg}
+          </div>
           </div>
           </> : null}
           </div>
