@@ -65,10 +65,10 @@ export default function SalesReport({PharmacistToken , AdminToken}) {
     return <>
     <div className="d-flex align-items-center justify-content-between">
         <div className="tableTitle">
-            <h2 className='text-secondary'>ALL SALES :</h2>
+            <h2 className='text-secondary'>SALES REPORT</h2>
           <div className="headerData">
-            <h5 className='text-main'>total Medicines Sold : <span className='text-muted'>{totalMedicinesSold}</span> </h5>
-            <h5 className='text-main'>total Money :  <span className='text-muted'>{totalMoney} EGP</span></h5>
+            <h5 className='text-main'>Medicines Sold : <span className='text-muted'>{totalMedicinesSold}</span> </h5>
+            <h5 className='text-main'>Revenue :  <span className='text-muted'>{totalMoney} EGP</span></h5>
           </div>
         </div>
         <div className="rightHeader d-flex flex-column align-items-end">

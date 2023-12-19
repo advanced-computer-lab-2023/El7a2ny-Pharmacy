@@ -178,8 +178,9 @@ const removeMedicineFromCart = async (req, res) => {
     const currentQuantity = cartTemp.medicine_list[0].quantity;
     const newTotal = (cartTemp1.total - (currentQuantity * medicine.price));
     const cart = await Cart.updateOne({patient_id: patient_id}, { $pull: { 'medicine_list': { medicine: id } }, total: newTotal});
-    
-    res.status(200).json(cart); 
+    const cartRes = await Cart.findOne({patient_id: patient_id});
+
+    res.status(200).json(cartRes); 
 };
 
 const updateMedicineQuantityInCart = async (req, res) => {
@@ -256,8 +257,9 @@ const addMedicineToCart = async (req, res) => {
 
     const cartTemp = await Cart.findOne({patient_id: patient_id});
     const cart = await Cart.updateOne({patient_id: patient_id}, { $push: { 'medicine_list': { medicine: id, quantity: 1 } }, total: medicine.price + cartTemp.total});
-     
-    res.status(200).json(cart); 
+    const cartRes = await Cart.findOne({patient_id: patient_id});
+
+    res.status(200).json(cartRes); 
 };
 
 const getOverTheCounterMedicines = async (req, res) => {
