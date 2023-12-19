@@ -34,10 +34,9 @@ export default function Checkout({ PatientToken }) {
     }else if (values.payment_method === 'online') {
       try {
         let response = await onlinePayment();
-        console.log("response : " + response);
-        // if (response?.status === 200) {
-          // window.location.href = response.data.session.url;
-        // }
+        if (response?.status === 200) {
+          window.location.href = response.data.url;
+        }
       } catch (error) {
         console.error(error);
       }  
