@@ -8,10 +8,11 @@ import { cartContext } from '../../Context/CartContext'
 import { Button } from 'primereact/button';
 import {shopping_cart_ok} from 'react-icons-kit/ikons/shopping_cart_ok'
 import { Icon } from 'react-icons-kit';
+import Loading from '../Loading/Loading';
 
 export default function Perscriptions({ PatientToken }) {
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
-  let {addToCart} = useContext(cartContext);
+  let {addToCart , IsInCart} = useContext(cartContext);
 
   const [Medicines, setMedicines] = useState();
   const [OriginalMedicines, setOriginalMedicines] = useState();
@@ -96,6 +97,7 @@ export default function Perscriptions({ PatientToken }) {
       <Helmet>
         <title>Medicine List</title>
       </Helmet>
+      {Medicines ? <>
       <div className="container-fluid my-3">
         <DataTable
           value={Medicines?.flatMap((prescription) =>
@@ -124,6 +126,7 @@ export default function Perscriptions({ PatientToken }) {
           {PatientToken ? <Column header=" " body={AddToCartBody}  style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} /> : null}
         </DataTable>
       </div>
+      </> : <Loading/> }
     </>
   );
 }
