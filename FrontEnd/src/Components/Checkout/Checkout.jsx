@@ -22,8 +22,9 @@ export default function Checkout({ PatientToken }) {
     if (!values.address) {
       alert('Please select an address before placing the order.');
       return;
+    }else if (values.paymentMethod === 'wallet' || values.paymentMethod === 'cash') {
+      placeOrder(values)
     }
-
     try {
       let response = await onlinePayment(cartId, values);
       if (response?.data?.status === 'success') {
@@ -36,17 +37,15 @@ export default function Checkout({ PatientToken }) {
 
   let formik = useFormik({
     initialValues: {
-      details: '',
       address: '', // Use this field to store the selected address
-      phone: '',
       paymentMethod: 'wallet', // Default to 'wallet'
     },
     onSubmit: handleSubmit,
   });
 
-  const placeOrder = async () => {
+  const placeOrder = async (val) => {
     try {
-      let { data } = await axios.post(ApiBaseUrl + `patients/place-order`, {}, { headers: PatientHeaders });
+      let { data } = await axios.post(ApiBaseUrl + `patients/place-order`, val, { headers: PatientHeaders });
       console.log(data);
     } catch (error) {
       console.error(error);
@@ -71,15 +70,6 @@ export default function Checkout({ PatientToken }) {
       </Helmet>
       <div className="w-50 p-5 mx-auto bg-light my-4 rounded border shadow-sm">
         <form onSubmit={formik.handleSubmit}>
-          <label htmlFor="details">Full Name:</label>
-          <input
-            type="text"
-            className="form-control mb-3"
-            value={formik.values.details}
-            onChange={formik.handleChange}
-            name="details"
-            id="details"
-          />
 
           <label>Delivery Address:</label>
           {Addresses.map((addressOption) => (
@@ -98,17 +88,8 @@ export default function Checkout({ PatientToken }) {
               </label>
             </div>
           ))}
-
-          <label htmlFor="phone">Phone:</label>
-          <input
-            type="tel"
-            className="form-control mb-3"
-            value={formik.values.phone}
-            onChange={formik.handleChange}
-            name="phone"
-            id="phone"
-          />
-
+<hr />
+<label>Choose Payment Method:</label>
           <div className="form-check">
             <input
               className="form-check-input"
