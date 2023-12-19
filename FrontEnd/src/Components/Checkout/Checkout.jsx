@@ -26,10 +26,11 @@ export default function Checkout({ PatientToken }) {
       formik.resetForm()
     }else if (values.payment_method === 'online') {
       try {
-        let response = await onlinePayment(cartId, values);
-        if (response?.data?.status === 'success') {
-          window.location.href = response.data.session.url;
-        }
+        let response = await onlinePayment();
+        // if (response?.status === 200) {
+          // window.location.href = response.data.session.url;
+          console.log(response);
+        // }
       } catch (error) {
         console.error(error);
       }  
