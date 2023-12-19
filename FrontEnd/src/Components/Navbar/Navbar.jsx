@@ -81,11 +81,11 @@ return <>
             </span>
             <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
               {PatientData ? <>
-                <Link className={`dropdown-item text-main ${activeLink === 'MyAddresses' ? ' active' : ''}`} to={"PharmacistDocs"} onClick={() => setActiveLink('MyAddresses')}>
-                  My Addresses
-                </Link>
-                <Link className={`dropdown-item text-main ${activeLink === 'Orders' ? ' active' : ''}`} to={"PharmacistDocs"} onClick={() => setActiveLink('Orders')}>
+                <Link className={`dropdown-item text-main ${activeLink === 'Orders' ? ' active' : ''}`} to={"AllOrders"} onClick={() => setActiveLink('Orders')}>
                   All Orders
+                </Link>
+                <Link className={`dropdown-item text-main ${activeLink === 'MyAddresses' ? ' active' : ''}`} to={"MyAddresses"} onClick={() => setActiveLink('MyAddresses')}>
+                  My Addresses
                 </Link>
               </>
               :
