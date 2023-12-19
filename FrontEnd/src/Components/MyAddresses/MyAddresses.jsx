@@ -25,7 +25,7 @@ export default function MyAddresses({ PatientToken }) {
       console.error(error);
     }
   };
-
+  
   useEffect(() => {
     if (PatientToken) {
       getAllAddresses();

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { cartContext } from '../../Context/CartContext';
 import { Helmet } from 'react-helmet';
@@ -9,39 +9,69 @@ export default function Checkout({ PatientToken }) {
   let { onlinePayment, cartId } = useContext(cartContext);
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
 
+  const [Addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    if (PatientToken) {
+      getAllAddresses();
+    }
+  }, [PatientToken]);
+
   async function handleSubmit(values) {
-    let response = await onlinePayment(cartId, values);
-    if (response?.data?.status === 'success') {
-      window.location.href = response.data.session.url;
+    // Check if an address is selected before placing an order
+    if (!values.address) {
+      alert('Please select an address before placing the order.');
+      return;
+    }
+
+    try {
+      let response = await onlinePayment(cartId, values);
+      if (response?.data?.status === 'success') {
+        window.location.href = response.data.session.url;
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
   let formik = useFormik({
     initialValues: {
       details: '',
-      address: '',
+      address: '', // Use this field to store the selected address
       phone: '',
       paymentMethod: 'wallet', // Default to 'wallet'
     },
     onSubmit: handleSubmit,
   });
 
-  const placeOrder = async () =>{
+  const placeOrder = async () => {
     try {
-      let {data} = await axios.post(ApiBaseUrl + `patients/place-order` , {headers: PatientHeaders})
+      let { data } = await axios.post(ApiBaseUrl + `patients/place-order`, {}, { headers: PatientHeaders });
       console.log(data);
     } catch (error) {
-      
+      console.error(error);
     }
-  }
+  };
+
+  const getAllAddresses = async () => {
+    try {
+      let { data } = await axios.get(ApiBaseUrl + `patients/my-addresses`, { headers: PatientHeaders });
+      // Transform the array of strings into an array of objects
+      const addressesArray = data.map((address, index) => ({ id: index + 1, address }));
+      setAddresses(addressesArray);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Helmet>
         <title>Checkout</title>
       </Helmet>
-      <div className="w-50 p-5 mx-auto bg-light">
+      <div className="w-50 p-5 mx-auto bg-light my-4 rounded border shadow-sm">
         <form onSubmit={formik.handleSubmit}>
-          <label htmlFor="details">Full Name :</label>
+          <label htmlFor="details">Full Name:</label>
           <input
             type="text"
             className="form-control mb-3"
@@ -50,7 +80,26 @@ export default function Checkout({ PatientToken }) {
             name="details"
             id="details"
           />
-          <label htmlFor="phone">phone :</label>
+
+          <label>Delivery Address:</label>
+          {Addresses.map((addressOption) => (
+            <div className="form-check" key={addressOption.id}>
+              <input
+                className="form-check-input"
+                type="radio"
+                name="address"
+                id={`address${addressOption.id}`}
+                value={addressOption.address}
+                checked={formik.values.address === addressOption.address}
+                onChange={() => formik.setFieldValue('address', addressOption.address)}
+              />
+              <label className="form-check-label" htmlFor={`address${addressOption.id}`}>
+                {addressOption.address}
+              </label>
+            </div>
+          ))}
+
+          <label htmlFor="phone">Phone:</label>
           <input
             type="tel"
             className="form-control mb-3"
@@ -58,15 +107,6 @@ export default function Checkout({ PatientToken }) {
             onChange={formik.handleChange}
             name="phone"
             id="phone"
-          />
-          <label htmlFor="address">Address :</label>
-          <input
-            type="text"
-            className="form-control mb-3"
-            value={formik.values.address}
-            onChange={formik.handleChange}
-            name="address"
-            id="address"
           />
 
           <div className="form-check">
@@ -110,7 +150,7 @@ export default function Checkout({ PatientToken }) {
           </div>
 
           <hr />
-          <button type="submit" className="btn border-main w-100">
+          <button type="submit" className="btn bg-main text-light w-100">
             Place Order
           </button>
         </form>
