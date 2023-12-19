@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import NavBar from '../Navbar/Navbar'
 
-export default function Layout({PharmacistData ,setPharmacistData , AdminData, setAdminData , PatientData, setPatientData }) {
+export default function Layout({PatientToken, PharmacistToken , PharmacistData ,setPharmacistData , AdminData, setAdminData , PatientData, setPatientData }) {
   let navigate = useNavigate();
   function LogOut(){
     localStorage.removeItem("PharmacistToken")
@@ -16,7 +16,7 @@ export default function Layout({PharmacistData ,setPharmacistData , AdminData, s
 
   return <>
   <div className="layout">
-    <NavBar PharmacistData={PharmacistData} PatientData={PatientData} AdminData={AdminData} LogOut={LogOut}></NavBar>
+    <NavBar PharmacistData={PharmacistData} PatientToken={PatientToken} PharmacistToken={PharmacistToken} PatientData={PatientData} AdminData={AdminData} LogOut={LogOut}></NavBar>
     <Outlet></Outlet>
   </div>
     </>

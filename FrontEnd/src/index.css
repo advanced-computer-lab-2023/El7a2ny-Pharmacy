@@ -5,26 +5,29 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('./assets/a129c03fa8617a0b612cdab15696a1e3.jpg');
+  background-position: center;
+  background-size: cover;
+  background-attachment: scroll;
+  background-repeat:space;
+  min-height: 100vh;
 }
-
+body::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: -1;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 .homePage{
-  background-image: url("./assets/a129c03fa8617a0b612cdab15696a1e3.jpg");
-  background-position: center;
-  background-size: cover;
   height: 100vh;
   width: 100%;
   position: absolute;
   inset: 0;
-}
-.homePage::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.8);
 }
 .border-main{
   border-color: #0057c0 !important;

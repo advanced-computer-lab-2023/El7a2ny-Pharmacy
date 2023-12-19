@@ -9,10 +9,11 @@ import {notepad_ok} from 'react-icons-kit/ikons/notepad_ok'
 import { Helmet } from 'react-helmet';
 import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
-
+import {ic_error_twotone} from 'react-icons-kit/md/ic_error_twotone'
 const PharmacistRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(false);
+  const [pendingMssg, setpendingMssg] = useState(null)
   const togglePassword = () => {setPasswordShown(!passwordShown)};
   const navigate = useNavigate()
   const formik = useFormik({
@@ -43,7 +44,7 @@ const PharmacistRegister = () => {
         console.log(data);
         setIsLoading(false);
         formik.resetForm();
-        navigate(`/PharmacistLogin`)
+        setpendingMssg('Pending Approval: Your request is currently pending admin approval. Please wait for approval or contact an admin for more information.')
       } catch (error) {
         console.error(error);
         setIsLoading(false);
@@ -111,7 +112,13 @@ const PharmacistRegister = () => {
               </div>
               {formik.errors.password && formik.touched.password ? ( <div className="alert alert-danger">{formik.errors.password}</div>  ) : null}
           </div>
-
+          {pendingMssg ? <>
+          <div className="col-12">
+            <div className="alert alert-success">
+            <Icon className='me-2' size={30} icon={ic_error_twotone}/>{pendingMssg}
+            </div>
+          </div>
+          </> : null}
           </div>
           <div className="btns ms-auto w-25">
             {/* loading & signup btns */}
