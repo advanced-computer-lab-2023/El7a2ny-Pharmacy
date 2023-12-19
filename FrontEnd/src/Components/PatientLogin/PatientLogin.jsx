@@ -53,10 +53,9 @@ export default function PatientLogin({savePatientData}) {
     El7a2ny | Patient Login
     </title>
   </Helmet>
-    <div className="container login w-75 ">
-      
-      <form action=""  onSubmit={formik.handleSubmit} className='row text-center '>
-      <div className="col-8 offset-2 m-auto bg-light my-5 rounded border shadow-sm w-auto p-4">
+    <div className="container my-5 login w-75">
+      <form action=""  onSubmit={formik.handleSubmit} className='row text-center'>
+      <div className="col-8 offset-2 m-auto bg-light rounded border shadow-sm w-auto p-4 h-100">
       <h2 className='text-muted'>Patient LOG IN :</h2>
       <div className="row">
           <div className="col-12  form-floating">
@@ -87,9 +86,7 @@ export default function PatientLogin({savePatientData}) {
         <div className="col-12">
           <Link id='forgetPass' className="btn p-0 mb-2 text-main">Do You Forget Your Password ? </Link>
         </div>
-
       </div>
-
       </form>
     </div>
   </>

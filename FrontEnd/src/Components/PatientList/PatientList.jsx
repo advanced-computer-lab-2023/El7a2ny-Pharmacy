@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import ApiBaseUrl from '../ApiBaseUrl';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -101,8 +100,8 @@ export default function PatientList({AdminToken}) {
         <Column field="gender" header="gender" sortable style={{ width: "12%", borderBottom: '1px solid #dee2e6' }} />
         <Column field="mobile_number" header="mobile number" sortable style={{ width: "15%", borderBottom: '1px solid #dee2e6' }} />
         <Column field="DOB" header="Age" body={DobBodyTemplate} sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} ></Column>
-        <Column field="createdAt" header="Join at" body={joinBodyTemplate} sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
-        <Column body={actionTemplate} header="Actions" style={{ width: '15%', borderBottom: '1px solid #dee2e6' }} />
+        <Column field="createdAt" header="Joined at" body={joinBodyTemplate} sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
+        <Column body={actionTemplate} header=" " style={{ width: '15%', borderBottom: '1px solid #dee2e6' }} />
       </DataTable>
 
     </div>

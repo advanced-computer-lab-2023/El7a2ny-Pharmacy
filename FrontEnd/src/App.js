@@ -31,6 +31,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import SalesReport from './Components/SalesReport/SalesReport';
+import Perscriptions from './Components/Perscriptions/Perscriptions';
 
 
 function App() {
@@ -72,7 +73,7 @@ function App() {
 
   const routes = createHashRouter([
     {
-      path: "",element:<Layout AdminData={AdminData} setAdminData={setAdminData} PatientData={PatientData} setPatientData={setPatientData} PharmacistData={PharmacistData} setPharmacistData={setPharmacistData}/>,
+      path: "",element:<Layout PharmacistToken={PharmacistToken} PatientToken={PatientToken} AdminData={AdminData} setAdminData={setAdminData} PatientData={PatientData} setPatientData={setPatientData} PharmacistData={PharmacistData} setPharmacistData={setPharmacistData}/>,
       children:[
         {index:true , element:<Home/>},
         {path : "AdminOtpLogin",element:<AdminOtpLogin/>},
@@ -93,6 +94,9 @@ function App() {
         {path : "AdminForgetPassword",element:<AdminForgetPassword/>},
         {path : "PatientList",element:<PatientList AdminToken={AdminToken}/>},
         {path : "PatientDetails/:id",element:<PatientDetails/>},
+
+        {path : "Perscriptions",element:<Perscriptions PatientToken={PatientToken}/>},
+
         // Pharmacist Routes
         {path : "PharmacistList",element:<PharmacistList AdminToken={AdminToken}/>},
         {path : "MedicineList",element:<MedicineList PatientToken={PatientToken} AdminToken={AdminToken} PharmacistToken={PharmacistToken} PharmacistData={PharmacistData}/>},

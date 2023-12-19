@@ -26,6 +26,7 @@ const PatientRegister = () => {
       mobile_number: '',
       emergency_contact: {
         name: '',
+        relation: '',
         mobile_number: ''
       }
     },
@@ -38,10 +39,11 @@ const PatientRegister = () => {
       username: Yup.string().required('Username is required'),
       DOB: Yup.date().required('Date of birth is required'),
       mobile_number: Yup.string()
-        .matches(/^\d{10}$/, 'Invalid mobile number')
+        .matches(/^\d{11}$/, 'Invalid mobile number')
         .required('Mobile number is required'),
       emergency_contact: Yup.object().shape({
         name: Yup.string().required('Emergency contact name is required'),
+        relation: Yup.string().required('Emergency contact Relation is required'),
         mobile_number: Yup.string()
           .matches(/^\d{10}$/, 'Invalid mobile number')
           .required('Emergency contact mobile number is required')
@@ -133,13 +135,19 @@ const PatientRegister = () => {
           <div className="col-12">
             <div className="row">            
               <h6 className='text-muted'>Emergency Contact Information :</h6>
-              <div className="col-md-6 form-floating">
+              <div className="col-md-4 form-floating">
                 {/* emergency contact name input */}
                 <input type="text" placeholder='Name' className="form-control mb-2" id="emergency_contact.name" name="emergency_contact.name" value={formik.values.emergency_contact.name} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                 <label className='ms-2' htmlFor="emergency_contact.name">Name</label>
                 {formik.errors.emergency_contact?.name && formik.touched.emergency_contact?.name ? <div className="alert alert-danger">{formik.errors.emergency_contact.name}</div>  : null}
               </div>
-              <div className="col-md-6 form-floating">
+              <div className="col-md-4 form-floating">
+                {/* emergency contact relation input */}
+                <input type="text" placeholder='relation' className="form-control mb-2" id="emergency_contact.relation" name="emergency_contact.relation" value={formik.values.emergency_contact.relation} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                <label htmlFor="emergency_contact.relation" className='ms-2'>Relation</label>
+                {formik.errors.emergency_contact?.relation && formik.touched.emergency_contact?.relation ? <div className="alert alert-danger">{formik.errors.emergency_contact.mobile_number}</div> : null}
+              </div>
+              <div className="col-md-4 form-floating">
                 {/* emergency contact mobile number input */}
                 <input type="text" placeholder='Mobile Number' className="form-control mb-2" id="emergency_contact.mobile_number" name="emergency_contact.mobile_number" value={formik.values.emergency_contact.mobile_number} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                 <label htmlFor="emergency_contact.mobile_number" className='ms-2'>Mobile Number</label>

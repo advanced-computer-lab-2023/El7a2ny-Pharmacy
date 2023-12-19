@@ -5,8 +5,31 @@ import {userMd} from 'react-icons-kit/fa/userMd'
 import {out} from 'react-icons-kit/entypo/out'
 import {shoppingCart} from 'react-icons-kit/feather/shoppingCart'
 import {ic_payment} from 'react-icons-kit/md/ic_payment'
-export default function NavBar({LogOut , PharmacistData , PatientData , AdminData}) {
+import axios from 'axios';
+import ApiBaseUrl from '../ApiBaseUrl';
+
+export default function NavBar({LogOut , PharmacistData , PatientData , AdminData ,PatientToken, PharmacistToken }) {
+  let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
+  let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   const [activeLink, setActiveLink] = useState();
+  const [WalletAmount, setWalletAmount] = useState();
+
+  const handleGetWallet = ()=>{
+      if (PatientToken) {
+        getWalletAmount('patients' , PatientHeaders);
+      }else if (PharmacistToken) {
+        getWalletAmount('pharmacists' , PharmacistHeaders);
+      }
+  }
+  const getWalletAmount = async (role , header)=>{
+    try {
+      let {data} = await axios.get(ApiBaseUrl + `${role}/my-wallet` , {headers : header})
+      console.log(data);
+      setWalletAmount(data)
+    } catch (error) {
+      
+    }
+  }
   const location = useLocation();
   useEffect(()=>{
     const pathSegments = location.pathname.split('/');
@@ -29,6 +52,11 @@ return <>
         </li>
         {PharmacistData || PatientData || AdminData ? <>
           {PatientData ? <>
+            <li className="nav-item">
+              <Link className={`nav-link ${activeLink === 'perscriptions' ? ' active' : ''}`} to={`Perscriptions`} onClick={() => setActiveLink('perscriptions')}>
+                Perscriptions
+              </Link>
+            </li>
           </>:null}
           {PatientData ? <>
           </>:null}
@@ -121,9 +149,14 @@ return <>
           </li>
           {PatientData || PharmacistData ? <>
             <li className="nav-item position-relative dropdown">
-              <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`}  onClick={handleGetWallet} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <Icon size={20} icon={ic_payment}/> 
               </span>
+              <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
+                <span className={`dropdown-item text-main`}>
+                  {WalletAmount} EGP
+                </span>
+              </div>
             </li>
           </> : null}
           {PatientData ? 
