@@ -12,11 +12,16 @@ import {login} from 'react-icons-kit/entypo/login'
 
 export default function NavBar({LogOut , PharmacistData , PatientData , AdminData ,PatientToken, PharmacistToken }) {
   let {numbOfCartItems} = useContext(cartContext);
-
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
   let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   const [activeLink, setActiveLink] = useState();
   const [WalletAmount, setWalletAmount] = useState();
+
+  const NavItem = ({ to, text, activeLink, onClick }) => (
+    <li className="nav-item">
+      <Link to={to} className={`nav-link ${activeLink === to ? 'active' : ''}`} onClick={() => onClick(to)} > {text} </Link>
+    </li>
+  );
 
   const handleGetWallet = ()=>{
       if (PatientToken) {
@@ -28,10 +33,9 @@ export default function NavBar({LogOut , PharmacistData , PatientData , AdminDat
   const getWalletAmount = async (role , header)=>{
     try {
       let {data} = await axios.get(ApiBaseUrl + `${role}/my-wallet` , {headers : header})
-      console.log(data);
       setWalletAmount(data)
     } catch (error) {
-      
+      console.error(error);
     }
   }
   const location = useLocation();
@@ -51,50 +55,20 @@ return <>
       <ul className="navbar-nav mb-2 mb-lg-0">
         {PharmacistData || PatientData || AdminData ? <>
           {PatientData ? <>
-            <li className="nav-item">
-              <Link className={`nav-link ${activeLink === 'perscriptions' ? ' active' : ''}`} to={`Perscriptions`} onClick={() => setActiveLink('perscriptions')}>
-                Perscriptions
-              </Link>
-            </li>
-          </>:null}
-          {PatientData ? <>
+            <NavItem to="perscriptions" text="Prescriptions" activeLink={activeLink} onClick={setActiveLink} />
           </>:null}
           {AdminData ?  <>
-            <li className="nav-item">
-            <Link className={`nav-link ${activeLink === 'PharmacistRequests' ? ' active' : ''}`} to={`PharmacistRequests`} onClick={() => setActiveLink('PharmacistRequests')}>
-            Pharmacist Requests
-            </Link>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link ${activeLink === 'PharmacistList' ? ' active' : ''}`} to={`PharmacistList`} onClick={() => setActiveLink('PharmacistList')}>
-              Pharmacist List
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link ${activeLink === 'PatientList' ? ' active' : ''}`} to={`PatientList`} onClick={() => setActiveLink('PatientList')}>
-              PatientList
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link ${activeLink === 'AddAdmin' ? ' active' : ''}`} to={`AddAdmin`} onClick={() => setActiveLink('AddAdmin')}>
-              ADD ADMIN
-              </Link>
-            </li>
+            <NavItem to="PharmacistRequests" text="Pharmacist Requests" activeLink={activeLink} onClick={setActiveLink} />
+            <NavItem to="PharmacistList" text="Pharmacist List" activeLink={activeLink} onClick={setActiveLink} />
+            <NavItem to="PatientList" text="Patient List" activeLink={activeLink} onClick={setActiveLink} />
+            <NavItem to="AddAdmin" text="AddAdmin" activeLink={activeLink} onClick={setActiveLink} />
             </>
           : null }
           {PharmacistData || AdminData ? <>
-            <li className="nav-item">
-              <Link className={`nav-link ${activeLink === 'SalesReport' ? ' active' : ''}`} to={`SalesReport`} onClick={() => setActiveLink('SalesReport')}>
-              Sales Report
-              </Link>
-            </li>
+            <NavItem to="SalesReport" text="Sales Report" activeLink={activeLink} onClick={setActiveLink} />
           </>
           :null}
-          <li className="nav-item">
-            <Link className={`nav-link ${activeLink === 'MedicineList' ? ' active' : ''}`} to={`MedicineList`} onClick={() => setActiveLink('MedicineList')}>
-            Medicine List
-            </Link>
-          </li>
+          <NavItem to="MedicineList" text="Medicine List" activeLink={activeLink} onClick={setActiveLink} />
           </> :
           null
         }
@@ -151,48 +125,42 @@ return <>
               </Link>
             </li>
           : null }
-
         </> : <>
         <li className="nav-item position-relative dropdown">
             <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <Icon size={20}  icon={login}></Icon> LOGIN
             </span>
             <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
-            <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
-            <Link className={`dropdown-item text-main ${activeLink === 'PatientLogin' ? ' active' : ''}`} to={`PatientLogin`} onClick={() => setActiveLink('PatientLogin')}>
-            Patient Login
-            </Link>
-          </li>
-          <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
-            <Link className={`dropdown-item text-main ${activeLink === 'PharmacistLogin' ? ' active' : ''}`} to={`PharmacistLogin`} onClick={() => setActiveLink('PharmacistLogin')}>
-            Pharmacist Login
-            </Link>
-          </li>
-          <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
-            <Link className={`dropdown-item text-main ${activeLink === 'AdminLogin' ? ' active' : ''}`} to={`AdminLogin`} onClick={() => setActiveLink('AdminLogin')}>
-            Admin Login
-            </Link>
-          </li>
-
+              <span className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
+                <Link className={`dropdown-item text-main ${activeLink === 'PatientLogin' ? ' active' : ''}`} to={`PatientLogin`} onClick={() => setActiveLink('PatientLogin')}>
+                Patient Login
+                </Link>
+              </span>
+              <span className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
+                <Link className={`dropdown-item text-main ${activeLink === 'PharmacistLogin' ? ' active' : ''}`} to={`PharmacistLogin`} onClick={() => setActiveLink('PharmacistLogin')}>
+                Pharmacist Login
+                </Link>
+              </span>
+              <span className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
+                <Link className={`dropdown-item text-main ${activeLink === 'AdminLogin' ? ' active' : ''}`} to={`AdminLogin`} onClick={() => setActiveLink('AdminLogin')}>
+                Admin Login
+                </Link>
+              </span>
             </div>
           </li>
-
-
           <li className="nav-item position-relative dropdown">
             <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span className='pi pi pi-user me-1'></span> REGISTER
             </span>
             <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
-                <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
-                  <Link className={`dropdown-item text-main ${activeLink === 'PharmacistRegister' ? ' active' : ''}`} to={`PharmacistRegister`} onClick={() => setActiveLink('PharmacistRegister')}>Signup as a Pharmacist</Link>
-                </li>
-                <li className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
-                    <Link className={`dropdown-item text-main ${activeLink === 'PatientRegister' ? ' active' : ''}`} to={`PatientRegister`} onClick={() => setActiveLink('PatientRegister')}>Signup as a Patient</Link>
-                </li>
+                <span className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
+                  <Link className={`dropdown-item text-main ${activeLink === 'PharmacistRegister' ? ' active' : ''}`} to={`PharmacistRegister`} onClick={() => setActiveLink('PharmacistRegister')}>Pharmacist Register</Link>
+                </span>
+                <span className="nav-itemdropdown-menu text-center" aria-labelledby="navbarDropdown">
+                    <Link className={`dropdown-item text-main ${activeLink === 'PatientRegister' ? ' active' : ''}`} to={`PatientRegister`} onClick={() => setActiveLink('PatientRegister')}>Patient Register</Link>
+                </span>
             </div>
           </li>
-
-
         </>}
       </ul>
     </div>

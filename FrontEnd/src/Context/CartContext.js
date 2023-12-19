@@ -3,7 +3,6 @@ import { createContext, useEffect, useState } from "react";
 import ApiBaseUrl from "../Components/ApiBaseUrl";
 export let cartContext = createContext();
 export function CartContextProvider(props) {
-    const [cartId, setCartId] = useState(null)
     const [numbOfCartItems, setNumbOfCartItems] = useState(0)
     let PatientToken = localStorage.getItem('PatientToken')
     let headers = { 'Authorization': `Bearer ${PatientToken}` };
@@ -19,7 +18,6 @@ export function CartContextProvider(props) {
         let response = await getLoggedUserCart()
         if (response?.status == 200) {
             setNumbOfCartItems(response.data.length)
-            // setCartId(response.data.data._id)
             console.log(response);
         }
     }
@@ -27,10 +25,7 @@ export function CartContextProvider(props) {
         getCart();
     },[])
     function addToCart(productId){
-        return axios.post(ApiBaseUrl + `/api/v1/cart` ,
-        {
-            productId
-        },
+        return axios.patch(ApiBaseUrl + `patients/add-medicine-to-cart/${productId}` ,
         {
             headers
         }
@@ -38,17 +33,17 @@ export function CartContextProvider(props) {
         .catch((erorr) => erorr)
     }
     function removeItem(productId){
-        return axios.delete(ApiBaseUrl + `/api/v1/cart/${productId}` ,
+        return axios.patch(ApiBaseUrl + `patients/remove-medicine-from-cart/${productId}` ,
         {
             headers
         }
         ).then((response) => response)
         .catch((erorr) => erorr)
     }
-    function updateProductCount(productId , count){
-        return axios.put(ApiBaseUrl + `/api/v1/cart/${productId}` ,
+    function updateProductCount(productId , quantity){
+        return axios.patch(ApiBaseUrl + `patients/update-medicine-quantity-in-cart/${productId}` ,
         {
-            count
+            quantity
         },
         {
             headers
@@ -56,16 +51,16 @@ export function CartContextProvider(props) {
         ).then((response) => response)
         .catch((erorr) => erorr)
     }
-    function clearUserCart(){
-        return axios.delete(ApiBaseUrl + `/api/v1/cart` ,
+    function onlinePayment(){
+        return axios.post(ApiBaseUrl + `patients/credit-card-payment` ,
         {
             headers
         }
         ).then((response) => response)
         .catch((erorr) => erorr)
     }
-    function onlinePayment(cartId , shippingAddress){
-        return axios.post(ApiBaseUrl + `/api/v1/orders/checkout-session/${cartId}?url=http://localhost:3000` ,
+    function PlaceOrder(shippingAddress){
+        return axios.post(ApiBaseUrl + `patients/place-order` ,
         {
             shippingAddress : shippingAddress
         },
@@ -75,8 +70,9 @@ export function CartContextProvider(props) {
         ).then((response) => response)
         .catch((erorr) => erorr)
     }
+
     return <>
-    <cartContext.Provider value={{setNumbOfCartItems , numbOfCartItems , cartId , onlinePayment, addToCart , getLoggedUserCart , removeItem , updateProductCount , clearUserCart}}>
+    <cartContext.Provider value={{setNumbOfCartItems ,PlaceOrder, numbOfCartItems  , onlinePayment, addToCart , getLoggedUserCart , removeItem , updateProductCount }}>
         {props.children}
     </cartContext.Provider>
     </>

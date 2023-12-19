@@ -4,8 +4,8 @@ import Loading from '../Loading/Loading'
 import { toast } from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import {Helmet} from "react-helmet";
-export default function Cart() {
-  let {getLoggedUserCart , removeItem , updateProductCount , clearUserCart , setNumbOfCartItems} = useContext(cartContext)
+export default function Cart({PatientToken}) {
+  let {getLoggedUserCart , removeItem , updateProductCount , setNumbOfCartItems} = useContext(cartContext)
   const [cartDetails, setCartDetails] = useState(null)
   const [btnLoading, setBtnLoading] = useState(false)
 
@@ -29,16 +29,6 @@ export default function Cart() {
       getCart()
       setBtnLoading(false)
   }
-  async function deleteCart(){
-    setBtnLoading(true)
-    let response = await clearUserCart()
-    setCartDetails(response.data.data);
-    toast.success('Cart Is Empty' , {
-      className : 'first-z mt-5 bg-main-light text-danger ',
-      duration:2000})
-      setNumbOfCartItems("0")
-      setBtnLoading(false)
-  }
   
   async function updateProductQuantity(productId , count){
     setBtnLoading(true)
@@ -55,8 +45,10 @@ export default function Cart() {
   }
 
   useEffect(()=>{
-    getCart()
-  },[])
+    if (PatientToken) {
+      getCart()
+    }
+  },[PatientToken])
   return <>
   <Helmet>
       <title>Cart Details</title>
@@ -69,36 +61,35 @@ export default function Cart() {
         </div>
           : null}
       <h3>Shop Cart :</h3> 
-      {cartDetails?.products? <>
+      {cartDetails? <>
       <h6 className='text-main'>Total Cart Price : {cartDetails.totalCartPrice} EGP</h6>
-      <button onClick={deleteCart} className=' btn btn-danger btn-sm mb-3'> Clear All Items </button>
       </>
       :
       <h3 className='text-main h6'>Your Cart IS Empty</h3>
       }
-      {cartDetails.products?.map((product)=> <div key={product.product._id} className='row border-bottom py-2 my-2 align-items-center'>
+      {cartDetails?.map((product)=> <div key={product._id} className='row border-bottom py-2 my-2 align-items-center'>
       <div className="col-3 col-md-2 col-lg-1">
-        <img src={product.product.imageCover} className='w-100 rounded' alt="" />
+        <img src={product.medicine.pictureUrl} className='w-100 rounded' alt="" />
       </div>
       <div className="col-9 col-md-10 col-lg-11 ">
         <div className="row">
           <div className='productDetails col-6'>
 
-          <h6>{product.product.title}</h6>
-          <h6 className='text-main'>price : {product.price} EGP</h6>
+          <h6>{product.medicine.title}</h6>
+          <h6 className='text-main'>price : {product.medicine.price} EGP</h6>
           </div>
           <div className='countContainer col-3'>
-            <button onClick={()=>{updateProductQuantity(product.product._id , product.count+1)}} className='btn border-main btn-sm p-1'>+</button>
-            <span className='mx-1'>{product.count}</span>
-            <button onClick={()=>{updateProductQuantity(product.product._id , product.count-1)}} className='btn border-main btn-sm p-1'>-</button>
+            <button onClick={()=>{updateProductQuantity(product._id , product.quantity+1)}} className='btn border-main btn-sm p-1'>+</button>
+            <span className='mx-1'>{product.quantity}</span>
+            <button onClick={()=>{updateProductQuantity(product._id , product.quantity-1)}} className='btn border-main btn-sm p-1'>-</button>
           </div>
           <div className="col-2">
-          <button onClick={()=>{deleteItem(product.product._id)}} className='btn'><i className='fa-regular fa-trash-can text-danger'></i> Remove Item </button>
+          <button onClick={()=>{deleteItem(product._id)}} className='btn'><i className='fa-regular fa-trash-can text-danger'></i> Remove Item </button>
           </div>
         </div>
       </div>
       </div>)}
-      {cartDetails.products? <button className='btn bg-main btn-sm d-block'>
+      {cartDetails? <button className='btn bg-main btn-sm d-block'>
         <Link className='text-light' to={'/checkout'}>
           Checkout
         </Link>
