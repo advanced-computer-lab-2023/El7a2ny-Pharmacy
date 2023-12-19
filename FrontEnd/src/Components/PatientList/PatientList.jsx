@@ -50,7 +50,7 @@ export default function PatientList({AdminToken}) {
 
   const header = (
     <div className="d-flex justify-content-between">
-        <h2 className='text-secondary'>All Patients :</h2>
+        <h2 className='text-secondary'>All Patients</h2>
       <span className="p-input-icon-left me-2">
         <i className="pi pi-search" />
         <InputText placeholder="Search By Patients Name..." onChange={(e) => { searchPatients(e.target.value) }} />

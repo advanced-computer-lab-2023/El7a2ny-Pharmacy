@@ -42,9 +42,9 @@ export default function AddAdmin({AdminToken}) {
     </Helmet>
     <div className="container w-50 mx-auto mt-4 border rounded shadow-sm p-4 bg-light">
     <form onSubmit={formik.handleSubmit}>
-      <h3 className='text-muted'>New Admin Form :</h3>
+      <h3 className='text-muted'>New Admin Form</h3>
                 {/* username input */}
-          <label htmlFor="username">User Name :</label>
+          <label htmlFor="username">Username :</label>
           <input type="text" className="form-control mb-2" id="username" name="username" value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur} />
           {formik.errors.username && formik.touched.username ? ( <div className="alert alert-danger">{formik.errors.username}</div> ) : null}
                 {/* email input */}

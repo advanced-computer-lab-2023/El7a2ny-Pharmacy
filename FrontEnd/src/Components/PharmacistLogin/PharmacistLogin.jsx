@@ -65,7 +65,7 @@ export default function PharmacistLogin({savePharmacistData}) {
       
       <form action=""  onSubmit={formik.handleSubmit} className='row text-center '>
       <div className="col-8 offset-2 m-auto bg-light my-5 rounded border shadow-sm w-auto p-4">
-      <h2 className='text-muted'>Pharmacist LOG IN :</h2>
+      <h2 className='text-muted'>Pharmacist</h2>
       <div className="row">
           <div className="col-12  form-floating">
             <input type="string"  placeholder='Username' className='mb-2 form-control' name='username' id='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
@@ -93,7 +93,7 @@ export default function PharmacistLogin({savePharmacistData}) {
           }
         </div>
         <div className="col-12">
-          <Link id='forgetPass' className="btn p-0 mb-2 text-main">Do You Forget Your Password ? </Link>
+          <Link id='forgetPass' className="btn p-0 mb-2 text-main">Forgot password ? </Link>
         </div>
 
       </div>
