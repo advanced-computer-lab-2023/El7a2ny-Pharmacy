@@ -31,11 +31,12 @@ export default function Checkout({ PatientToken }) {
       } catch (error) {
         console.error(error);
       }
-    }else if (values.payment_method === 'online') {
+    }else if (values.payment_method === 'credit card') {
       try {
         let response = await onlinePayment();
         if (response?.status === 200) {
           window.location.href = response.data.url;
+          PlaceOrder(values)
         }
       } catch (error) {
         console.error(error);
@@ -119,11 +120,11 @@ export default function Checkout({ PatientToken }) {
               className="form-check-input"
               type="radio"
               name="payment_method"
-              id="online"
-              checked={formik.values.payment_method === 'online'}
-              onChange={() => formik.setFieldValue('payment_method', 'online')}
+              id="credit card"
+              checked={formik.values.payment_method === 'credit card'}
+              onChange={() => formik.setFieldValue('payment_method', 'credit card')}
             />
-            <label className="form-check-label" htmlFor="online">
+            <label className="form-check-label" htmlFor="credit card">
               Complete Payment Online
             </label>
           </div>
