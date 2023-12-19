@@ -30,7 +30,6 @@ export default function PharmacistDocs({PharmacistToken}) {
       if (govId) {
         await sendGovId(govId);
       }
-      // You can add further logic or handling after uploading all the files
     } catch (error) {
       console.error(error);
     }

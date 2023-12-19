@@ -17,14 +17,14 @@ export function CartContextProvider(props) {
     async function getCart(){
         let response = await getLoggedUserCart()
         if (response?.status == 200) {
-            setNumbOfCartItems(response.data.length)
-            console.log(response);
+            setNumbOfCartItems(response.data.medicine_list.length)
         }
     }
     useEffect(()=>{
         getCart();
     },[])
     function addToCart(productId){
+        console.log(productId);
         return axios.patch(ApiBaseUrl + `patients/add-medicine-to-cart/${productId}` ,
         {
             headers

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,useContext } from 'react'
 import { Helmet } from 'react-helmet'
 import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
@@ -11,12 +11,15 @@ import { Icon } from 'react-icons-kit';
 import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import {notepad_ok} from 'react-icons-kit/ikons/notepad_ok'
-import { FileUpload } from 'primereact/fileupload';
+import { cartContext } from '../../Context/CartContext'
 
 export default function MedicineList({PharmacistToken , PatientToken , AdminToken}) {
   let AdminHeaders = { 'Authorization': `Bearer ${AdminToken}` };
   let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
+
+  let {addToCart} = useContext(cartContext);
+
   const [Medicines, setMedicines] = useState()
   const [OrignalMedicines, setOrignalMedicines] = useState()
   const [DisplayAddMedicineDialog, setDisplayAddMedicineDialog] = useState(false);
