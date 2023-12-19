@@ -52,7 +52,7 @@ export default function PatientList({AdminToken}) {
         <h2 className='text-secondary'>All Patients :</h2>
       <span className="p-input-icon-left me-2">
         <i className="pi pi-search" />
-        <InputText placeholder="Search By Patients Name..." onChange={(e) => { searchPatients(e.target.value) }} />
+        <InputText placeholder="Search By Name..." onChange={(e) => { searchPatients(e.target.value) }} />
       </span>
     </div>
   );
