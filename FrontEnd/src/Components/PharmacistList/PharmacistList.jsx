@@ -83,7 +83,7 @@ export default function PharmacistList({ PatientToken, AdminToken }) {
   const header = (
     <div className="d-flex justify-content-between">
       <div className="tableTitle">
-        <h2 className='text-secondary'>All Pharmacists :</h2>
+        <h2 className='text-secondary'>All Pharmacists</h2>
       </div>
       <div className="searchContiner">
       <span className="p-input-icon-left me-2">
