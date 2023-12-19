@@ -33,6 +33,7 @@ import 'primeicons/primeicons.css';
 import SalesReport from './Components/SalesReport/SalesReport';
 import Perscriptions from './Components/Perscriptions/Perscriptions';
 import { CartContextProvider } from './Context/CartContext';
+import Cart from './Components/Cart/Cart';
 
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
         {path : "PatientDetails/:id",element:<PatientDetails/>},
 
         {path : "Perscriptions",element:<Perscriptions PatientToken={PatientToken}/>},
+        {path : "Cart",element:<Cart PatientToken={PatientToken}/>},
 
         // Pharmacist Routes
         {path : "PharmacistList",element:<PharmacistList AdminToken={AdminToken}/>},

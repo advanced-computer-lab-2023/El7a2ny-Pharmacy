@@ -5,12 +5,10 @@ export let cartContext = createContext();
 export function CartContextProvider(props) {
     const [cartId, setCartId] = useState(null)
     const [numbOfCartItems, setNumbOfCartItems] = useState(0)
-    
-    let headers = {
-        token:localStorage.getItem("UserToken")
-    }
+    let PatientToken = localStorage.getItem('PatientToken')
+    let headers = { 'Authorization': `Bearer ${PatientToken}` };
     function getLoggedUserCart(){
-        return axios.get(ApiBaseUrl + `/api/v1/cart` ,
+        return axios.get(ApiBaseUrl + `patients/view-cart` ,
         {
             headers
         }
@@ -19,10 +17,11 @@ export function CartContextProvider(props) {
     }
     async function getCart(){
         let response = await getLoggedUserCart()
-        if (response?.data?.status === 'success') {
-            setNumbOfCartItems(response.data.numOfCartItems)
-            setCartId(response.data.data._id)
+        if (response?.status == 200) {
+            setNumbOfCartItems(response.data.length)
+            // setCartId(response.data.data._id)
         }
+        console.log(response?.status);
     }
     useEffect(()=>{
         getCart();

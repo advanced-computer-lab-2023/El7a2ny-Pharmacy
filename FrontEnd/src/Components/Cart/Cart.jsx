@@ -54,9 +54,6 @@ export default function Cart() {
 
   useEffect(()=>{
     getCart()
-    // if (cartDetails?.products.length == 0 ) {
-    //   console.log("mfeesh");
-    // }
   },[])
   return <>
   <Helmet>
