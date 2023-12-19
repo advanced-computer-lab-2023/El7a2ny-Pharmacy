@@ -23,21 +23,18 @@ export function CartContextProvider(props) {
     useEffect(()=>{
         getCart();
     },[])
-    function addToCart(productId){
-        console.log(productId);
-        return axios.patch(ApiBaseUrl + `patients/add-medicine-to-cart/${productId}` ,
-        {
-            headers
+    async function addToCart(productId){
+        try {
+            let response =await axios.patch(ApiBaseUrl + `patients/add-medicine-to-cart/${productId}` , {}, { headers });
+            setNumbOfCartItems(response.data.medicine_list.length)
+            return response
+        } catch (error) {
+            console.error(error);
         }
-        ).then((response) => response)
-        .catch((erorr) => erorr)
     }
     function removeItem(productId){
-        return axios.patch(ApiBaseUrl + `patients/remove-medicine-from-cart/${productId}` ,
-        {
-            headers
-        }
-        ).then((response) => response)
+        return axios.patch(ApiBaseUrl + `patients/remove-medicine-from-cart/${productId}` ,{}, { headers })
+        .then((response) => response)
         .catch((erorr) => erorr)
     }
     function updateProductCount(productId , quantity){
@@ -46,7 +43,7 @@ export function CartContextProvider(props) {
             quantity
         },
         {
-            headers
+            headers 
         }
         ).then((response) => response)
         .catch((erorr) => erorr)

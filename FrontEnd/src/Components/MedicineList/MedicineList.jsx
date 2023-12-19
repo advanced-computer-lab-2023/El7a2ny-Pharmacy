@@ -12,7 +12,7 @@ import { InputText } from 'primereact/inputtext';
 import { Dialog } from 'primereact/dialog';
 import {notepad_ok} from 'react-icons-kit/ikons/notepad_ok'
 import { cartContext } from '../../Context/CartContext'
-
+import {shopping_cart_ok} from 'react-icons-kit/ikons/shopping_cart_ok'
 export default function MedicineList({PharmacistToken , PatientToken , AdminToken}) {
   let AdminHeaders = { 'Authorization': `Bearer ${AdminToken}` };
   let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
@@ -236,6 +236,8 @@ useEffect(()=>{
                 </label>
   };
     
+  const AddToCartBody = (rowData) => <Button className='TabelButton approve' onClick={() => { addToCart(rowData._id) }}> <Icon size={20} className='m-0 mb-2' icon={shopping_cart_ok}></Icon> </Button>
+  
   return <>
     <Helmet>
       <title>Medicine List</title>
@@ -252,6 +254,7 @@ useEffect(()=>{
             <Column field='ingredients' header="ingredients" body={mainIngredientBody} style={{ width: '15%', borderBottom: '1px solid #dee2e6' }} />
             {PharmacistToken ? <Column header="edit" body={actionTemplate}  style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} /> : null}
             {PharmacistToken ? <Column header="Image" body={uploadImgBody}  style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} /> : null}
+            {PatientToken ? <Column header=" " body={AddToCartBody}  style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} /> : null}
           </DataTable>
       <Dialog header={dialogHeader} className='container' visible={DisplayAddMedicineDialog} onHide={hideDialog} modal>
           <form onSubmit={formik.handleSubmit} className='bg-light p-3 border shadow-sm rounded'>

@@ -21,18 +21,19 @@ export default function Cart({PatientToken}) {
   async function deleteItem(productId){
     setBtnLoading(true)
     try {
-      let response = await removeItem(productId)
+      let response = await removeItem(productId);
+      setNumbOfCartItems(response.data.medicine_list.length)
       getCart()
     } catch (error) {
       console.error(error);
     }
     // 
-    // setCartDetails(response.data.data);
+    // setCartDetails(response.data.);
     // setNumbOfCartItems(response.data.medicine_list.length)
-    // toast.success('Product Removed' , {
-    //   className : 'first-z mt-5 bg-main-light text-danger ',
-    //   duration:2000})
-    //   
+    toast.success('Product Removed' , {
+      className : 'first-z mt-5 bg-main-light text-danger ',
+      duration:2000})
+      
       setBtnLoading(false)
   }
   
@@ -63,7 +64,7 @@ export default function Cart({PatientToken}) {
   {cartDetails? 
     <div className="container bg-light my-4 p-4 position-relative shadow-sm border rounded">
         {btnLoading ?
-        <div className="overlayLoading">
+        <div className="overlayLoading text-main position-absolute h-100 top-0 d-flex align-items-center justify-content-center left-0 w-100 bg-overlay">
           <i className='text-main fa fa-spin fa-spinner fs-1'></i>
         </div>
           : null}
@@ -82,7 +83,7 @@ export default function Cart({PatientToken}) {
         <div className="row">
           <div className='productDetails col-6'>
 
-          <h6>{product.medicine.title}</h6>
+          <h6>{product.medicine.name}</h6>
           <h6 className='text-main'>price : {product.medicine.price} EGP</h6>
           </div>
           <div className='countContainer col-3'>

@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext } from 'react';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { InputText } from 'primereact/inputtext';
+import { cartContext } from '../../Context/CartContext'
+import { Button } from 'primereact/button';
+import {shopping_cart_ok} from 'react-icons-kit/ikons/shopping_cart_ok'
+import { Icon } from 'react-icons-kit';
 
 export default function Perscriptions({ PatientToken }) {
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
+  let {addToCart} = useContext(cartContext);
+
   const [Medicines, setMedicines] = useState();
   const [OriginalMedicines, setOriginalMedicines] = useState();
 
@@ -84,6 +89,8 @@ export default function Perscriptions({ PatientToken }) {
     }
   };
 
+  const AddToCartBody = (rowData) => <Button className='TabelButton approve' onClick={() => { addToCart(rowData.medicine._id) }}> <Icon size={20} className='m-0 mb-2' icon={shopping_cart_ok}></Icon> </Button>
+
   return (
     <>
       <Helmet>
@@ -114,7 +121,7 @@ export default function Perscriptions({ PatientToken }) {
           <Column field="medicine.medicinal_use" header="Usage" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
           <Column field="medicine.main_ingredient" header="Main Ingredient" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
           <Column field="medicine.ingredients" header="Ingredients" body={mainIngredientBody} style={{ width: '15%', borderBottom: '1px solid #dee2e6' }} />
-          
+          {PatientToken ? <Column header=" " body={AddToCartBody}  style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} /> : null}
         </DataTable>
       </div>
     </>
