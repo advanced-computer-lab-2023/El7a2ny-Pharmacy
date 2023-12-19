@@ -214,7 +214,10 @@ const getNotFilledPrescriptions = async (req, res) => {
     if(!patient)
         return res.status(404).json({error: 'no such patient'});
      
-    const prescriptions = await Prescription.find({patient_id: id, isFilled: false}).populate(['medicine_list.medicine', 'doctor_id']);
+    const prescriptions = await Prescription.find({patient_id: id, isFilled: false}).populate([
+        { path: 'doctor_id', select: 'name' },
+        { path: 'medicine_list.medicine' }
+      ]);
     
     res.status(200).json(prescriptions);
 };
@@ -225,7 +228,10 @@ const getPrescription = async (req, res) => {
     if(!mongoose.Types.ObjectId.isValid(id))
         return res.status(404).json({error: 'no such prescription'});
 
-    const prescription = await Prescription.findById(id).populate(['medicine_list.medicine', 'doctor_id']);
+    const prescription = await Prescription.findById(id).populate([
+        { path: 'doctor_id', select: 'name' },
+        { path: 'medicine_list.medicine' }
+      ]);
     
     if(!prescription)
         return res.status(404).json({error: 'no such prescription'});
