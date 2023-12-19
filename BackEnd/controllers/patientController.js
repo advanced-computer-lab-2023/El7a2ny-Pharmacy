@@ -304,8 +304,8 @@ const creditCardPayment = async (req, res) => {
             payment_method_types: ["card"],
             mode: "payment",
             line_items: items,
-            success_url: "https://google.com", // when user press pay button redirects to link
-            cancel_url: "https://facebook.com" // if user cancelled payment (pressed back) redirects to link
+            success_url: "http://localhost:3000/#/", // when user press pay button redirects to link
+            cancel_url: "http://localhost:3000/#/Cart" // if user cancelled payment (pressed back) redirects to link
         })
 
         res.json({url: session.url})
