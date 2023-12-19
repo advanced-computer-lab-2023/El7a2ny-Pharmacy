@@ -2,9 +2,12 @@ import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import { cartContext } from '../../Context/CartContext';
 import { Helmet } from 'react-helmet';
+import axios from 'axios';
+import ApiBaseUrl from '../ApiBaseUrl';
 
-export default function Checkout() {
+export default function Checkout({ PatientToken }) {
   let { onlinePayment, cartId } = useContext(cartContext);
+  let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
 
   async function handleSubmit(values) {
     let response = await onlinePayment(cartId, values);
@@ -23,6 +26,14 @@ export default function Checkout() {
     onSubmit: handleSubmit,
   });
 
+  const placeOrder = async () =>{
+    try {
+      let {data} = await axios.post(ApiBaseUrl + `patients/place-order` , {headers: PatientHeaders})
+      console.log(data);
+    } catch (error) {
+      
+    }
+  }
   return (
     <>
       <Helmet>
