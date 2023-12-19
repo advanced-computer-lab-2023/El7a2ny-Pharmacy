@@ -4,11 +4,12 @@ import { cartContext } from '../../Context/CartContext';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
+import { useNavigate } from 'react-router-dom';
 
 export default function Checkout({ PatientToken }) {
-  let { onlinePayment, cartId , PlaceOrder } = useContext(cartContext);
+  let { onlinePayment , PlaceOrder , setNumbOfCartItems } = useContext(cartContext);
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
-
+  let navigate = useNavigate()
   const [Addresses, setAddresses] = useState([]);
 
   useEffect(() => {
@@ -22,15 +23,20 @@ export default function Checkout({ PatientToken }) {
       alert('Please select an address before placing the order.');
       return;
     }else if (values.payment_method === 'wallet' || values.payment_method === 'cash') {
-      PlaceOrder(values)
-      formik.resetForm()
+      try {
+        PlaceOrder(values)
+        formik.resetForm();
+        setNumbOfCartItems(0)
+        navigate('/')  
+      } catch (error) {
+        console.error(error);
+      }
     }else if (values.payment_method === 'online') {
       try {
         let response = await onlinePayment();
-        // if (response?.status === 200) {
-          // window.location.href = response.data.session.url;
-          console.log(response);
-        // }
+        if (response?.status === 200) {
+          window.location.href = response.data.url;
+        }
       } catch (error) {
         console.error(error);
       }  
@@ -121,7 +127,6 @@ export default function Checkout({ PatientToken }) {
               Complete Payment Online
             </label>
           </div>
-
           <hr />
           <button type="submit" className="btn bg-main text-light w-100">
             Place Order

@@ -3,7 +3,9 @@ import { createContext, useEffect, useState } from "react";
 import ApiBaseUrl from "../Components/ApiBaseUrl";
 export let cartContext = createContext();
 export function CartContextProvider(props) {
-    const [numbOfCartItems, setNumbOfCartItems] = useState()
+    const [numbOfCartItems, setNumbOfCartItems] = useState();
+    const [IsInCart, setIsInCart] = useState(false);
+
     let PatientToken = localStorage.getItem('PatientToken')
     let headers = { 'Authorization': `Bearer ${PatientToken}` };
     function getLoggedUserCart(){
@@ -26,7 +28,8 @@ export function CartContextProvider(props) {
     async function addToCart(productId){
         try {
             let response =await axios.patch(ApiBaseUrl + `patients/add-medicine-to-cart/${productId}` , {}, { headers });
-            setNumbOfCartItems(response.data.medicine_list.length)
+            setNumbOfCartItems(response.data.medicine_list.length);
+            setIsInCart(true)
             return response
         } catch (error) {
             console.error(error);
@@ -34,7 +37,11 @@ export function CartContextProvider(props) {
     }
     function removeItem(productId){
         return axios.patch(ApiBaseUrl + `patients/remove-medicine-from-cart/${productId}` ,{}, { headers })
-        .then((response) => response)
+        .then((response) => {
+            setIsInCart(false);
+            console.log(response);
+            return response
+        })
         .catch((erorr) => erorr)
     }
     function updateProductCount(productId , quantity){
@@ -71,7 +78,7 @@ export function CartContextProvider(props) {
     }
 
     return <>
-    <cartContext.Provider value={{setNumbOfCartItems ,PlaceOrder, numbOfCartItems  , onlinePayment, addToCart , getLoggedUserCart , removeItem , updateProductCount }}>
+    <cartContext.Provider value={{setNumbOfCartItems , IsInCart ,PlaceOrder, numbOfCartItems  , onlinePayment, addToCart , getLoggedUserCart , removeItem , updateProductCount }}>
         {props.children}
     </cartContext.Provider>
     </>
