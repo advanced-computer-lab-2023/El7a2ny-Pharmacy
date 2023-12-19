@@ -165,7 +165,7 @@ const getCart = async (req, res) => {
 
     const cart = await Cart.findOne({patient_id: id}).populate('medicine_list.medicine');
 
-    res.status(200).json(cart.medicine_list);
+    res.status(200).json(cart);
 };
 
 const removeMedicineFromCart = async (req, res) => {
