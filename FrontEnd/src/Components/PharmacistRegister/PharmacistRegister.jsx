@@ -64,7 +64,7 @@ const PharmacistRegister = () => {
       <title>Pharmacist Registration</title>
     </Helmet>
 
-      <div className="container bg-light my-5 p-4 border rounded shadow-sm mx-auto">
+      <div className="container bg-light my-5 p-4 border rounded shadow-sm mx-auto ">
         <h2 className='text-muted d-flex align-items-center'><Icon className='me-2' size={30} icon={notepad_ok}/><span className='me-2'>Pharmacist Form</span> </h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="row">

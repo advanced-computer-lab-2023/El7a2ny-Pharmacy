@@ -15,6 +15,9 @@ body {
   max-height:max-content;
   overflow-x: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .layout::before {
   content: "";
