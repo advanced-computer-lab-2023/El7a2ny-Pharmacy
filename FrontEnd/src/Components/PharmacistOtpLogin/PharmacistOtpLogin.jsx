@@ -21,7 +21,7 @@ export default function PharmacistOtpLogin({savePharmacistData}) {
   async function setPassword( val ) {
     setIsLoading(true)
     try {
-      await axios.post( ApiBaseUrl + `pharmacists/OTP-login` , val );
+      let {data} = await axios.post( ApiBaseUrl + `pharmacists/OTP-login` , val );
       console.log("done"); 
       formik.resetForm()
       setIsLoading(false) 

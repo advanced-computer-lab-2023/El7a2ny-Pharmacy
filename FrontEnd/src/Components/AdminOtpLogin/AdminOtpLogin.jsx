@@ -21,7 +21,7 @@ export default function AdminOtpLogin({saveAdminData}) {
   async function setPassword( val ) {
     setIsLoading(true)
     try {
-      await axios.post( ApiBaseUrl + `administrators/OTP-login` , val );
+      let {data} = await axios.post( ApiBaseUrl + `administrators/OTP-login` , val );
       console.log("done"); 
       formik.resetForm()
       setIsLoading(false) 
