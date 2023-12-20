@@ -104,7 +104,7 @@ export default function Cart({ PatientToken }) {
               ))}
               <Column header="Update Quantity" body={(rowData)=>(
                 <div className='d-flex justify-content-center'>
-                  <Button onClick={() => updateProductQuantity(rowData.medicine._id, rowData.quantity + 1)} className="TabelButton approve">
+                  <Button onClick={() => updateProductQuantity(rowData.medicine._id, rowData.quantity + 1)} className="TabelButton text-secondary border-secondary">
                     <Icon icon={plus} className='mb-1' size={20}></Icon>
                   </Button>
                   <Button onClick={() => updateProductQuantity(rowData.medicine._id, rowData.quantity - 1)}  className="TabelButton text-secondary border-secondary">
