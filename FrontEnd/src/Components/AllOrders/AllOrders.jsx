@@ -14,7 +14,7 @@ export default function AllOrders({PatientToken}) {
   
     async function getAllAllPatientOrders() {
       try {
-        let {data} =await axios.get(ApiBaseUrl + `administrators/all-pharmacists-requests`, { headers: PatientHeaders });
+        let {data} =await axios.get(ApiBaseUrl + `patients/my-orders`, { headers: PatientHeaders });
         console.log(data);
         setAllPatientOrders(data);
       } catch (error) {
@@ -26,7 +26,7 @@ export default function AllOrders({PatientToken}) {
 
     async function CancelOrder( id){
       try {
-        const { data } = await axios.patch(ApiBaseUrl + `administrators/pharmacist-request/${id}`,
+        const { data } = await axios.patch(ApiBaseUrl + `patients/cancel-order/${id}`,
           { headers: PatientHeaders }
         );
         if (PatientToken) {
@@ -44,33 +44,15 @@ export default function AllOrders({PatientToken}) {
         </div>
       );
     };
+
     const header = (
       <div className="d-flex justify-content-between">
         <h2 className='text-secondary'>All Patient Orders :</h2>
       </div>
     );
   
-    function calculateAge(dateOfBirth) {
-      const today = new Date();
-      const birthDate = new Date(dateOfBirth);
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-    
-      return age;
-    }
   
-  const DobBodyTemplate = (rowData) => {
-    const age = calculateAge(rowData.DOB);
-    return (
-      <span>
-        {rowData.DOB ? `${age}` : ''}
-      </span>
-    );
-  };  
+  const DobBodyTemplate = (rowData) =>  <span>{rowData.createdAt ? rowData.createdAt.slice(0, 10) : ''}</span>;
   
     return <>
       <Helmet>
@@ -79,11 +61,11 @@ export default function AllOrders({PatientToken}) {
     <div className="container my-3">
     <DataTable value={AllPatientOrders} header={header} paginator selectionMode="single" className={`dataTabel mb-4 text-capitalize`} dataKey="_id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
           <Column field="name" header="Name" sortable style={{ width: "13%" , borderBottom: '1px solid #dee2e6' }} />
-          <Column field="_id" header="id" sortable style={{ width: "15%" , borderBottom: '1px solid #dee2e6' }} />
-          <Column field="email" header="email" sortable style={{ width: "15%" ,borderBottom: '1px solid #dee2e6' }} />
-          <Column field="DOB" header="Age" body={DobBodyTemplate} sortable style={{ width: '10%' , borderBottom: '1px solid #dee2e6' }}></Column>
+          <Column field="_id" header="idinvoice number" sortable style={{ width: "15%" , borderBottom: '1px solid #dee2e6' }} />
+          <Column field="address" header="address" sortable style={{ width: "15%" ,borderBottom: '1px solid #dee2e6' }} />
+          <Column field="createdAt" header="created At" body={DobBodyTemplate} sortable style={{ width: '10%' , borderBottom: '1px solid #dee2e6' }}></Column>
           <Column field="affiliation" header="affiliation" sortable style={{ width: "12%" , borderBottom: '1px solid #dee2e6' }} />
-          <Column field="hourlyRate" header="H-Rate" sortable style={{ width: "11%" ,borderBottom: '1px solid #dee2e6' }} />
+          <Column field="status" header="status" sortable style={{ width: "11%" ,borderBottom: '1px solid #dee2e6' }} />
           <Column body={actionTemplate} header="Actions" style={{ width: '12%' , borderBottom: '1px solid #dee2e6' }} />
     </DataTable>
     </div>
