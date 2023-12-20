@@ -29,10 +29,9 @@ export default function AllOrders({PatientToken}) {
     
     async function CancelOrder( id){
       try {
-        const { data } = await axios.patch(ApiBaseUrl + `patients/cancel-order/${id}`, null, { headers: PatientHeaders });
-        if (PatientToken) {
-          getAllAllPatientOrders() 
-        } 
+        const { data } = await axios.patch(ApiBaseUrl + `patients/cancel-order/${id}`,{}, { headers: PatientHeaders });
+        console.log(data);
+        getAllAllPatientOrders();
       } catch (error) {
         console.error('Error:', error);
       }
