@@ -15,7 +15,7 @@ export default function Perscriptions({ PatientToken }) {
   let {addToCart , IsInCart} = useContext(cartContext);
 
   const [Medicines, setMedicines] = useState();
-  const [OriginalMedicines, setOriginalMedicines] = useState();
+  const [selectedRow, setSelectedRow] = useState(null);
 
   async function getAllMedicines(role, header) {
     try {
@@ -29,7 +29,6 @@ export default function Perscriptions({ PatientToken }) {
         };
       });
       setMedicines(updatedPrescriptions);
-      setOriginalMedicines(updatedPrescriptions);
     } catch (error) {
       console.error(error);
     }
@@ -37,22 +36,6 @@ export default function Perscriptions({ PatientToken }) {
 
   useEffect(() => { getAllMedicines('patients', PatientHeaders) }, [PatientToken]);
 
-  function searchMedicines(searchVal , searchType) {
-    if (searchVal.trim() === '') {
-      setMedicines([...OriginalMedicines]);
-    } else {
-      const filteredMedicines = OriginalMedicines.filter(
-        (medicine) =>{
-          if (searchType === "name") {
-            return medicine.name.toLowerCase().includes(searchVal.toLowerCase())
-          } else if (searchType === "medicinal-use") {
-            return medicine.medicinal_use.toLowerCase().includes(searchVal.toLowerCase())
-          }
-        }
-      );
-      setMedicines([...filteredMedicines]);
-    }
-  }
 
   const header = (
     <div className="d-flex justify-content-between col-12">
@@ -62,20 +45,6 @@ export default function Perscriptions({ PatientToken }) {
             <h2 className="text-secondary">Prescription Medicines</h2>
           </div>
         </div>
-        {/* <div className="col-7 ms-auto">
-          <div className="rightHeader d-flex flex-column">
-            <div className="searchContiner align-self-end ">
-              <span className="p-input-icon-left me-2">
-                <i className="pi pi-search" />
-                <InputText placeholder="Medicine Name..." onChange={(e) => { searchMedicines(e.target.value, 'name') }} />
-              </span>
-              <span className="p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText placeholder="Medicine Usage..." onChange={(e) => { searchMedicines(e.target.value, 'medicinal-use') }} />
-              </span>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
@@ -92,36 +61,44 @@ export default function Perscriptions({ PatientToken }) {
 
   const getAlternatives = async (rowData)=>{
     try {
-      let {data} =await axios.get(ApiBaseUrl + ``)
+      let {data} =await axios.get(ApiBaseUrl + `patients/medicine-alternatives/${rowData.medicine._id}` , {headers : PatientHeaders})
+      console.log(data);
     } catch (error) {
       
     }
   }
+  
   const AddToCartBody = (rowData) => <Button className='TabelButton approve' onClick={() => { addToCart(rowData.medicine._id) }}> <Icon size={20} className='m-0 mb-2' icon={shopping_cart_ok}></Icon> </Button>
 
-  return (
-    <>
+  return  <>
       <Helmet>
         <title>Medicine List</title>
       </Helmet>
       {Medicines ? <>
       <div className="container-fluid my-3">
-        <DataTable
-          value={Medicines?.flatMap((prescription) =>
-            prescription.medicine_list.map((medicine) => ({ ...prescription, ...medicine }))
-          )}
-          header={header}
-          paginator
-          selectionMode="single"
-          className={`dataTabel mb-4 text-capitalize AllList`}
-          dataKey="_id"
-          scrollable
-          scrollHeight="100vh"
-          tableStyle={{ minWidth: "50rem" }}
-          rows={10}
-          responsive="scroll"
-        >
-          <Column field="doctorName" header="Doctor Name" sortable style={{ width: "15%", borderBottom: "1px solid #dee2e6" }} />
+      <DataTable
+  value={Medicines?.flatMap((prescription) =>
+    prescription.medicine_list.map((medicine) => ({ ...prescription, ...medicine }))
+  )}
+  header={header}
+  paginator
+  selectionMode="single"
+  className={`dataTabel mb-4 text-capitalize AllList`}
+  dataKey="_id"
+  scrollable
+  scrollHeight="100vh"
+  tableStyle={{ minWidth: "50rem" }}
+  rows={10}
+  responsive="scroll"
+  onRowClick={(event) => {
+    setSelectedRow(event.data);
+    getAlternatives(event.data);
+  }}
+  selection={selectedRow}
+  expandedRows={[selectedRow]}
+>
+  
+            <Column field="doctorName" header="Doctor Name" sortable style={{ width: "15%", borderBottom: "1px solid #dee2e6" }} />
           <Column field="prescriptionDate" header="Prescription Date" sortable style={{ width: "15%", borderBottom: "1px solid #dee2e6" }} />
           <Column field="medicine.name" header="Name" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
           <Column field="medicine.availableQuantity" header="Quantity" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
@@ -135,5 +112,4 @@ export default function Perscriptions({ PatientToken }) {
       </div>
       </> : <Loading/> }
     </>
-  );
 }

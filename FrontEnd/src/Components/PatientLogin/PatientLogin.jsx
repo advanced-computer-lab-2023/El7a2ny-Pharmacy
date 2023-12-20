@@ -84,7 +84,7 @@ export default function PatientLogin({savePatientData}) {
           }
         </div>
         <div className="col-12">
-          <Link id='forgetPass' className="btn p-0 mb-2 text-main">Forgot password ? </Link>
+          <Link id='forgetPass' to={'/PatientForgetPassword'} className="btn p-0 mb-2 text-main">Forgot password ? </Link>
         </div>
       </div>
       </form>

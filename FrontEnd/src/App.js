@@ -37,6 +37,7 @@ import Cart from './Components/Cart/Cart';
 import MyAddresses from './Components/MyAddresses/MyAddresses';
 import AllOrders from './Components/AllOrders/AllOrders';
 import Checkout from './Components/Checkout/Checkout';
+import PatientForgetPassword from './Components/PatientForgetPassword/PatientForgetPassword';
 
 
 function App() {
@@ -86,6 +87,7 @@ function App() {
         {path : "PatientLogin",element:<PatientLogin savePatientData={savePatientData}/>},
         {path : "AdminLogin",element:<AdminLogin saveAdminData={saveAdminData}/>},
         {path : "PatientOtpLogin",element:<PatientOtpLogin/>},
+        {path : "PatientForgetPassword",element:<PatientForgetPassword/>},
         {path : "ChangePassword",element:<ChangePassword/>},
         {path : "PharmacistRegister",element:<PharmacistRegister/>},
         {path : "PharmacistOtpLogin",element:<PharmacistOtpLogin/>},
