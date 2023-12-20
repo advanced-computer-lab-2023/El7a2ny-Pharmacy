@@ -1,32 +1,27 @@
 import React, { useState } from 'react'
-import { Helmet } from 'react-helmet'
-import {  useFormik } from 'formik'
-import ApiBaseUrl from '../ApiBaseUrl';
 import * as Yup from 'yup'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import {  useFormik } from 'formik'
+import {  useNavigate} from 'react-router-dom'
+import {Helmet} from "react-helmet";
+import ApiBaseUrl from '../ApiBaseUrl';
 
-export default function AdminForgetPassword({AdminToken}) {
-  let AdminHeaders = { 'Authorization': `Bearer ${AdminToken}` };
-  const[isLoading,setIsLoading]=useState(false)
+export default function AdminForgetPassword() {
+  const[isLoading,setIsLoading]=useState(false);
+  const [ErrMsg, setErrMsg] = useState()
+
   let navigate = useNavigate()
 
   async function sendData(values) {
     setIsLoading(true)
     try {
-      
-      let { data } = await axios.post(ApiBaseUrl + 'administrators/OTP-email', values, {
-        headers: AdminHeaders,
-      });
+      let { data } = await axios.post(ApiBaseUrl + 'administrators/OTP-email', values);
       setIsLoading(false)
-      console.log(data);
-      navigate(`AdminOtpLogin`)
-
+      navigate(`/AdminOtpLogin`)
     } catch (error) {
       console.error('Error during API call:', error);
       setIsLoading(false)
     }
-    
   }
   
 let validateschema = Yup.object({
@@ -43,19 +38,30 @@ let validateschema = Yup.object({
     <Helmet>
       <title>Admin Forget Password</title>
     </Helmet>
-    <div className="container">
-        <div className="col-md-9 mx-auto mt-5">
-        <h2>Forget Password</h2>
-        <form onSubmit={formik.handleSubmit}>
-          <label className='mt-4' htmlFor="username">Username : </label>
-          <input onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.username} name = 'username' type = 'text' id = 'username' className='form-control w-100 mx-auto mt-1' placeholder='enter Username' />
-          {formik.errors.username && formik.touched.username ?<div className="alert alert-danger">{formik.errors.username}</div>: null}
+    <div className="container my-5 login w-75">
+      <form action=""  onSubmit={formik.handleSubmit} className='row text-center'>
+      <div className="col-8 offset-2 m-auto bg-light rounded border shadow-sm w-auto p-4 h-100">
+      <h2 className='text-muted'>Admin</h2>
+      <div className="row">
+          <div className="col-12  form-floating">
+            <input type="string"  placeholder='Username' className='mb-2 form-control' name='username' id='username' value={formik.values.username} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+            <label className='ms-2' htmlFor="username">Username</label>
+            {formik.errors.username && formik.touched.username ?<div className="alert alert-danger">{formik.errors.username}</div>: null}
+          </div>
+        </div>
+        <div className="col-12">
+        {ErrMsg ? <div className="Err alert alert-danger">{ErrMsg}</div> : null }
+        </div>
+        <div className="btns col-12 my-2">
           {isLoading?
-            <button type="button" className='btn btn-primary text-light mt-2'><i className=' fa fa-spin fa-spinner'></i></button>
+          <button type="button" className='btn bg-main text-light me-2 w-100'><i className=' fa fa-spin fa-spinner'></i></button>
           :<>
-            <button type='submit' className=' mt-2 btn btn-primary'>Send</button></>}
-        </form>
+          <button type="submit" disabled={!(formik.isValid && formik.dirty)} className='btn bg-main text-light me-2 w-100 d-flex align-items-center justify-content-center'><span className='me-2'>Get OTP</span></button>
+          </>
+          }
+        </div>
       </div>
+      </form>
     </div>
     </>
 }
