@@ -46,7 +46,7 @@ export default function NavBar({LogOut , PharmacistData , PatientData , AdminDat
     try {
       let {data} = await axios.get(ApiBaseUrl +`pharmacists/notifications` ,  {headers : PharmacistHeaders});
       if (data.length > 0) {
-        setNotification(data);
+        setNotification(data.map((notification , index)=>notification.content));
       }
     } catch (error) {
       console.error(error);
