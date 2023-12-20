@@ -90,6 +90,13 @@ export default function Perscriptions({ PatientToken }) {
     }
   };
 
+  const getAlternatives = async (rowData)=>{
+    try {
+      let {data} =await axios.get(ApiBaseUrl + ``)
+    } catch (error) {
+      
+    }
+  }
   const AddToCartBody = (rowData) => <Button className='TabelButton approve' onClick={() => { addToCart(rowData.medicine._id) }}> <Icon size={20} className='m-0 mb-2' icon={shopping_cart_ok}></Icon> </Button>
 
   return (

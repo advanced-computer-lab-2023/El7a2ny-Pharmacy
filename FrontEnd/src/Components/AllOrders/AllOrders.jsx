@@ -8,27 +8,28 @@ import { Button } from 'primereact/button';
 
 export default function AllOrders({PatientToken}) {
 
-  const [AllPatientOrders, setAllPatientOrders] = useState();
+  const [AllPatientOrders, setAllPatientOrders] = useState([]);
 
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
   
     async function getAllAllPatientOrders() {
       try {
         let {data} =await axios.get(ApiBaseUrl + `patients/my-orders`, { headers: PatientHeaders });
-        console.log(data);
         setAllPatientOrders(data);
       } catch (error) {
         console.error(error);
       }
     }
 
-    useEffect(()=>{ PatientToken? getAllAllPatientOrders() : null},[PatientToken]);
-
+    useEffect(() => {
+      if (PatientToken) {
+        getAllAllPatientOrders();
+      }
+    }, [PatientToken]);
+    
     async function CancelOrder( id){
       try {
-        const { data } = await axios.patch(ApiBaseUrl + `patients/cancel-order/${id}`,
-          { headers: PatientHeaders }
-        );
+        const { data } = await axios.patch(ApiBaseUrl + `patients/cancel-order/${id}`, null, { headers: PatientHeaders });
         if (PatientToken) {
           getAllAllPatientOrders() 
         } 
@@ -54,19 +55,36 @@ export default function AllOrders({PatientToken}) {
   
   const DobBodyTemplate = (rowData) =>  <span>{rowData.createdAt ? rowData.createdAt.slice(0, 10) : ''}</span>;
   
-    return <>
+  const getMedicineNames = (medicineList) => {
+    return medicineList
+      .map((item) => item.medicine && item.medicine.name)
+      .filter(Boolean) // Remove undefined values
+      .join(', ');
+  };
+    // New column to display medicine names
+const medicineNamesTemplate = (rowData) => (
+    <span>{getMedicineNames(rowData.medicine_list)}</span>
+  );
+  
+  return <>
       <Helmet>
         <title>Pharmacist Requests</title>
       </Helmet>
     <div className="container my-3">
     <DataTable value={AllPatientOrders} header={header} paginator selectionMode="single" className={`dataTabel mb-4 text-capitalize`} dataKey="_id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
-          <Column field="name" header="Name" sortable style={{ width: "13%" , borderBottom: '1px solid #dee2e6' }} />
+    {/* <Column
+            field="medicine_list"
+            header="Medicine Names"
+            body={medicineNamesTemplate}
+            sortable
+            style={{ width: "20%", borderBottom: '1px solid #dee2e6' }}
+          /> */}
           <Column field="_id" header="idinvoice number" sortable style={{ width: "15%" , borderBottom: '1px solid #dee2e6' }} />
           <Column field="address" header="address" sortable style={{ width: "15%" ,borderBottom: '1px solid #dee2e6' }} />
           <Column field="createdAt" header="created At" body={DobBodyTemplate} sortable style={{ width: '10%' , borderBottom: '1px solid #dee2e6' }}></Column>
-          <Column field="affiliation" header="affiliation" sortable style={{ width: "12%" , borderBottom: '1px solid #dee2e6' }} />
+          <Column field="total" header="total Price" sortable style={{ width: "12%" , borderBottom: '1px solid #dee2e6' }} />
           <Column field="status" header="status" sortable style={{ width: "11%" ,borderBottom: '1px solid #dee2e6' }} />
-          <Column body={actionTemplate} header="Actions" style={{ width: '12%' , borderBottom: '1px solid #dee2e6' }} />
+          <Column body={actionTemplate} header=" " style={{ width: '12%' , borderBottom: '1px solid #dee2e6' }} />
     </DataTable>
     </div>
       </>
