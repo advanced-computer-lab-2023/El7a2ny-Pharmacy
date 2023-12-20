@@ -17,7 +17,7 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content:space-between;
 }
 .layout::before {
   content: "";
@@ -30,23 +30,29 @@ body {
   background-color: rgba(0, 0, 0, 0.8); 
   z-index: 0;
 }
-.layout div{
+.outlet {
   z-index: 1 !important;
-  position: relative;
-  
+  margin-bottom: auto;
+  height: 100% !important;
+  flex-shrink: 3 !important;
 }
 .centerContainer{
   margin-top: auto;
+
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.homePage{
-  height: 100vh;
-  width: 100%;
+.homeContent{
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% , -50%);
+  -webkit-transform: translate(-50% , -50%);
+  -moz-transform: translate(-50% , -50%);
+  -ms-transform: translate(-50% , -50%);
+  -o-transform: translate(-50% , -50%);
 }
 .border-main{
   border-color: #0057c0 !important;

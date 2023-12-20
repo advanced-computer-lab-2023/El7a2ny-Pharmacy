@@ -17,7 +17,10 @@ export default function Layout({PatientToken, PharmacistToken , PharmacistData ,
   return <>
   <div className="layout">
     <NavBar PharmacistData={PharmacistData} PatientToken={PatientToken} PharmacistToken={PharmacistToken} PatientData={PatientData} AdminData={AdminData} LogOut={LogOut}></NavBar>
-    <Outlet></Outlet>
+    <div className="outlet">
+    <Outlet ></Outlet>
+    </div>
+    
   </div>
     </>
 }

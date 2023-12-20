@@ -6,8 +6,10 @@ export default function Home() {
       <title>Home</title>
     </Helmet>
     <main>
-      <div className="homePage d-flex justify-content-center align-items-center">
-      <h4 className='headLine first-z'>Welcome in our medical services website </h4>
+      <div className="homePage container">
+        <div className="homeContent">
+        <h4 className='headLine first-z'>Welcome in our medical services website </h4>
+        </div>
       </div>
     </main>
     </>

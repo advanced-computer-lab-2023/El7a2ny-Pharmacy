@@ -28,6 +28,7 @@ export default function MedicineList({PharmacistToken , PatientToken , AdminToke
   const [DisplayAddMedicineDialog, setDisplayAddMedicineDialog] = useState(false);
   const [displayEditDialog, setDisplayEditDialog] = useState(false);
   const [SelectedMedicine, setSelectedMedicine] = useState(null);
+  
   async function getAllMedicines(role , header) {
       try {
         const response = await axios.get(ApiBaseUrl + `${role}/all-medicines` , {headers : header})
@@ -189,7 +190,8 @@ useEffect(()=>{
       <div className="row w-100">
         <div className="col-5">
           <div className="tableTitle mt-1">
-            <h2 className='text-secondary'>All Medicines :</h2>
+            <h2 className='text-secondary'>Medicines</h2>
+            {PatientToken ? <><h6 className='text-main'>All items on this page can be purchased without a prescription</h6></>:null}
           </div>
         </div>
         <div className="col-7 ms-auto">

@@ -77,8 +77,7 @@ export default function Cart({ PatientToken }) {
     { field: 'quantity', header: 'Quantity' },
   ];
 
-  return (
-    <>
+  return  <>
       <Helmet>
         <title>Cart Details</title>
       </Helmet>
@@ -133,5 +132,4 @@ export default function Cart({ PatientToken }) {
         <Loading />
       )}
     </>
-  );
 }
