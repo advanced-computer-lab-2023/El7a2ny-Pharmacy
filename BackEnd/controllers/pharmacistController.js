@@ -88,12 +88,12 @@ const sendOTPEmail = async (req, res) => {
         
     const otp = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
 
-    const exists = await DoctorOTP.findOne({username: username});   
+    const exists = await PharmacistOTP.findOne({username: username});   
 
     if(exists)
-        return res.status(400).json({error: 'one time password already sent to your email'});
-
-    await PharmacistOTP.create({username: username, password: otp});
+        await PharmacistOTP.findOneAndUpdate({username: username}, {password: otp});
+    else
+        await PharmacistOTP.create({username: username, password: otp});
 
     const transporter = nodemailer.createTransport({
     service: 'hotmail',
@@ -123,9 +123,7 @@ const loginOTP = async (req, res) => {
     const {username, password} = req.body;
     try{
         const pharmacist = await PharmacistOTP.loginOTP(username, password);
-
         const token = createToken(pharmacist._id);
-
         res.status(200).json({pharmacist, token});
     } catch(error) {
         res.status(400).json({error: error.message});

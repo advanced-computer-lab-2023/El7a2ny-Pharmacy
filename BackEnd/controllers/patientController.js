@@ -60,9 +60,9 @@ const sendOTPEmail = async (req, res) => {
     const exists = await PatientOTP.findOne({username: username});   
 
     if(exists)
-        return res.status(400).json({error: 'one time password already sent to your email'});
-
-    await PatientOTP.create({username: username, password: otp});
+        await PatientOTP.findOneAndUpdate({username: username}, {password: otp});
+    else
+        await PatientOTP.create({username: username, password: otp});
 
     const transporter = nodemailer.createTransport({
     service: 'hotmail',

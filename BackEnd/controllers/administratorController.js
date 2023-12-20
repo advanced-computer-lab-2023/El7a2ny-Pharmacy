@@ -8,6 +8,7 @@ const Pharmacist = require('../models/pharmacistModel');
 const validator = require('validator');
 const Cart = require('../models/cartModel');
 const Order = require('../models/orderModel');
+const AdminOTP = require('../models/adminOTPModel');
 
 const createToken = (_id) => {
     return jwt.sign({_id: _id}, process.env.SECRET, {expiresIn: '3d'})
@@ -50,9 +51,9 @@ const sendOTPEmail = async (req, res) => {
     const exists = await AdminOTP.findOne({username: username});   
 
     if(exists)
-        return res.status(400).json({error: 'one time password already sent to your email'});
-
-    await AdminOTP.create({username: username, password: otp});
+        await AdminOTP.findOneAndUpdate({username: username}, {password: otp});
+    else
+        await AdminOTP.create({username: username, password: otp});
 
     const transporter = nodemailer.createTransport({
     service: 'hotmail',
