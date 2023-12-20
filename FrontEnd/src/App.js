@@ -89,7 +89,7 @@ function App() {
         {path : "AdminLogin",element:<AdminLogin saveAdminData={saveAdminData}/>},
         {path : "PatientOtpLogin",element:<PatientOtpLogin/>},
         {path : "PatientForgetPassword",element:<PatientForgetPassword/>},
-        {path : "ChangePassword",element:<ChangePassword/>},
+        {path : "ChangePassword",element:<ChangePassword PharmacistToken={PharmacistToken} PatientToken={PatientToken} AdminToken={AdminToken}/>},
         {path : "PharmacistRegister",element:<PharmacistRegister/>}, 
         {path : "PharmacistForgetPassword",element:<PharmacistForgetPassword/>}, 
         {path : "PharmacistOtpLogin",element:<PharmacistOtpLogin/>},
