@@ -9,13 +9,15 @@ import axios from 'axios';
 import ApiBaseUrl from '../ApiBaseUrl';
 import { cartContext } from '../../Context/CartContext'
 import {login} from 'react-icons-kit/entypo/login'
-
+import {bellO} from 'react-icons-kit/fa/bellO'
 export default function NavBar({LogOut , PharmacistData , PatientData , AdminData ,PatientToken, PharmacistToken }) {
   let {numbOfCartItems} = useContext(cartContext);
   let PatientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
   let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   const [activeLink, setActiveLink] = useState();
   const [WalletAmount, setWalletAmount] = useState();
+  const [Notification, setNotification] = useState("No Avialable Notifications");
+  const location = useLocation();
 
   const NavItem = ({ to, text, activeLink, onClick }) => (
     <li className="nav-item">
@@ -30,6 +32,7 @@ export default function NavBar({LogOut , PharmacistData , PatientData , AdminDat
         getWalletAmount('pharmacists' , PharmacistHeaders);
       }
   }
+
   const getWalletAmount = async (role , header)=>{
     try {
       let {data} = await axios.get(ApiBaseUrl + `${role}/my-wallet` , {headers : header})
@@ -38,7 +41,21 @@ export default function NavBar({LogOut , PharmacistData , PatientData , AdminDat
       console.error(error);
     }
   }
-  const location = useLocation();
+
+  const getNotification = async()=>{
+    try {
+      let {data} = await axios.get(ApiBaseUrl +`pharmacists/notifications` ,  {headers : PharmacistHeaders});
+      if (data.length > 0) {
+        setNotification(data);
+        console.log("ehhh");
+      }
+      console.log(Notification);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+    
   useEffect(()=>{
     const pathSegments = location.pathname.split('/');
     const lastSegment = pathSegments[pathSegments.length - 1];
@@ -74,6 +91,39 @@ return <>
         }
       </ul>
       <ul className='navbar-nav'>
+      {PharmacistData ? 
+            <li className="nav-item position-relative dropdown">
+            <span className={`cursor-pointer nav-link dropdown-toggle`}  onClick={getNotification} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <Icon size={20} icon={bellO}/> 
+            </span>
+            <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
+              <span className={`dropdown-item text-main`}>
+                hey , {Notification} 
+              </span>
+            </div>
+          </li>
+        : null }
+          {PatientData || PharmacistData ? <>
+            <li className="nav-item position-relative dropdown">
+              <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`}  onClick={handleGetWallet} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <Icon size={20} icon={ic_payment}/> 
+              </span>
+              <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
+                <span className={`dropdown-item text-main`}>
+                  {WalletAmount} EGP
+                </span>
+              </div>
+            </li>
+          </> : null}
+          {PatientData ? 
+            <li className="nav-item">
+              <Link className={`nav-link ${activeLink === 'Cart' ? ' cartActive' : ''}`} to={`Cart`} onClick={() => setActiveLink('Cart')}>
+                <Icon size={20} icon={shoppingCart}/>
+                <span  className='cart-Num p- badge bg-main text-white position-absolute top-0 end-0 rounded-circle'>{numbOfCartItems}</span>
+              </Link>
+            </li>
+          : null }
+
         {PharmacistData || PatientData || AdminData ? <>
           <li className="nav-item position-relative dropdown">
             <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -105,29 +155,9 @@ return <>
               <Link className={`dropdown-item text-main ${activeLink === 'Logout' ? ' active' : ''}`}  onClick={() => { LogOut(); setActiveLink('Logout')}}><Icon size={20} icon={out}/> Logout</Link>
             </div>
           </li>
-          {PatientData || PharmacistData ? <>
-            <li className="nav-item position-relative dropdown">
-              <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`}  onClick={handleGetWallet} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <Icon size={20} icon={ic_payment}/> 
-              </span>
-              <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
-                <span className={`dropdown-item text-main`}>
-                  {WalletAmount} EGP
-                </span>
-              </div>
-            </li>
-          </> : null}
-          {PatientData ? 
-            <li className="nav-item">
-              <Link className={`nav-link ${activeLink === 'Cart' ? ' cartActive' : ''}`} to={`Cart`} onClick={() => setActiveLink('Cart')}>
-                <Icon size={20} icon={shoppingCart}/>
-                <span  className='cart-Num p- badge bg-main text-white position-absolute top-0 end-0 rounded-circle'>{numbOfCartItems}</span>
-              </Link>
-            </li>
-          : null }
         </> : <>
         <li className="nav-item position-relative dropdown">
-            <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === 'MyProfile' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span className={`cursor-pointer nav-link dropdown-toggle ${activeLink === '' ? ' active' : ''}`} id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <Icon size={20}  icon={login}></Icon> LOGIN
             </span>
             <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">

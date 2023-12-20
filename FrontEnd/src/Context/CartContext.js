@@ -39,6 +39,7 @@ export function CartContextProvider(props) {
         return axios.patch(ApiBaseUrl + `patients/remove-medicine-from-cart/${productId}` ,{}, { headers })
         .then((response) => {
             setIsInCart(false);
+            setNumbOfCartItems(response.data.medicine_list.length);
             console.log(response);
             return response
         })
@@ -73,7 +74,9 @@ export function CartContextProvider(props) {
         {
             headers
         }
-        ).then((response) => response)
+        ).then((response) =>{ 
+            setNumbOfCartItems(response.data.medicine_list.length);
+            return response})
         .catch((erorr) => erorr)
     }
 
