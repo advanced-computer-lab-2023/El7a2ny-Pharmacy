@@ -88,10 +88,10 @@ export default function Cart({ PatientToken }) {
               <i className="text-main fa fa-spin fa-spinner fs-1"></i>
             </div>
           ) : null}
-          <h3>Shop Cart :</h3>
+          <h3>Shopping Cart</h3>
           {cartDetails ? (
             <>
-              <h6 className="text-main">Total Cart Price : {TotalPrice} EGP</h6>
+              <h6 className="text-main">Total : {TotalPrice} EGP</h6>
             </>
           ) : (
             <h3 className="text-main h6">Your Cart IS Empty</h3>
