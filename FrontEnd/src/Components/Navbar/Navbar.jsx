@@ -16,7 +16,7 @@ export default function NavBar({LogOut , PharmacistData , PatientData , AdminDat
   let PharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   const [activeLink, setActiveLink] = useState();
   const [WalletAmount, setWalletAmount] = useState();
-  const [Notification, setNotification] = useState("No Avialable Notifications");
+  const [Notification, setNotification] = useState();
   const location = useLocation();
 
   const NavItem = ({ to, text, activeLink, onClick }) => (
@@ -47,10 +47,7 @@ export default function NavBar({LogOut , PharmacistData , PatientData , AdminDat
       let {data} = await axios.get(ApiBaseUrl +`pharmacists/notifications` ,  {headers : PharmacistHeaders});
       if (data.length > 0) {
         setNotification(data);
-        console.log("ehhh");
       }
-      console.log(Notification);
-      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -98,7 +95,7 @@ return <>
             </span>
             <div className="dropdown-menu text-center" aria-labelledby="navbarDropdown">
               <span className={`dropdown-item text-main`}>
-                hey , {Notification} 
+                {Notification ? Notification.map((notificaion , index)=> <span key={index}>{notificaion}</span>) : "No Available Notifications"} 
               </span>
             </div>
           </li>
