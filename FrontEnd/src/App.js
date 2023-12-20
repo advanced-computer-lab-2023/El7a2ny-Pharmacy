@@ -38,6 +38,7 @@ import MyAddresses from './Components/MyAddresses/MyAddresses';
 import AllOrders from './Components/AllOrders/AllOrders';
 import Checkout from './Components/Checkout/Checkout';
 import PatientForgetPassword from './Components/PatientForgetPassword/PatientForgetPassword';
+import PharmacistForgetPassword from './Components/PharmacistForgetPassword/PharmacistForgetPassword';
 
 
 function App() {
@@ -89,7 +90,8 @@ function App() {
         {path : "PatientOtpLogin",element:<PatientOtpLogin/>},
         {path : "PatientForgetPassword",element:<PatientForgetPassword/>},
         {path : "ChangePassword",element:<ChangePassword/>},
-        {path : "PharmacistRegister",element:<PharmacistRegister/>},
+        {path : "PharmacistRegister",element:<PharmacistRegister/>}, 
+        {path : "PharmacistForgetPassword",element:<PharmacistForgetPassword/>}, 
         {path : "PharmacistOtpLogin",element:<PharmacistOtpLogin/>},
         {path : "PharmacistLogin",element:<PharmacistLogin savePharmacistData={savePharmacistData}/>},
         
