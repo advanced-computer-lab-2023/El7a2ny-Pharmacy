@@ -9,8 +9,8 @@ import {eye} from 'react-icons-kit/feather/eye';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff'
 import ApiBaseUrl from '../ApiBaseUrl'
 
-export default function ChangePassword({ DrToken , AdminToken , PatientToken }) {
-  let drHeaders = { 'Authorization': `Bearer ${DrToken}` };
+export default function ChangePassword({ PharmacistToken , AdminToken , PatientToken }) {
+  let pharmacistHeaders = { 'Authorization': `Bearer ${PharmacistToken}` };
   let adminHeaders = { 'Authorization': `Bearer ${AdminToken}` };
   let patientHeaders = { 'Authorization': `Bearer ${PatientToken}` };
   const[isLoading,setIsLoading]=useState(false)
@@ -20,9 +20,9 @@ export default function ChangePassword({ DrToken , AdminToken , PatientToken }) 
   };
   let navigate = useNavigate();
   function handleUpdateRole(val){
-    switch (DrToken || AdminToken || PatientToken) {
-      case DrToken:
-        updatePassword('doctors' , val , drHeaders)
+    switch (PharmacistToken || AdminToken || PatientToken) {
+      case PharmacistToken:
+        updatePassword('pharmacists' , val , pharmacistHeaders)
         break;
         case AdminToken:
           updatePassword('administrators' , val , adminHeaders)
