@@ -254,7 +254,7 @@ useEffect(()=>{
       <title>Medicine List</title>
     </Helmet>
     {Medicines ? <>
-    <div className="container-fluid my-3">
+    <div className="container-fluid  centerContainer">
           <DataTable value={Medicines} header={header} paginator selectionMode="single" className={`dataTabel mb-4 text-capitalize AllList`} dataKey="_id" scrollable scrollHeight="100vh" tableStyle={{ minWidth: "50rem" }} rows={10} responsive="scroll">
             <Column field="name" header="Name" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
             <Column field="availableQuantity" header="Quantity" sortable style={{ width: "10%", borderBottom: '1px solid #dee2e6' }} />
