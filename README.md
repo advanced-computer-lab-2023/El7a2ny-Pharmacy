@@ -310,7 +310,7 @@ You choose the http method, for example (POST), the API endpoint, for example (l
 
 ## How to Use
 
-- To use this app you'll need to clone the repository using the command: git clone https://github.com/Advanced-Computer-Lab-2023/teamSlim-Pharmacy.
+- To use this app you'll need to clone the repository using the command: git clone https://github.com/Advanced-Computer-Lab-2023/El7a2ny-Pharmacy.
 
 First, create a .env file and populate PORT, SECRET (used for jwt), MONGO_URI.
 
